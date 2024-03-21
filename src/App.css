@@ -16,3 +16,8 @@ body {
   color: white;
   user-select: none;
 }
+
+.test-wrapper-div {
+  border: 1px solid red;
+  background-color: blue;
+}
