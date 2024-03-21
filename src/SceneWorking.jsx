@@ -15,13 +15,13 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing'
 const pexel = (id) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`
 // const images = [
 //   // Front
-//   { position: [0, 0, 1.5], rotation: [0, 0, 0], url: './0gkax94ZwlPz1XbtCVg4Vd.png' },
+//   { position: [0, 0, 1.5], rotation: [0, 0, 0], url: './1OC16r1BdQO6hK2iqmvwXF.png'},
 //   // Back
 //   { position: [-0.8, 0, -0.6], rotation: [0, 0, 0], url: './0mb5Q9w5GJKU7HClkEzHpy.png' },
 //   { position: [0.8, 0, -0.6], rotation: [0, 0, 0], url: './0sI9HAbEJn1eqWsxyFsf1I.png' },
 //   // Left
 //   { position: [-1.75, 0, 0.25], rotation: [0, Math.PI / 2.5, 0], url: './1lDo24S34NvI1pAg7Oxldc.png' },
-//   { position: [-2.15, 0, 1.5], rotation: [0, Math.PI / 2.5, 0], url: './1OC16r1BdQO6hK2iqmvwXF.png' },
+//   { position: [-2.15, 0, 1.5], rotation: [0, Math.PI / 2.5, 0], url: './0gkax94ZwlPz1XbtCVg4Vd.png' },
 //   { position: [-2, 0, 2.75], rotation: [0, Math.PI / 2.5, 0], url: './4HgjdBhRMGZ4jLWnjpTtMu.png' },
 //   // Right
 //   { position: [1.75, 0, 0.25], rotation: [0, -Math.PI / 2.5, 0], url: './6yZv0Nl6BXABbXoPVpfF5y.png' },
@@ -92,6 +92,7 @@ function Frames({ images, q = new THREE.Quaternion(), p = new THREE.Vector3() })
   const clicked = useRef()
   const [, params] = useRoute('/item/:id')
   const [, setLocation] = useLocation()
+  const [selectedAlbumId, setSelectedAlbumId] = useState(null)
   useEffect(() => {
     clicked.current = ref.current.getObjectByName(params?.id)
     if (clicked.current) {
@@ -114,13 +115,33 @@ function Frames({ images, q = new THREE.Quaternion(), p = new THREE.Vector3() })
         e.stopPropagation()
         setLocation(clicked.current === e.object ? '/' : '/item/' + e.object.name)
       }}
-      onPointerMissed={() => setLocation('/')}>
-      {images.map((props) => <Frame key={props.url} {...props} /> /* prettier-ignore */)}
+      onPointerMissed={() => {
+        setSelectedAlbumId(null)
+        setLocation('/')
+      }}>
+      {
+        images.map((props) =>(
+          <Frame 
+            key={props.url} 
+            {...props} 
+            selectedAlbumId={selectedAlbumId} 
+            onClick={(e)  => {
+              // Logic to make sure that if the same image is clicked again there will be no selected album
+              if (clicked.current === e.object) {
+                console.log('current is clicked again')
+                setSelectedAlbumId(null)
+              } else {
+                setSelectedAlbumId(e.object.name)
+              }
+            }} 
+          />
+        ))
+      }
     </group>
   )
 }
 
-function Frame({ url, c = new THREE.Color(), ...props }) {
+function Frame({ url, c = new THREE.Color(), selectedAlbumId, ...props }) {
   const image = useRef()
   const frame = useRef()
   const [, params] = useRoute('/item/:id')
@@ -136,7 +157,7 @@ function Frame({ url, c = new THREE.Color(), ...props }) {
     easing.dampC(frame.current.material.color, hovered ? 'orange' : 'aqua', 0.1, dt)
   })
   return (
-    <group {...props}>
+    <group {...props} >
       <mesh
         name={name}
         onPointerOver={(e) => (e.stopPropagation(), hover(true))}
@@ -153,27 +174,33 @@ function Frame({ url, c = new THREE.Color(), ...props }) {
         {/* Testing out some html which will need to cover the whole image 
         and only appear when that image is clicked; this is where all 
         the viz will live */}
-        {/* <Html
-          as='div' // Wrapping element (default: 'div')
-          wrapperClass='test-wrapper-div'
-          prepend
-          center
-          style={{
-            transition: 'all 0.5s',
-            border: '10px solid red',
-            width: '650px',
-            height: '650px',
-            pointerEvents: 'none'
-            // opacity: hiddenHtml ? 0 : 1,
-            // transform: `scale(${hiddenHtml ? 0 : 1})`
-          }}
-        >
-          <h1>hello</h1>
-          <p>world</p>
-        </Html> */}
+        {
+          selectedAlbumId !== null && name === selectedAlbumId &&
+          <Html
+            as='div' // Wrapping element (default: 'div')
+            wrapperClass='test-wrapper-div'
+            center
+            occlude={false}
+            style={{
+              transition: 'all 1.5s',
+              border: '10px solid red',
+              width: '650px',
+              height: '650px',
+              pointerEvents: 'all',
+              background: 'rgba(99, 99, 99, 0.9)'
+              // opacity: hiddenHtml ? 0 : 1,
+              // transform: `scale(${hiddenHtml ? 0 : 1})`
+            }}
+          >
+            <h1>hello</h1><p>world</p>
+          </Html>
+        }
+
       </mesh>
-      <Text maxWidth={0.1} anchorX="left" anchorY="top" position={[0.55, RATIO, 0]} fontSize={0.025}>
-        The name of the album
+      <Text maxWidth={0.1} anchorX="left" anchorY="top" position={[0.55, 1.4, 0]} fontSize={0.025}>
+        {/* The name of the album  */}
+        {/* {name} --------- */}
+        {selectedAlbumId}
         {/* {name.split('-').join(' ')} */}
       </Text>
     </group>
