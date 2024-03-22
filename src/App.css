@@ -21,3 +21,7 @@ body {
   border: 1px solid red;
   background-color: blue;
 }
+
+.test-wrapper-div div h1 {
+  color: orange;
+}

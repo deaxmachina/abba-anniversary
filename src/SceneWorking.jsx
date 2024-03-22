@@ -46,53 +46,79 @@ const images = [
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
-const SceneTest = () => (
-  <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
-    <color attach="background" args={['rebeccapurple']} />
-    <fog attach="fog" args={['#191920', 0, 15]} />
-    <group position={[0, -0.5, 0]}>
-      {/* The image frames */}
-      <Frames images={images} />
-      {/* The floor */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[50, 50]} />
-        <MeshReflectorMaterial
-          blur={[300, 100]}
-          resolution={2048}
-          mixBlur={1}
-          mixStrength={80}
-          roughness={1}
-          depthScale={1.2}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.4}
-          color="#050505"
-          metalness={0.5}
+const SceneTest = () => {
+  const [, setLocation] = useLocation()
+  const [selectedAlbumId, setSelectedAlbumId] = useState(null)
+  const [hiddenHtml, setHiddenHtml] = useState(true)
+  return (
+    <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
+      <color attach="background" args={['rebeccapurple']} />
+      <fog attach="fog" args={['#191920', 0, 15]} />
+      <group position={[0, -0.5, 0]}>
+        {/* The image frames */}
+        <Frames 
+          images={images}
+          setLocation={setLocation}
+          selectedAlbumId={selectedAlbumId}
+          setSelectedAlbumId={setSelectedAlbumId}
+          hiddenHtml={hiddenHtml}
+          setHiddenHtml={setHiddenHtml}
         />
-      </mesh>
-      {/* Alternative floor */}
-      {/* <Ground 
-        mirror={1} 
-        blur={[500, 100]} 
-        mixBlur={12} 
-        mixStrength={1.5} 
-        rotation={[-Math.PI / 2, 0, Math.PI / 2]} 
-        position-y={-0.6}
-      /> */}
-    </group>
-    <Environment preset="city" />
-    <EffectComposer multisampling={8}>
-        <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
-        <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
-    </EffectComposer>
-  </Canvas>
-)
+        {/* The floor */}
+        <mesh 
+          rotation={[-Math.PI / 2, 0, 0]}
+          onClick={(e) => { 
+            // When the floor is clicked on, reset the scene and album 
+            // the html content will also disappear
+            // Note that this is not ideal as the floor can overlap with the frames and then 
+            // when you think you've clicked on the frame, you've clicked on the floor and reset the scene
+            e.stopPropagation()
+            setTimeout(() => {
+              setHiddenHtml(true)
+            }, 1000)
+            setSelectedAlbumId(null)
+            setLocation('/')
+          }}
+        >
+          <planeGeometry args={[50, 50]} />
+          <MeshReflectorMaterial
+            blur={[300, 100]}
+            resolution={2048}
+            mixBlur={1}
+            mixStrength={80}
+            roughness={1}
+            depthScale={1.2}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.4}
+            color="#050505"
+            metalness={0.5}
+          />
+        </mesh>
+        {/* Alternative floor */}
+        {/* <Ground 
+          mirror={1} 
+          blur={[500, 100]} 
+          mixBlur={12} 
+          mixStrength={1.5} 
+          rotation={[-Math.PI / 2, 0, Math.PI / 2]} 
+          position-y={-0.6}
+        /> */}
+      </group>
+      <Environment preset="city" />
+      <EffectComposer multisampling={8}>
+          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
+          <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
+      </EffectComposer>
+    </Canvas>
+  )
+}
 
-function Frames({ images, q = new THREE.Quaternion(), p = new THREE.Vector3() }) {
+function Frames({ images, setLocation, selectedAlbumId, setSelectedAlbumId, hiddenHtml, setHiddenHtml, q = new THREE.Quaternion(), p = new THREE.Vector3() }) {
   const ref = useRef()
   const clicked = useRef()
   const [, params] = useRoute('/item/:id')
-  const [, setLocation] = useLocation()
-  const [selectedAlbumId, setSelectedAlbumId] = useState(null)
+  // const [, setLocation] = useLocation()
+  // const [selectedAlbumId, setSelectedAlbumId] = useState(null)
   useEffect(() => {
     clicked.current = ref.current.getObjectByName(params?.id)
     if (clicked.current) {
@@ -113,27 +139,37 @@ function Frames({ images, q = new THREE.Quaternion(), p = new THREE.Vector3() })
       ref={ref}
       onClick={(e) => { 
         e.stopPropagation()
-        setLocation(clicked.current === e.object ? '/' : '/item/' + e.object.name)
+        //setLocation(clicked.current === e.object ? '/' : '/item/' + e.object.name) // Original code
+        // Logic to make sure that if the same image is clicked again there will be no selected album
+        // Only set the selected album to currently clicked one, and don't reset the scene under any conditions
+        if (clicked.current === e.object) {
+          console.log('current is clicked again')
+          setSelectedAlbumId(null)
+          setTimeout(() => {
+            setHiddenHtml(true)
+          }, 1000)
+        } else {
+          setSelectedAlbumId(e.object.name)
+          setLocation('/item/' + e.object.name)
+          setHiddenHtml(true)
+          setTimeout(() => {
+            setHiddenHtml(false)
+          }, 1000)
+        }
+        
       }}
       onPointerMissed={() => {
-        setSelectedAlbumId(null)
-        setLocation('/')
-      }}>
+        //setSelectedAlbumId(null)
+        // setLocation('/')
+      }}
+    >
       {
         images.map((props) =>(
           <Frame 
             key={props.url} 
             {...props} 
             selectedAlbumId={selectedAlbumId} 
-            onClick={(e)  => {
-              // Logic to make sure that if the same image is clicked again there will be no selected album
-              if (clicked.current === e.object) {
-                console.log('current is clicked again')
-                setSelectedAlbumId(null)
-              } else {
-                setSelectedAlbumId(e.object.name)
-              }
-            }} 
+            hiddenHtml={hiddenHtml}
           />
         ))
       }
@@ -141,7 +177,7 @@ function Frames({ images, q = new THREE.Quaternion(), p = new THREE.Vector3() })
   )
 }
 
-function Frame({ url, c = new THREE.Color(), selectedAlbumId, ...props }) {
+function Frame({ url, c = new THREE.Color(), selectedAlbumId, hiddenHtml, ...props }) {
   const image = useRef()
   const frame = useRef()
   const [, params] = useRoute('/item/:id')
@@ -149,7 +185,7 @@ function Frame({ url, c = new THREE.Color(), selectedAlbumId, ...props }) {
   const [rnd] = useState(() => Math.random())
   const name = getUuid(url) // Note that this needs to be unique
   const isActive = params?.id === name
-  const [hiddenHtml, setHiddenHtml] = useState(true)
+  const [clickedText, setClickedText] = useState('hello')
   useCursor(hovered)
   useFrame((state, dt) => {
     image.current.material.zoom = 2 + Math.sin(rnd * 10000 + state.clock.elapsedTime / 3) / 2
@@ -175,24 +211,32 @@ function Frame({ url, c = new THREE.Color(), selectedAlbumId, ...props }) {
         and only appear when that image is clicked; this is where all 
         the viz will live */}
         {
-          selectedAlbumId !== null && name === selectedAlbumId &&
+           !hiddenHtml && selectedAlbumId !== null && name === selectedAlbumId &&
           <Html
+            key={name}
             as='div' // Wrapping element (default: 'div')
             wrapperClass='test-wrapper-div'
             center
             occlude={false}
             style={{
               transition: 'all 1.5s',
-              border: '10px solid red',
-              width: '650px',
-              height: '650px',
+              border: '2px solid red',
+              width: '610px',
+              height: '630px',
               pointerEvents: 'all',
-              background: 'rgba(99, 99, 99, 0.9)'
+              background: 'rgba(9, 99, 99, 0.8)',
+              zIndex: 100000,
               // opacity: hiddenHtml ? 0 : 1,
               // transform: `scale(${hiddenHtml ? 0 : 1})`
             }}
           >
-            <h1>hello</h1><p>world</p>
+            <h1 
+              onClick = { () => clickedText === 'hello' ? setClickedText('belloooo') : setClickedText('hello') }
+            >
+              {clickedText}
+            </h1>
+            <p>world</p>
+            <button style={{ cursor: 'pointer' }}>click me</button>
           </Html>
         }
 
