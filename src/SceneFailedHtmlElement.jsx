@@ -46,10 +46,11 @@ const images = [
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
-const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) => {
+const SceneTest = () => {
   const [location, setLocation] = useLocation()
-  // const [selectedAlbumId, setSelectedAlbumId] = useState(null)
-  // const [showHtml, setShowHtml] = useState(false)
+  const [selectedAlbumId, setSelectedAlbumId] = useState(null)
+  const [selectedAlbumIds, setSelectedAlbumIds] = useState([null])
+  const [hiddenHtml, setHiddenHtml] = useState(true)
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
       <color attach="background" args={['black']} />
@@ -61,8 +62,10 @@ const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml 
           setLocation={setLocation}
           selectedAlbumId={selectedAlbumId}
           setSelectedAlbumId={setSelectedAlbumId}
-          setShowHtml={setShowHtml}
-          showHtml={showHtml}
+          hiddenHtml={hiddenHtml}
+          setHiddenHtml={setHiddenHtml}
+          setSelectedAlbumIds={setSelectedAlbumIds}
+          selectedAlbumIds={selectedAlbumIds}
         />
         {/* The floor */}
         <mesh 
@@ -71,10 +74,12 @@ const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml 
             // When the floor is clicked on, reset the scene and album; the html content will also disappear
             // Note that this is not ideal as the floor can overlap with the frames and then 
             // when you think you've clicked on the frame, you've clicked on the floor and reset the scene
-            e.stopPropagation()
-            setShowHtml(false)
-            setSelectedAlbumId(null)
-            setLocation('/')
+            // e.stopPropagation()
+            // setTimeout(() => {
+            //   setHiddenHtml(true)
+            // }, 1000)
+            // setSelectedAlbumId(null)
+            // setLocation('/')
           }}
         >
           <planeGeometry args={[50, 50]} />
@@ -103,7 +108,7 @@ const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml 
 
 
 function Frames({ 
-  images, setLocation, selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, 
+  images, setLocation, selectedAlbumId, setSelectedAlbumId, hiddenHtml, setHiddenHtml, setSelectedAlbumIds, selectedAlbumIds,
   q = new THREE.Quaternion(), p = new THREE.Vector3() 
 }) {
   const refFrames = useRef()
@@ -141,19 +146,19 @@ function Frames({
           setSelectedAlbumId(e.object.name)
           // setLocation('/')
           setLocation('/album/' + e.object.name)
-          setShowHtml(false)
-          // setTimeout(() => {
-          //   setShowHtml(false)
-          // }, 1000)
+          setTimeout(() => {
+            setHiddenHtml(true)
+          }, 1000)
         } else {
           setSelectedAlbumId(e.object.name)
           setLocation('/album/' + e.object.name)
-          setShowHtml(false)
+          setHiddenHtml(true)
           setTimeout(() => {
-            setShowHtml(true)
-          }, 1500)
+            setHiddenHtml(false)
+          }, 1000)
+          setSelectedAlbumIds(d => [...d, e.object.name])
         }
-      
+        
         //console.log('e.object.name', e.object.name)
         console.log('selectedAlbumId', selectedAlbumId)
         // console.log('clicked.current', clicked.current)
@@ -172,6 +177,9 @@ function Frames({
             imgUrl={d.imgUrl}
             id={d.id} // This will become the album id and needs to be renamed
             selectedAlbumId={selectedAlbumId} 
+            hiddenHtml={hiddenHtml}
+            clicked={clicked}
+            selectedAlbumIds={selectedAlbumIds}
           />
         ))
       }
@@ -179,7 +187,7 @@ function Frames({
   )
 }
 
-function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
+function Frame({ position, rotation, imgUrl, id, selectedAlbumId, hiddenHtml, clicked, selectedAlbumIds }) {
   const image = useRef()
   const frame = useRef()
   const [, params] = useRoute('/album/:id')
@@ -187,6 +195,7 @@ function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
   const [rnd] = useState(() => Math.random())
   const name = id // getUuid(url) // Note that this needs to be unique
   const isActive = params?.id === name
+  const [clickedText, setClickedText] = useState('hello')
   useCursor(hovered)
   useFrame((state, dt) => {
     image.current.material.zoom = 1.5 + Math.sin(rnd * 10000 + state.clock.elapsedTime / 3) / 2
@@ -207,6 +216,37 @@ function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
         scale={[1.2, RATIO*1.2, 0.05]}
         position={[0, RATIO*1.2 * 0.5, 0]}
       >
+        {/* HTML element where the data viz will live */}
+        {
+          name === selectedAlbumId &&
+            <Html
+                  key={name}
+                  as='div' // Wrapping element (default: 'div')
+                  wrapperClass='test-wrapper-div'
+                  center
+                  occlude={false}
+                  sprite
+                  zIndexRange={[2, 0]}
+                  distanceFactor={1}
+                  style={{
+                    transition: 'all 1.5s',
+                    border: '2px solid red',
+                    width: '600px',
+                    height: '350px',
+                    background: 'rgba(9, 99, 99, 1)',
+                    zIndex: 2,
+                    // opacity: hiddenHtml ? 0 : 1,
+                  }}
+                >
+                    <h1 
+                      onClick = { () => clickedText === 'hello' ? setClickedText('belloooo') : setClickedText('hello') }
+                    >
+                      {clickedText}
+                    </h1>
+                    <p>world</p>
+                    <button style={{ cursor: 'pointer' }}>click me</button>
+            </Html>
+          }
         <boxGeometry />
         <meshStandardMaterial color="hotpink" metalness={1.5} roughness={0.5} envMapIntensity={3} />
         <mesh ref={frame} raycast={() => null} scale={[0.9, 0.93, 0.9]} position={[0, 0, 0.2]}>

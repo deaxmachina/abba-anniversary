@@ -1,0 +1,76 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100vw;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  color: white;
+  user-select: none;
+}
+
+.canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: lightblue;
+  z-index: 1; /* Ensure canvas is behind overlay */
+}
+
+.test-wrapper-div {
+  border: 1px solid red;
+  background-color: blue;
+  pointer-events: auto;
+}
+
+.test-wrapper-div div h1 {
+  color: orange;
+  pointer-events: auto;
+}
+
+
+.overall-wrapper {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  .wrapper-3d {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .wrapper-2d {
+    position: absolute;
+    top: 44%;
+    left: 50%;
+    width: 70vh;
+    height: 70vh;
+    background-color: hotpink;
+    z-index: 100;
+    transform: translate(-50%, -50%);
+    pointer-events: all;
+    transition: all 0.5s ease;
+
+    opacity: 0;  
+    &.visible {
+      opacity: 1;
+    }
+  }
+
+}
+
