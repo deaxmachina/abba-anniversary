@@ -10,46 +10,14 @@ import { easing } from 'maath'
 import getUuid from 'uuid-by-string'
 import { KernelSize } from 'postprocessing'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import albums from './albums'
 
 
-const pexel = (id) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`
-const images = [
-  // Front
-  { position: [0, 0, 1.5], rotation: [0, 0, 0], imgUrl: './1OC16r1BdQO6hK2iqmvwXF.png', id: '0'},
-  // Back
-  { position: [-0.8, 0, -0.6], rotation: [0, 0, 0], imgUrl: './0mb5Q9w5GJKU7HClkEzHpy.png', id: '1' },
-  { position: [0.8, 0, -0.6], rotation: [0, 0, 0], imgUrl: './0sI9HAbEJn1eqWsxyFsf1I.png', id: '2' },
-  // Left
-  { position: [-1.75, 0, 0.25], rotation: [0, Math.PI / 2.5, 0], imgUrl: './1lDo24S34NvI1pAg7Oxldc.png', id: '3' },
-  { position: [-2.15, 0, 1.5], rotation: [0, Math.PI / 2.5, 0], imgUrl: './0gkax94ZwlPz1XbtCVg4Vd.png', id: '4' },
-  { position: [-2, 0, 2.75], rotation: [0, Math.PI / 2.5, 0], imgUrl: './4HgjdBhRMGZ4jLWnjpTtMu.png', id: '5' },
-  // Right
-  { position: [1.75, 0, 0.25], rotation: [0, -Math.PI / 2.5, 0], imgUrl: './6yZv0Nl6BXABbXoPVpfF5y.png', id: '6' },
-  { position: [2.15, 0, 1.5], rotation: [0, -Math.PI / 2.5, 0], imgUrl: './65EhfozJEurgR34SyrNV3P.png', id: '7' },
-  { position: [2, 0, 2.75], rotation: [0, -Math.PI / 2.5, 0], imgUrl: './67WqQt65XzFxgqwAfJu7fZ.png', id: '8' }
-]
-// const images = [
-//   // Front
-//   { position: [0, 0, 1.5], rotation: [0, 0, 0], imgUrl: pexel(1103970), id: '1103970' },
-//   // Back
-//   { position: [-0.8, 0, -0.6], rotation: [0, 0, 0], imgUrl: pexel(416430), id: '416430' },
-//   { position: [0.8, 0, -0.6], rotation: [0, 0, 0], imgUrl: pexel(310452), id: '310452' },
-//   // Left
-//   { position: [-1.75, 0, 0.25], rotation: [0, Math.PI / 2.5, 0], imgUrl: pexel(327482), id: '327482' },
-//   { position: [-2.15, 0, 1.5], rotation: [0, Math.PI / 2.5, 0], imgUrl: pexel(325185), id: '325185' },
-//   { position: [-2, 0, 2.75], rotation: [0, Math.PI / 2.5, 0], imgUrl: pexel(358574), id: '358574' },
-//   // Right
-//   { position: [1.75, 0, 0.25], rotation: [0, -Math.PI / 2.5, 0], imgUrl: pexel(227675), id: '227675' },
-//   { position: [2.15, 0, 1.5], rotation: [0, -Math.PI / 2.5, 0], imgUrl: pexel(911738), id: '911738' },
-//   { position: [2, 0, 2.75], rotation: [0, -Math.PI / 2.5, 0], imgUrl: pexel(1738986), id: '1738986' }
-// ]
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
-const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) => {
+const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) => {
   const [location, setLocation] = useLocation()
-  // const [selectedAlbumId, setSelectedAlbumId] = useState(null)
-  // const [showHtml, setShowHtml] = useState(false)
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
       <color attach="background" args={['black']} />
@@ -57,7 +25,7 @@ const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml 
       <group position={[0, -0.5, 0]}>
         {/* The image frames */}
         <Frames 
-          images={images}
+          albums={albums}
           setLocation={setLocation}
           selectedAlbumId={selectedAlbumId}
           setSelectedAlbumId={setSelectedAlbumId}
@@ -103,7 +71,7 @@ const SceneTest = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml 
 
 
 function Frames({ 
-  images, setLocation, selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, 
+  albums, setLocation, selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, 
   q = new THREE.Quaternion(), p = new THREE.Vector3() 
 }) {
   const refFrames = useRef()
@@ -134,7 +102,6 @@ function Frames({
         // Logic to make sure that if the same Frame is clicked again there will be no selected album
         // Only set the selected Frame to currently clicked one, and don't reset the scene under any conditions
         // here (currently just resetting from clicking on the floor)
-
         if (clicked.current === e.object) {
           console.log('current is clicked again')
           //setSelectedAlbumId(null)
@@ -153,10 +120,6 @@ function Frames({
             setShowHtml(true)
           }, 1500)
         }
-      
-        //console.log('e.object.name', e.object.name)
-        console.log('selectedAlbumId', selectedAlbumId)
-        // console.log('clicked.current', clicked.current)
       }}
       // onPointerMissed={() => {
       //   setSelectedAlbumId(null)
@@ -164,7 +127,7 @@ function Frames({
       // }}
     >
       {
-        images.map((d) =>(
+        albums.map((d) =>(
           <Frame 
             key={d.id} 
             position={d.position}
@@ -185,7 +148,7 @@ function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
   const [, params] = useRoute('/album/:id')
   const [hovered, hover] = useState(false)
   const [rnd] = useState(() => Math.random())
-  const name = id // getUuid(url) // Note that this needs to be unique
+  const name = id // needs to be unique
   const isActive = params?.id === name
   useCursor(hovered)
   useFrame((state, dt) => {
@@ -225,4 +188,4 @@ function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
 }
 
 
-export default SceneTest
+export default Scene

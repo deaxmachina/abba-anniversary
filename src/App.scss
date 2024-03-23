@@ -65,6 +65,7 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: all;
     transition: all 0.5s ease;
+    padding: 3rem;
 
     opacity: 0;  
     &.visible {
