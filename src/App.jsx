@@ -23,7 +23,10 @@ function App() {
       {
         (hasTransitionedIn || showHtml) &&
         <div className={`wrapper-2d ${hasTransitionedIn && "in"} ${showHtml && "visible"}`}>
-          <SongsViz selectedAlbumId={selectedAlbumId} />
+          {
+           showHtml && 
+           <SongsViz selectedAlbumId={selectedAlbumId} />
+          }
         </div>
       }
     </div>

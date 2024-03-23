@@ -132,6 +132,8 @@ function Frames({
             key={d.id} 
             position={d.position}
             rotation={d.rotation}
+            colorDark={d.colorDark}
+            colorLight={d.colorLight}
             imgUrl={d.imgUrl}
             id={d.id} // This will become the album id and needs to be renamed
             selectedAlbumId={selectedAlbumId} 
@@ -142,7 +144,7 @@ function Frames({
   )
 }
 
-function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
+function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selectedAlbumId }) {
   const image = useRef()
   const frame = useRef()
   const [, params] = useRoute('/album/:id')
@@ -154,7 +156,7 @@ function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
   useFrame((state, dt) => {
     image.current.material.zoom = 1.5 + Math.sin(rnd * 10000 + state.clock.elapsedTime / 3) / 2
     easing.damp3(image.current.scale, [0.85 * (!isActive && hovered ? 0.85 : 1), 0.9 * (!isActive && hovered ? 0.905 : 1), 1], 0.1, dt)
-    easing.dampC(frame.current.material.color, hovered ? 'orange' : 'aqua', 0.1, dt)
+    easing.dampC(frame.current.material.color, hovered ? 'white' : colorDark, 0.1, dt)
   })
   return (
     <>
@@ -171,7 +173,7 @@ function Frame({ position, rotation, imgUrl, id, selectedAlbumId }) {
         position={[0, RATIO*1.2 * 0.5, 0]}
       >
         <boxGeometry />
-        <meshStandardMaterial color="hotpink" metalness={1.5} roughness={0.5} envMapIntensity={3} />
+        <meshStandardMaterial color={colorLight} metalness={1.5} roughness={0.5} envMapIntensity={3} />
         <mesh ref={frame} raycast={() => null} scale={[0.9, 0.93, 0.9]} position={[0, 0, 0.2]}>
           <boxGeometry />
           <meshBasicMaterial toneMapped={false} fog={false} />
