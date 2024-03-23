@@ -4,14 +4,17 @@
 import * as THREE from 'three'
 import { useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useCursor, MeshReflectorMaterial, Image, Text, Environment, Html, Reflector, useTexture } from '@react-three/drei'
+import { useCursor, MeshReflectorMaterial, Image, Text, Environment, Html, Reflector, useTexture, Stars, Sky, Lightformer, SpotLight, Text3D, Center } from '@react-three/drei'
 import { useRoute, useLocation } from 'wouter'
 import { easing } from 'maath'
 import getUuid from 'uuid-by-string'
 import { KernelSize } from 'postprocessing'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import albums from './albums'
+import Lights from './Lights'
 
+// #00b4d8 #fca311 #fb8500
+// #8ac6af #eeb064 #ed9b88
 
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
@@ -20,8 +23,30 @@ const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) =
   const [location, setLocation] = useLocation()
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
-      <color attach="background" args={['black']} />
+      <color attach="background" args={['#000']} />
       <fog attach="fog" args={['#191920', 0, 15]} />
+      <Lights />
+
+      {/* <Center top center > */}
+        <Text3D
+          castShadow={false}
+          receiveShadow={false}
+          curveSegments={32}
+          bevelEnabled
+          bevelSize={0.0001}
+          bevelThickness={0.01}
+          height={0.5}
+          lineHeight={0.5}
+          letterSpacing={-0.06}
+          size={3.3}
+          font="/Inter_Bold.json"
+          position={[-6.6, -0.5, -2]}
+        >
+          {`ABBA`}
+          <meshStandardMaterial castShadow={false} color='#fff' />
+        </Text3D>
+      {/* </Center> */}
+
       <group position={[0, -0.5, 0]}>
         {/* The image frames */}
         <Frames 
@@ -60,7 +85,8 @@ const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) =
           />
         </mesh>
       </group>
-      <Environment preset="city" />
+      <Environment preset="forest" ></Environment>
+      <Stars radius={100} depth={150} count={5000} factor={5} saturation={1} fade speed={2} />
       <EffectComposer multisampling={8}>
           <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
           <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
@@ -147,6 +173,7 @@ function Frames({
 function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selectedAlbumId }) {
   const image = useRef()
   const frame = useRef()
+  const [greyscale, setGreyscale] = useState(true)
   const [, params] = useRoute('/album/:id')
   const [hovered, hover] = useState(false)
   const [rnd] = useState(() => Math.random())
@@ -154,9 +181,9 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
   const isActive = params?.id === name
   useCursor(hovered)
   useFrame((state, dt) => {
-    image.current.material.zoom = 1.5 + Math.sin(rnd * 10000 + state.clock.elapsedTime / 3) / 2
+    image.current.material.zoom = 1.5 + Math.sin(rnd * 10 + state.clock.elapsedTime / 3) / 2
     easing.damp3(image.current.scale, [0.85 * (!isActive && hovered ? 0.85 : 1), 0.9 * (!isActive && hovered ? 0.905 : 1), 1], 0.1, dt)
-    easing.dampC(frame.current.material.color, hovered ? 'white' : colorDark, 0.1, dt)
+    easing.dampC(frame.current.material.color, hovered ? '#fcedbb' : '#fff', 0.1, dt)
   })
   return (
     <>
@@ -173,17 +200,29 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
         position={[0, RATIO*1.2 * 0.5, 0]}
       >
         <boxGeometry />
-        <meshStandardMaterial color={colorLight} metalness={1.5} roughness={0.5} envMapIntensity={3} />
-        <mesh ref={frame} raycast={() => null} scale={[0.9, 0.93, 0.9]} position={[0, 0, 0.2]}>
+        <meshStandardMaterial color='#000' metalness={1.5} roughness={0.5} envMapIntensity={3} />
+
+        <mesh ref={frame} raycast={() => null} scale={[0.9, 0.94, 0.9]} position={[0, 0, 0.2]}>
           <boxGeometry />
-          <meshBasicMaterial toneMapped={false} fog={false} />
+          <meshBasicMaterial toneMapped={false} fog={false}  />
         </mesh>
-        <Image raycast={() => null} ref={image} position={[0, 0, 0.7]} url={imgUrl} />
+        <Image 
+          raycast={() => null} 
+          ref={image} 
+          position={[0, 0, 0.7]} 
+          url={imgUrl}
+          // color='red'
+          radius='0'
+          grayscale={hovered ? false : true}
+          // transparent={true}
+          // opacity={0.5}
+        />
       </mesh>
-      <Text maxWidth={0.4} anchorX="left" anchorY="top" position={[0, 1.35, 0]} fontSize={0.025}>
+
+      {/* <Text maxWidth={0.4} anchorX="left" anchorY="top" position={[0, 1.35, 0]} fontSize={0.025}>
         name: {name} 1976
-        {/* {selectedAlbumId} */}
-      </Text>
+        {selectedAlbumId}
+      </Text> */}
     </group>
       </>
   )

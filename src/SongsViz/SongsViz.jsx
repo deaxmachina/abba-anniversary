@@ -1,4 +1,5 @@
 import albums from "./data/albums.json"
+import albumsFor3D from '../Albums3DScene/albums'
 
 console.log('albums', albums)
 
@@ -6,7 +7,9 @@ const SongsViz = ({ selectedAlbumId }) => {
 
   return (
     <>
-      <div>
+      <div className="wrapper-viz" 
+        // style={{ background: `${albumsFor3D.filter(d => d.id === selectedAlbumId)[0].colorDark}cc` }}
+      >
           <button>Click meeee </button>
           {selectedAlbumId}
           <div>
