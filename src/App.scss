@@ -53,6 +53,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    // background: radial-gradient(#af2f91, #0c4bc6);
+    background: radial-gradient(closest-side, #af2f91 30%, #0c4bc6 60%, #000 90%);
+    canvas {
+    }
   }
   .wrapper-2d {
     position: absolute;

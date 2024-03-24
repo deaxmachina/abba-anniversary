@@ -9,9 +9,12 @@ import { useRoute, useLocation } from 'wouter'
 import { easing } from 'maath'
 import getUuid from 'uuid-by-string'
 import { KernelSize } from 'postprocessing'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { EffectComposer, Bloom,  DepthOfField, Noise, Vignette, LensFlare, Glitch, GodRays, Sepia } from '@react-three/postprocessing'
+import { DotScreen } from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
 import albums from './albums'
 import Lights from './Lights'
+import { AbbaText, AbbaTextAmbigram } from './AbbaText'
 
 // #00b4d8 #fca311 #fb8500
 // #8ac6af #eeb064 #ed9b88
@@ -22,30 +25,11 @@ const RATIO = 1
 const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) => {
   const [location, setLocation] = useLocation()
   return (
-    <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }}>
-      <color attach="background" args={['#000']} />
+    <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} alpha transparent >
+      {/* <color attach="background" args={['#000']} /> */}
       <fog attach="fog" args={['#191920', 0, 15]} />
       <Lights />
-
-      {/* <Center top center > */}
-        <Text3D
-          castShadow={false}
-          receiveShadow={false}
-          curveSegments={32}
-          bevelEnabled
-          bevelSize={0.0001}
-          bevelThickness={0.01}
-          height={0.5}
-          lineHeight={0.5}
-          letterSpacing={-0.06}
-          size={3.3}
-          font="/Inter_Bold.json"
-          position={[-6.6, -0.5, -2]}
-        >
-          {`ABBA`}
-          <meshStandardMaterial castShadow={false} color='#fff' />
-        </Text3D>
-      {/* </Center> */}
+      <AbbaTextAmbigram />
 
       <group position={[0, -0.5, 0]}>
         {/* The image frames */}
@@ -81,15 +65,19 @@ const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) =
             minDepthThreshold={0.4}
             maxDepthThreshold={1.4}
             color="#050505"
-            metalness={0.5}
+            metalness={1}
           />
         </mesh>
       </group>
-      <Environment preset="forest" ></Environment>
       <Stars radius={100} depth={150} count={5000} factor={5} saturation={1} fade speed={2} />
       <EffectComposer multisampling={8}>
           <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
           <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
+
+          {/* <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} /> */}
+          <Noise opacity={0.08} premultiply={false}/>
+          {/* <Vignette eskil={false} offset={0.1} darkness={1.1} /> */}
+
       </EffectComposer>
     </Canvas>
   )
