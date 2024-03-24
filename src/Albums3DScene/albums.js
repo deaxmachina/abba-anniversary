@@ -1,7 +1,7 @@
 const pexel = (id) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260`
 const albums = [
   // Front
-  { position: [0, 0, 1.5], rotation: [0, 0, 0], imgUrl: './5gSBDA6ufk8UZejT4XR7av.png', id: '5gSBDA6ufk8UZejT4XR7av', name: 'Waterloo', colorDark: '#903828', colorLight: '#CB4F38' }, 
+  { position: [0, 0, 1.5], rotation: [0, 0, 0], imgUrl: './0uUtGVj0y9FjfKful7cABY.png', id: '0uUtGVj0y9FjfKful7cABY', name: 'Voyage', colorDark: '#93711C', colorLight: '#D0A028' }, 
   // Back
   { position: [-0.8, 0, -0.6], rotation: [0, 0, 0],  imgUrl: './3Il2ad1NGO9zoY1FIVBuHD.png', id: '3Il2ad1NGO9zoY1FIVBuHD', name: 'Ring Ring', colorDark: '#782828', colorLight: '#D14646' }, 
   { position: [0.8, 0, -0.6], rotation: [0, 0, 0], imgUrl: './3JHZ83ohEBDLFQfbVfDHFh.png', id: '3JHZ83ohEBDLFQfbVfDHFh', name: 'The Visitors', colorDark: '#BB5D10', colorLight: '#C06010' }, 
@@ -12,7 +12,7 @@ const albums = [
   // Right
   { position: [1.65, 0, 0.25], rotation: [0, -Math.PI / 3, 0], imgUrl: './1kM6xcSYO5ASJaWgygznL7.png', id: '1kM6xcSYO5ASJaWgygznL7', name: 'ABBA', colorDark: '#482020', colorLight: '#C05555' }, 
   { position: [2.15, 0, 1.5], rotation: [0, -Math.PI / 2.5, 0], imgUrl: './1V6a99EbTTIegOhWoPxYI9.png', id: '1V6a99EbTTIegOhWoPxYI9', name: 'Arrival', colorDark: '#481810', colorLight: '#D2462F' }, 
-  { position: [2, 0, 2.75], rotation: [0, -Math.PI / 2.5, 0], imgUrl: './0uUtGVj0y9FjfKful7cABY.png', id: '0uUtGVj0y9FjfKful7cABY', name: 'Voyage', colorDark: '#93711C', colorLight: '#D0A028' } 
+  { position: [2, 0, 2.75], rotation: [0, -Math.PI / 2.5, 0],  imgUrl: './5gSBDA6ufk8UZejT4XR7av.png', id: '5gSBDA6ufk8UZejT4XR7av', name: 'Waterloo', colorDark: '#903828', colorLight: '#CB4F38'  } 
 ]
 // const images = [
 //   // Front

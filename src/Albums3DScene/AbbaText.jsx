@@ -1,4 +1,4 @@
-import {  Text3D, Center } from '@react-three/drei'
+import {  Text3D, Center, useMatcapTexture } from '@react-three/drei'
 
 
 const AbbaText = () => {
@@ -27,12 +27,21 @@ const AbbaText = () => {
   )
 }
 
+// #b38a42
+// #fcd09f
+// #eeb064
+// Nice mapcaps:  47, 169, 194, 217, 233, 270, 284, 285, 294
+
 
 const AbbaTextAmbigram = ({ 
   curveSegments=32, bevelEnabled=true, bevelSize=0.001, bevelThickness=0.01,  height=0.5, 
-  lineHeight=0.5, letterSpacing=-0.1, size=3.3, font="/Inter_Bold.json", color='#fcd09f'
+  lineHeight=0.5, letterSpacing=-0.1, size=4, font="fonts/Sarabun Medium_Regular.json", color='#eeb064'
 }) => {
   const xOffset = -6
+  const [matcap, url] = useMatcapTexture(
+    294, // index of the matcap texture https://github.com/emmelleppi/matcaps/blob/master/matcap-list.json
+    1024 // size of the texture ( 64, 128, 256, 512, 1024 )
+   )
   return (
     <>
     {/* <Center top center > */}
@@ -46,10 +55,11 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset, -0.5, -2]}
+        position={[xOffset + 0.2, -0.5, -2]}
       >
         {`A`}
-        <meshStandardMaterial color={color} />
+        {/* <meshStandardMaterial color={color} /> */}
+        <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
       {/* The inverted B */}
       <Text3D
@@ -62,11 +72,12 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset+6, -0.5, -2]}
+        position={[xOffset+6.2, -0.5, -2]}
         scale={[-1, 1, 1]}
       >
         {`B`}
-        <meshStandardMaterial color={color} />
+        {/* <meshStandardMaterial color={color} /> */}
+        <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
       <Text3D
         curveSegments={curveSegments}
@@ -78,10 +89,11 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset + 6, -0.5, -2]}
+        position={[xOffset + 5.8, -0.5, -2]}
       >
         {`B`}
-        <meshStandardMaterial color={color} />
+        {/* <meshStandardMaterial color={color} /> */}
+        <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
       <Text3D
         curveSegments={curveSegments}
@@ -93,10 +105,11 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset + 8.7, -0.5, -2]}
+        position={[xOffset + 8.5, -0.5, -2]}
       >
         {`A`}
-        <meshStandardMaterial color={color} />
+        {/* <meshStandardMaterial color={color} /> */}
+        <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
     {/* </Center> */}
     </>

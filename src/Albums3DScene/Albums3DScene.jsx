@@ -25,7 +25,7 @@ const RATIO = 1
 const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) => {
   const [location, setLocation] = useLocation()
   return (
-    <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} alpha transparent >
+    <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} transparent={false} >
       {/* <color attach="background" args={['#000']} /> */}
       <fog attach="fog" args={['#191920', 0, 15]} />
       <Lights />
@@ -69,7 +69,7 @@ const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) =
           />
         </mesh>
       </group>
-      <Stars radius={100} depth={150} count={5000} factor={5} saturation={1} fade speed={2} />
+      {/* <Stars radius={100} depth={150} count={5000} factor={5} saturation={1} fade speed={2} /> */}
       <EffectComposer multisampling={8}>
           <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
           <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
