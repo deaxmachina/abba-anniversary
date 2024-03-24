@@ -35,7 +35,7 @@ export default function Lights() {
       {/* https://github.com/pmndrs/drei?tab=readme-ov-file#environment */}
       {/* https://github.com/pmndrs/drei/blob/master/src/helpers/environment-assets.ts */}
       {/* <Environment background={true} preset="forest" /> */}
-      <Environment background={true} files="hdrs/hightech-concert-stage-with-bright-lights-lightup-floor.hdr" />
+      <Environment background={true} files="hdrs/3440060.hdr" />
       {/* <Environment preset="city" ></Environment> */}
     </>
   );

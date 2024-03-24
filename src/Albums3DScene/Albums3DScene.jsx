@@ -22,16 +22,23 @@ import { AbbaText, AbbaTextAmbigram } from './AbbaText'
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
-const Scene = ({ selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml }) => {
+const Scene = ({ 
+  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight 
+}) => {
   const [location, setLocation] = useLocation()
+  useEffect(() => {
+    console.log( Math.floor(0.002*windowWidth))
+    // Start at 0 and increse the smaller the screen gets 
+  }, [windowWidth])
+  const z = windowWidth >= 1200 ? 0 : windowWidth >= 800 ? -2 : -4
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} transparent={false} >
       {/* <color attach="background" args={['#000']} /> */}
       <fog attach="fog" args={['#191920', 0, 15]} />
       <Lights />
-      <AbbaTextAmbigram />
+      <AbbaTextAmbigram windowWidth={windowWidth}/>
 
-      <group position={[0, -0.5, 0]}>
+      <group position={[0, -0.5, z]}>
         {/* The image frames */}
         <Frames 
           albums={albums}
@@ -95,7 +102,7 @@ function Frames({
     clicked.current = refFrames.current.getObjectByName(params?.id)
     if (clicked.current) {
       clicked.current.parent.updateWorldMatrix(true, true)
-      clicked.current.parent.localToWorld(p.set(0, RATIO / 2, 1.25))
+      clicked.current.parent.localToWorld(p.set(0, RATIO / 2, 1.25)) // TODO: Here is where you can set responsivness; original: 1.25
       clicked.current.parent.getWorldQuaternion(q)
     } else {
       p.set(0, 0, 5.5)

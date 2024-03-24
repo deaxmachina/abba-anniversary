@@ -34,6 +34,7 @@ const AbbaText = () => {
 
 
 const AbbaTextAmbigram = ({ 
+  windowWidth,
   curveSegments=32, bevelEnabled=true, bevelSize=0.001, bevelThickness=0.01,  height=0.5, 
   lineHeight=0.5, letterSpacing=-0.1, size=4, font="fonts/Sarabun Medium_Regular.json", color='#eeb064'
 }) => {
@@ -42,6 +43,7 @@ const AbbaTextAmbigram = ({
     294, // index of the matcap texture https://github.com/emmelleppi/matcaps/blob/master/matcap-list.json
     1024 // size of the texture ( 64, 128, 256, 512, 1024 )
    )
+  const z = windowWidth >= 1200 ? -2 : windowWidth >= 900 ? -4 : -6
   return (
     <>
     {/* <Center top center > */}
@@ -55,7 +57,7 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset + 0.2, -0.5, -2]}
+        position={[xOffset + 0.2, -0.5, z]}
       >
         {`A`}
         {/* <meshStandardMaterial color={color} /> */}
@@ -72,7 +74,7 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset+6.2, -0.5, -2]}
+        position={[xOffset+6.2, -0.5, z]}
         scale={[-1, 1, 1]}
       >
         {`B`}
@@ -89,7 +91,7 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset + 5.8, -0.5, -2]}
+        position={[xOffset + 5.8, -0.5, z]}
       >
         {`B`}
         {/* <meshStandardMaterial color={color} /> */}
@@ -105,7 +107,7 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset + 8.5, -0.5, -2]}
+        position={[xOffset + 8.5, -0.5, z]}
       >
         {`A`}
         {/* <meshStandardMaterial color={color} /> */}
