@@ -77,15 +77,11 @@ const Scene = ({
         </mesh>
       </group>
       {/* <Stars radius={100} depth={150} count={5000} factor={5} saturation={1} fade speed={2} /> */}
-      <EffectComposer multisampling={8}>
+      {/* <EffectComposer multisampling={8}>
           <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
           <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
-
-          {/* <DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} /> */}
           <Noise opacity={0.08} premultiply={false}/>
-          {/* <Vignette eskil={false} offset={0.1} darkness={1.1} /> */}
-
-      </EffectComposer>
+      </EffectComposer> */}
     </Canvas>
   )
 }
