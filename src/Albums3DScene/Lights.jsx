@@ -1,8 +1,8 @@
 import { Environment, Sky } from "@react-three/drei";
 
-
 // https://polyhaven.com/a/cyclorama_hard_light
 // https://polyhaven.com/a/circus_arena
+
 
 export default function Lights() {
   return (
@@ -12,19 +12,36 @@ export default function Lights() {
         position={[0, 5, 0]}
         castShadow={false}
       /> */}
-      <pointLight 
-        args={['#af2f91', 20, 5]} 
-        position={[2.4, 0, 1.7]}
-      />
-      <pointLight 
-        args={['#0c4bc6', 20, 2]} 
-        position={[-0.2, 0, 3]}
-      />
       {/* <rectAreaLight 
         args={['#b38a42', 4, 10, 20]}
         position={[0, 1, 0]}
         castShadow={false}
       /> */}
+
+      {/* <pointLight 
+        args={['#af2f91', 20, 5]} 
+        position={[2.4, 0, 1.7]}
+      /> */}
+      {/* <pointLight 
+        args={['#0c4bc6', 20, 2]} 
+        position={[-0.2, 0, 3]}
+      /> */}
+      
+      {/* <pointLight 
+        args={['#43c0f0', 20, 2]} 
+        position={[-0.2, 0, 3]}
+      /> */}
+
+
+      <pointLight 
+        args={['rebeccapurple', 20, 2]} 
+        position={[-0.2, 0, 3]}
+      />
+      <pointLight 
+        args={['#b38a42', 30, 5]} 
+        position={[2.4, 0, 1.7]}
+      />
+
       <ambientLight
         intensity={1.5}
       />
@@ -35,7 +52,16 @@ export default function Lights() {
       {/* https://github.com/pmndrs/drei?tab=readme-ov-file#environment */}
       {/* https://github.com/pmndrs/drei/blob/master/src/helpers/environment-assets.ts */}
       {/* <Environment background={true} preset="forest" /> */}
-      <Environment background={true} files="hdrs/3440060.hdr" />
+      <Environment 
+        background={true} 
+        files="hdrs/fave_SciFi_hdri-hdr_VR360_view_expansive_blue_1356476283_10545987.hdr" 
+        // files={[
+        //   "hdrs/SciFi_cube-map-default-png_VR360_view_expansive_blue_529834485_10545969/cube_up.png",
+        //   "hdrs/SciFi_cube-map-default-png_VR360_view_expansive_blue_529834485_10545969/cube_down.png",
+        //   "hdrs/SciFi_cube-map-default-png_VR360_view_expansive_blue_529834485_10545969/cube_front.png",
+        //   "hdrs/SciFi_cube-map-default-png_VR360_view_expansive_blue_529834485_10545969/cube_back.png",
+        // ]}
+      />
       {/* <Environment preset="city" ></Environment> */}
     </>
   );

@@ -54,7 +54,8 @@ body {
     top: 0;
     left: 0;
     // background: radial-gradient(#af2f91, #0c4bc6);
-    background: radial-gradient(closest-side, #af2f91 30%, #8ac6af 60%, #000 90%);
+    // background: radial-gradient(closest-side, #af2f91 30%, #8ac6af 60%, #000 90%);
+    background: #000;
     canvas {
     }
   }
@@ -67,12 +68,11 @@ body {
     z-index: 100;
     transform: translate(-50%, -50%);
     pointer-events: all;
-    transition: opacity 0.5s ease;
-    // padding: 3rem;
-    opacity: 0;  
-    &.visible {
-      opacity: 1;
-    }
+    transition: all 1.5s ease;
+    // opacity: 0;  
+    // &.visible {
+    //   opacity: 1;
+    // }
   }
 }
 
@@ -82,5 +82,7 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(12px);
   padding: 3rem;
+  background-color: #000;
+  // border: 10px solid white;
 }
 

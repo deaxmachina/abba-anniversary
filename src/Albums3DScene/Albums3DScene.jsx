@@ -78,8 +78,8 @@ const Scene = ({
       </group>
       {/* <Stars radius={100} depth={150} count={5000} factor={5} saturation={1} fade speed={2} /> */}
       <EffectComposer multisampling={8}>
-          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.6} />
-          {/* <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} /> */}
+          <Bloom kernelSize={3} luminanceThreshold={0} luminanceSmoothing={0.4} intensity={0.8} />
+          <Bloom kernelSize={KernelSize.HUGE} luminanceThreshold={0} luminanceSmoothing={0} intensity={0.5} />
           {/* <Noise opacity={0.08} premultiply={false}/> */}
       </EffectComposer>
     </Canvas>
@@ -204,7 +204,7 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
           url={imgUrl}
           // color='red'
           radius='0'
-          grayscale={hovered ? false : true}
+          grayscale={hovered || id === '0uUtGVj0y9FjfKful7cABY' ? false : true}
           // transparent={true}
           // opacity={0.5}
         />

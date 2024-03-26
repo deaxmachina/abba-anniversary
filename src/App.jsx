@@ -39,6 +39,12 @@ function App() {
         />
       </div>
       {
+        showHtml && selectedAlbumId && 
+        <div className='wrapper-2d'>
+          <SongsViz selectedAlbumId={selectedAlbumId} />
+        </div>
+      }
+      {/* {
         (hasTransitionedIn || showHtml) &&
         <div className={`wrapper-2d ${hasTransitionedIn && "in"} ${showHtml && "visible"}`}>
           {
@@ -46,7 +52,7 @@ function App() {
            <SongsViz selectedAlbumId={selectedAlbumId} />
           }
         </div>
-      }
+      } */}
     </div>
   )
 }
