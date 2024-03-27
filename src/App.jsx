@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import _ from 'lodash'
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
 import useMountTransition from "./useMountTransition";
 import SongsViz from './SongsViz/SongsViz';
+import Loading from './Loading/Loading';
 
 function App() {
   const [selectedAlbumId, setSelectedAlbumId] = useState(null)
@@ -29,14 +30,18 @@ function App() {
   return (
     <div className='overall-wrapper'>
       <div className='wrapper-3d'>
+
+      <Suspense fallback={<Loading />}>
         <Albums3DScene
-          selectedAlbumId={selectedAlbumId}
-          setSelectedAlbumId={setSelectedAlbumId}
-          showHtml={showHtml}
-          setShowHtml={setShowHtml}
-          windowWidth={windowWidth}
-          windowHeight={windowHeight}
-        />
+            selectedAlbumId={selectedAlbumId}
+            setSelectedAlbumId={setSelectedAlbumId}
+            showHtml={showHtml}
+            setShowHtml={setShowHtml}
+            windowWidth={windowWidth}
+            windowHeight={windowHeight}
+          />
+      </Suspense>
+
       </div>
       {
         showHtml && selectedAlbumId && 

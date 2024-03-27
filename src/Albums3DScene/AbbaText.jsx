@@ -47,6 +47,21 @@ const AbbaTextAmbigram = ({
   return (
     <>
     {/* <Center top center > */}
+      {/* <Text3D
+        curveSegments={curveSegments}
+        bevelEnabled={bevelEnabled}
+        bevelSize={bevelSize}
+        bevelThickness={bevelThickness}
+        height={height}
+        lineHeight={lineHeight}
+        letterSpacing={-0.6}
+        size={size}
+        font={font}
+        position={[xOffset + 0.2, -0.5, z]}
+      >
+        {`ABBA`}
+        <meshMatcapMaterial matcap={matcap} color={color} />
+      </Text3D> */}
       <Text3D
         curveSegments={curveSegments}
         bevelEnabled={bevelEnabled}
@@ -60,10 +75,8 @@ const AbbaTextAmbigram = ({
         position={[xOffset + 0.2, -0.5, z]}
       >
         {`A`}
-        {/* <meshStandardMaterial color={color} /> */}
         <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
-      {/* The inverted B */}
       <Text3D
         curveSegments={curveSegments}
         bevelEnabled={bevelEnabled}
@@ -78,7 +91,6 @@ const AbbaTextAmbigram = ({
         scale={[-1, 1, 1]}
       >
         {`B`}
-        {/* <meshStandardMaterial color={color} /> */}
         <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
       <Text3D
@@ -94,7 +106,6 @@ const AbbaTextAmbigram = ({
         position={[xOffset + 5.8, -0.5, z]}
       >
         {`B`}
-        {/* <meshStandardMaterial color={color} /> */}
         <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
       <Text3D
@@ -110,7 +121,6 @@ const AbbaTextAmbigram = ({
         position={[xOffset + 8.5, -0.5, z]}
       >
         {`A`}
-        {/* <meshStandardMaterial color={color} /> */}
         <meshMatcapMaterial matcap={matcap} color={color} />
       </Text3D>
     {/* </Center> */}
