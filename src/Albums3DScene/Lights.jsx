@@ -34,7 +34,7 @@ export default function Lights() {
 
 
       <pointLight 
-        args={['#43c0f0', 20, 2]} 
+        args={['rebeccapurple', 20, 2]} 
         position={[-0.2, 0, 3]}
       />
       <pointLight 
@@ -54,7 +54,7 @@ export default function Lights() {
       {/* <Environment background={true} preset="forest" /> */}
       <Environment 
         background={true} 
-        files="hdrs/fave_SciFi_hdri-hdr_VR360_view_expansive_blue_529834485_10545969.hdr" 
+        files="hdrs/fave_SciFi_hdri-hdr_VR360_view_expansive_blue_1356476283_10545987.hdr" 
         // files={[
         //   "hdrs/SciFi_cube-map-default-png_VR360_view_expansive_blue_529834485_10545969/cube_up.png",
         //   "hdrs/SciFi_cube-map-default-png_VR360_view_expansive_blue_529834485_10545969/cube_down.png",
