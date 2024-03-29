@@ -171,7 +171,7 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
   useFrame((state, dt) => {
     image.current.material.zoom = 1.5 + Math.sin(rnd * 10 + state.clock.elapsedTime / 3) / 2
     easing.damp3(image.current.scale, [0.85 * (!isActive && hovered ? 0.85 : 1), 0.9 * (!isActive && hovered ? 0.905 : 1), 1], 0.1, dt)
-    easing.dampC(frame.current.material.color, hovered ? '#fcedbb' : '#fff', 0.1, dt)
+    easing.dampC(frame.current.material.color, isActive ? '#000' : hovered ? '#fcedbb' : '#fff', 0.1, dt)
   })
   return (
     <>
@@ -201,7 +201,7 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
           url={imgUrl}
           // color='red'
           radius='0'
-          grayscale={hovered || id === '0uUtGVj0y9FjfKful7cABY' ? false : true}
+          grayscale={hovered || id === '0uUtGVj0y9FjfKful7cABY' || isActive ? false : true}
           // transparent={true}
           // opacity={0.5}
         />
