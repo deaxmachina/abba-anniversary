@@ -14,7 +14,7 @@ import { DotScreen } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import albums from './albums'
 import Lights from './Lights'
-import { AbbaText, AbbaTextAmbigram } from './AbbaText'
+import { AbbaText, AbbaTextAmbigram, VoyageText } from './AbbaText'
 
 // #00b4d8 #fca311 #fb8500
 // #8ac6af #eeb064 #ed9b88
@@ -34,6 +34,7 @@ const Scene = ({
       <fog attach="fog" args={['#191920', 0, 15]} />
       <Lights />
       <AbbaTextAmbigram windowWidth={windowWidth}/>
+      <VoyageText />
 
       <group position={[0, -0.5, z]}>
         {/* The image frames */}

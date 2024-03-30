@@ -19,6 +19,18 @@ const SongsViz = ({ selectedAlbumId }) => {
   }, [selectedAlbumId])
 
   // Create data for node-link graph 
+  // Make sure that every song is connected to at least one more song
+  const compulsoryLinks = tracksInAlbum.map(track => {
+    const source = track.id
+    const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
+    return ({ source, target, size: _.sample([0.3, 0.7, 1.6]) })
+  })
+  const otherLinks = _.range(6).map(i => {
+    const source = _.sample(tracksInAlbum).id
+    const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
+    return ({ source, target, size: _.sample([0.3, 0.7, 1.6])  })
+  })
+  const allLinks = _.uniqBy([...compulsoryLinks, ...otherLinks], d => `${d.source}-${d.target}`)
   const data = { 
     nodes: tracksInAlbum.map(track => ({
       ...track, 
@@ -26,11 +38,13 @@ const SongsViz = ({ selectedAlbumId }) => {
         ? 20 
         :  _.sample([8, 10, 12])
     })), 
-    links: _.uniqBy(_.range(12).map(i => {
-      const source = _.sample(tracksInAlbum).id
-      const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
-      return ({ source, target })
-    }), d => `${d.source}-${d.target}`).map(link => ({...link, size: _.sample([0.3, 0.7, 1.6])}))
+    links: allLinks
+    // links: _.uniqBy(_.range(12).map(i => {
+    //   const source = _.sample(tracksInAlbum).id
+    //   const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
+    //   return ({ source, target })
+    // }), d => `${d.source}-${d.target}`)
+    //   .map(link => ({...link, size: _.sample([0.3, 0.7, 1.6])}))
   }
 
   // Set dimensions of the main svg 
@@ -85,11 +99,33 @@ const SongsViz = ({ selectedAlbumId }) => {
             <filter id='glow'>
               <feGaussianBlur stdDeviation='10' result='coloredBlur'></feGaussianBlur>
               <feMerge>
-                <feMergeNode id='coloredBlur'></feMergeNode>
-                <feMergeNode id='SourceGraphic'></feMergeNode>
+                <feMergeNode in='coloredBlur'></feMergeNode>
+                <feMergeNode in='SourceGraphic'></feMergeNode>
               </feMerge>
             </filter>
+            <filter id='glow-subtle'>
+              <feGaussianBlur stdDeviation='3' result='coloredBlur'></feGaussianBlur>
+              <feMerge>
+                <feMergeNode in='coloredBlur'></feMergeNode>
+                <feMergeNode in='SourceGraphic'></feMergeNode>
+              </feMerge>
+            </filter>
+
+            <radialGradient id='radial-gradient' cx='50%' cy='50%' r='50%'>
+              <stop offset='0%' stopColor='#FFF76B'></stop>
+              <stop offset='50%' stopColor='#FFF845'></stop>
+              <stop offset='90%' stopColor='#FFDA4E'></stop>
+              <stop offset='100%' stopColor='#FB8933'></stop>
+            </radialGradient>
+
+            <radialGradient id='radial-gradient-planets' cx='50%' cy='50%' r='50%'>
+              <stop offset='0%' stopColor='#3a86ff'></stop>
+              <stop offset='100%' stopColor='#8338ec'></stop>
+              {/* <stop offset='100%' stopColor='#af2f91'></stop> */}
+            </radialGradient>
           </defs>
+
+
 
           {/* Links */}
           {
@@ -108,37 +144,19 @@ const SongsViz = ({ selectedAlbumId }) => {
             ))
           }
           {/* Nodes */}
-          <g className='nodes-g' style={{ filter: "url(#glow)" }} >
-            {
-              (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
-                <circle
-                  key={`${node.id}`}
-                  cx={node.x}
-                  cy={node.y}
-                  fill='#ea9918'
-                  opacity={node.id === clickedNode || clickedNode === null ? 1 : 0.1}
-                  style={{ pointerEvents: 'none' }}
-                  r={node.id !== clickedNode ? node.size : 30}
-                  transform={ clickedNode === null ? 'none' : node.id === clickedNode
-                    ? `translate(${width/2 - node.x}, ${height/2 - node.y})` 
-                    : `none`
-                  }
-                ></circle>
-              ))
-            }
-          </g>
-          <g className='nodes-g' >
+          <g className='nodes-g' style={{ filter: "url(#glow)" }}>
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
                 <g className='circle-g' key={`${node.id}`} >
                   <circle    
+                    className='node'
                     fill={node.id === selectedNode ? '#ea9918' : '#ea9918'}
                     opacity={node.id === clickedNode || clickedNode === null ? 1 : 0}
                     cx={node.x}
                     cy={node.y}
                     r={node.id !== clickedNode ? node.size : 30}
                     transform={ clickedNode === null ? 'none' : node.id === clickedNode
-                      ? `translate(${width/2 - node.x}, ${height/2 - node.y})` 
+                      ? `translate(${width/2 - node.x}, ${height*0.4 - node.y})` 
                       : `none`
                     }
                     onMouseEnter={(e) => {
@@ -169,12 +187,13 @@ const SongsViz = ({ selectedAlbumId }) => {
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
                 <text
+                  className='song-label'
                   key={`${node.id}`}
                   x={node.x}
                   y={node.y}
                   dy={-20}
                   textAnchor='middle'
-                  opacity={node.id === clickedNode || node.id === selectedNode ? 1 : 0}
+                  opacity={node.id === selectedNode ? 1 : 0}
                   style={{ pointerEvents: 'none' }}
                 >
                   {node.name}

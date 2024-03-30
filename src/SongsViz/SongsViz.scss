@@ -21,7 +21,7 @@ svg.stars-viz-svg {
   height: 100%;
 }
 
-line.link {
+line.link, circle.node, text.song-label {
   transition: opacity 1s ease;
 }
 

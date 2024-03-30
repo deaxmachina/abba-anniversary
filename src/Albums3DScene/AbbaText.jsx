@@ -128,4 +128,33 @@ const AbbaTextAmbigram = ({
   )
 }
 
-export { AbbaText, AbbaTextAmbigram }
+const VoyageText = () => {
+  return (
+    <>
+      {/* <Center top center > */}
+      <Text3D
+        castShadow={false}
+        receiveShadow={false}
+        curveSegments={32}
+        bevelEnabled={false}
+        bevelSize={0.0001}
+        bevelThickness={0.01}
+        height={0.001}
+        lineHeight={0.1}
+        letterSpacing={-0.06}
+        size={0.4}
+        font="/fonts/Licorice_Regular.json"
+        position={[-0.5, -0.5, 4.1]}
+        rotation={[-Math.PI * 0.5, 0, 0]}
+      >
+        {`Voyage`}
+        <meshStandardMaterial color='#9b5de5' />
+      </Text3D>
+    {/* </Center> */}
+    </>
+  )
+}
+
+// Licorice_Regular.json
+
+export { AbbaText, AbbaTextAmbigram, VoyageText }
