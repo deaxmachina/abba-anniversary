@@ -1,0 +1,20 @@
+
+
+$delay-increment: 2s; // Define the delay increment
+@keyframes scaleFromZero {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.spotify-metrics-g {
+  // animation: scaleFromZero 2s ease-in-out;
+  @for $i from 1 through 5 { // Assuming you have 5 elements
+    &:nth-child(#{$i}) {
+      animation: scaleFromZero 1s ease-in-out (($i - 1) * $delay-increment); // Apply animation with staggered delay
+    }
+  }
+}

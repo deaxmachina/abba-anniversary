@@ -1,23 +1,23 @@
 import { useState, useEffect, useMemo, useRef, useLayoutEffect } from 'react'
 import albums from "./data/albums.json"
-import albumsFor3D from '../Albums3DScene/albums'
 import * as d3 from 'd3'
 import _ from 'lodash'
 import './SongsViz.scss'
 import selectedSongs from './selectedSongs.js'
+import SpotifyMetricsViz from '../SpotifyMetricsViz/SpotifyMetricsViz'
 
-//console.log('albums', albums)
 
 const SongsViz = ({ selectedAlbumId }) => {
 
-  useEffect(() => {
-    console.log('selected album data', albums.filter(d => d.id === selectedAlbumId))
-  }, [selectedAlbumId])
+  // useEffect(() => {
+  //   console.log('selected album data', albums.filter(d => d.id === selectedAlbumId))
+  // }, [selectedAlbumId])
 
-
+  // Get the tracks in the selected album
   const tracksInAlbum = useMemo(() => {
     return albums.filter(d => d.id === selectedAlbumId)[0].tracks
   }, [selectedAlbumId])
+
   // Create data for node-link graph 
   const data = { 
     nodes: tracksInAlbum.map(track => ({
@@ -33,6 +33,7 @@ const SongsViz = ({ selectedAlbumId }) => {
     }), d => `${d.source}-${d.target}`).map(link => ({...link, size: _.sample([0.3, 0.7, 1.6])}))
   }
 
+  // Set dimensions of the main svg 
   const wrapperRef = useRef()
   const wrapperWidth = wrapperRef?.current?.getBoundingClientRect().width
   const wrapperHeight = wrapperRef?.current?.getBoundingClientRect().height
@@ -45,17 +46,10 @@ const SongsViz = ({ selectedAlbumId }) => {
     setHeight(Math.floor(wrapperHeight))
   }, [wrapperRef, wrapperWidth, wrapperHeight])
 
-  useEffect(() => {
-    console.log('width', width)
-    console.log('height', height)
-  }, [width, height])
-
 
   // Define the d3 simulation for node-link graph
-  // Note: I don't think this will be responsive with width and height
-  // Maybe it needs to be wrapped in a memo
-  const links = data.links.map(d => ({...d}))
-  const nodes = data.nodes.map(d => ({...d}))
+  const links = data.links.map(d => ({...d})) // Need a copy of links as the force will modify the array in place
+  const nodes = data.nodes.map(d => ({...d})) // Need a copy of nodes as the force will modify the array in place
   const [nodesSimulation, setNodesSimulation] = useState(null)
   const [linksSimulation, setLinksSimulation] = useState(null)
   const simulation = useRef()
@@ -67,18 +61,15 @@ const SongsViz = ({ selectedAlbumId }) => {
       .force("x", d3.forceX((d, i) => i * 50).strength(0.5))
       .force("collide", d3.forceCollide().radius(50).strength(0.2))
       .on("tick", () => {
-        //console.log('tick happened')
         setNodesSimulation(() => [...nodes])
         setLinksSimulation(() => [...links])
       })
       //.stop(); // Stop the simulation initially
   }, [width, height])
 
-  const nodesRef = useRef() 
-
+  // Keep track of the songs that have been selected 
   const [selectedNode, setSelectedNode] = useState(null)
   const [clickedNode, setClickedNode] = useState(null)
-
 
 
   return (
@@ -117,7 +108,7 @@ const SongsViz = ({ selectedAlbumId }) => {
             ))
           }
           {/* Nodes */}
-          <g className='nodes-g' ref={nodesRef} style={{ filter: "url(#glow)" }} >
+          <g className='nodes-g' style={{ filter: "url(#glow)" }} >
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
                 <circle
@@ -129,7 +120,7 @@ const SongsViz = ({ selectedAlbumId }) => {
                   style={{ pointerEvents: 'none' }}
                   r={node.id !== clickedNode ? node.size : 30}
                   transform={ clickedNode === null ? 'none' : node.id === clickedNode
-                    ? `translate(${width/2 - node.x - 15}, ${height/2 - node.y - 15})` 
+                    ? `translate(${width/2 - node.x}, ${height/2 - node.y})` 
                     : `none`
                   }
                 ></circle>
@@ -147,7 +138,7 @@ const SongsViz = ({ selectedAlbumId }) => {
                     cy={node.y}
                     r={node.id !== clickedNode ? node.size : 30}
                     transform={ clickedNode === null ? 'none' : node.id === clickedNode
-                      ? `translate(${width/2 - node.x - 15}, ${height/2 - node.y - 15})` 
+                      ? `translate(${width/2 - node.x}, ${height/2 - node.y})` 
                       : `none`
                     }
                     onMouseEnter={(e) => {
@@ -166,8 +157,15 @@ const SongsViz = ({ selectedAlbumId }) => {
               ))
             }
           </g>
+          {/* Spotify metrics for selected song  */}
+          {
+            clickedNode !== null &&
+            <SpotifyMetricsViz width={width} height={height} />
+          }
+          
+
           {/* Labels for songs */}
-          <g className='songs-labels-g' ref={nodesRef}>
+          <g className='songs-labels-g' >
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
                 <text
@@ -185,8 +183,6 @@ const SongsViz = ({ selectedAlbumId }) => {
             }
           </g>
         </svg>
-        {/* <div>{ tracksInAlbum.map(track => (<h4>{track.name}</h4>)) }</div> */}
-
       </div>
     </>
   )
