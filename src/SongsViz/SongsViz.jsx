@@ -4,17 +4,28 @@ import albumsFor3D from '../Albums3DScene/albums'
 import * as d3 from 'd3'
 import _ from 'lodash'
 import './SongsViz.scss'
+import selectedSongs from './selectedSongs.js'
 
-console.log('albums', albums)
+//console.log('albums', albums)
 
 const SongsViz = ({ selectedAlbumId }) => {
+
+  useEffect(() => {
+    console.log('selected album data', albums.filter(d => d.id === selectedAlbumId))
+  }, [selectedAlbumId])
+
 
   const tracksInAlbum = useMemo(() => {
     return albums.filter(d => d.id === selectedAlbumId)[0].tracks
   }, [selectedAlbumId])
   // Create data for node-link graph 
   const data = { 
-    nodes: tracksInAlbum.map(track => ({...track, size: _.sample([8, 10, 16])})), 
+    nodes: tracksInAlbum.map(track => ({
+      ...track, 
+      size:  _.find(selectedSongs, d => d.albumId === selectedAlbumId).songs.map(songs => songs.id).includes(track.id) 
+        ? 20 
+        :  _.sample([8, 10, 12])
+    })), 
     links: _.uniqBy(_.range(12).map(i => {
       const source = _.sample(tracksInAlbum).id
       const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
@@ -51,8 +62,8 @@ const SongsViz = ({ selectedAlbumId }) => {
   useEffect(() => {
     simulation.current = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id))
-      //.force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width * 0.5, height * 0.4).strength(1))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width * 0.5, height * 0.4).strength(1.5))
       .force("x", d3.forceX((d, i) => i * 50).strength(0.5))
       .force("collide", d3.forceCollide().radius(50).strength(0.2))
       .on("tick", () => {
@@ -89,6 +100,7 @@ const SongsViz = ({ selectedAlbumId }) => {
             </filter>
           </defs>
 
+          {/* Links */}
           {
             (width > 0 && height > 0 && linksSimulation) && linksSimulation.map((link, i) => (
               <line
@@ -104,6 +116,7 @@ const SongsViz = ({ selectedAlbumId }) => {
               ></line>
             ))
           }
+          {/* Nodes */}
           <g className='nodes-g' ref={nodesRef} style={{ filter: "url(#glow)" }} >
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
@@ -150,6 +163,24 @@ const SongsViz = ({ selectedAlbumId }) => {
                     style={{ pointerEvents: clickedNode === null || node.id === clickedNode ? 'all' : 'none' }}
                   ></circle>
                 </g>
+              ))
+            }
+          </g>
+          {/* Labels for songs */}
+          <g className='songs-labels-g' ref={nodesRef}>
+            {
+              (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
+                <text
+                  key={`${node.id}`}
+                  x={node.x}
+                  y={node.y}
+                  dy={-20}
+                  textAnchor='middle'
+                  opacity={node.id === clickedNode || node.id === selectedNode ? 1 : 0}
+                  style={{ pointerEvents: 'none' }}
+                >
+                  {node.name}
+                </text>
               ))
             }
           </g>
