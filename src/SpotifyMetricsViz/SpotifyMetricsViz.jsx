@@ -42,7 +42,7 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
     .domain(d3.extent(audioFeatures, d => d.loudness))
     .range([360, 0])
   // Radius scale 
-  const degToRadiusScale = d3.scaleSqrt()
+  const degToRadiusScale = d3.scaleLinear()
     .domain([0, 360])
     .range([4, 25])
 
@@ -73,10 +73,23 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
     return { metric, value, angle, fill }
   })
 
+  const scaleAll = useMemo(() => {
+    const x = _.random(0.8, 1.2)
+    const y = x < 1 ? _.random(1, 1.2) : _.random(0.8, 1)
+    return { x, y }
+  }, [songId]) 
+
 
   return (
     <>
-      <g transform={`translate(${width * 0.5}, ${height * 0.4})`} >
+      <g transform={
+        `translate(${width * 0.5}, ${height * 0.5})
+        `
+      //   `translate(${width * 0.5}, ${height * 0.5})
+      //   scale(${scaleAll.x}, ${scaleAll.y})
+      // `
+        } 
+        >
         <g className='spotify-metrics-g' style={{ filter: "url(#glow-subtle)" }}>
           {
             spotifyMetrics.map((metric, i) => {
@@ -98,9 +111,9 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
                   <path 
                     className='path-to-metric-circle'
                     fill='none' 
-                    // stroke={metric.fill}
-                    stroke={colours.goldLight}
-                    strokeWidth={2}
+                    stroke={metric.fill}
+                    //stroke={colours.goldLight}
+                    strokeWidth={3}
                     style={{ strokeLinejoin: 'round' }}
                     d={d3.arc()({
                       innerRadius: r,
@@ -124,7 +137,8 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
                   />
                   <text 
                     className='spotify-metric-label' 
-                    fill={colours.goldLight} 
+                    // fill={colours.goldLight} 
+                    fill={metric.fill}
                     dy='-0.2rem'
                     opacity={selectedMetric === null || selectedMetric === metric.metric ? 1 : 0}
                   >
@@ -138,6 +152,7 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
                   >
                     <circle 
                       className='spotify-metrics'
+                      //transform={`scale(${1/scaleAll.x}, ${1/scaleAll.y})`}
                       onMouseOver={() => { 
                         setSelectedMetric(metric.metric) 
                       }}
@@ -150,6 +165,7 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
                       //fill="url(#radial-gradient-planets)"
                     ></circle>
                     <text 
+                      //transform={`scale(${1/scaleAll.x}, ${1/scaleAll.y})`}
                       className='label-metric-val' 
                       x={0}
                       dy='0.35em' 

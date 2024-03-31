@@ -23,12 +23,12 @@ $delay-increment: 2s; // Define the delay increment
 
 .spotify-metric-label {
   font-family: "Sarabun", sans-serif;
-  font-family: "Licorice", cursive;
+  //font-family: "Licorice", cursive;
   font-weight: 100;
   font-style: normal;
   textPath {
-    font-size: 1.2rem;
-    opacity: 0.6;
+    font-size: 1rem;
+    opacity: 0.9;
   }
 }
 .label-metric-val {

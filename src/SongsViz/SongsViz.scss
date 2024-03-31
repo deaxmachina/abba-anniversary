@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Licorice&display=swap');
 
 .wrapper-viz {
   position: relative;
@@ -28,11 +27,26 @@ line.link, circle.node, text.song-label {
   transition: opacity 1s ease;
 }
 
+.wrapper-viz-instructions {
+  position: absolute;
+  top: 2%;
+  left: 3%;
+  font-family: "Sarabun", sans-serif;
+  .example-circle {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+
+  }
+}
+
 g.nodes-g {
   g.circle-g {
     //transition: transform 0.1s ease;
   }
   circle {
+    -webkit-transition: -webkit-transform 1s ease, opacity 1s ease; /* Safari */
     transition: transform 1s ease, opacity 1s ease;
     cursor: pointer;
   }

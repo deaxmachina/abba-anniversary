@@ -70,7 +70,7 @@ const coloursOption2 = new function() {
   this.goldLight = '#fcedbb'
   this.primary1 = '#fcedbb'
   this.primary1accent = ''
-  this.secondary1 = '#fcedbb' // '#0c4bc6'
+  this.secondary1 = '#43c0f0' // '#0c4bc6'
   this.secondary1accent = ''
   this.songsVizBg = '#021021c3'
 

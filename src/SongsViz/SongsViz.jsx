@@ -29,15 +29,23 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
     return ({ source, target, size: _.sample([0.3, 0.7, 1.6])  })
   })
   const allLinks = _.uniqBy([...compulsoryLinks, ...otherLinks], d => `${d.source}-${d.target}`)
-  const data = { 
-    nodes: tracksInAlbum.map(track => ({
-      ...track, 
-      size:  _.find(selectedSongs, d => d.albumId === selectedAlbumId).songs.map(songs => songs.id).includes(track.id) 
-        ? 20 
-        :  _.sample([8, 10, 12])
-    })), 
-    links: allLinks
-  }
+  const data = useMemo(() => {
+    const data = { 
+      nodes: tracksInAlbum.map(track => ({
+        ...track, 
+        size:  _.find(selectedSongs, d => d.albumId === selectedAlbumId).songs.map(songs => songs.id).includes(track.id) 
+          ? 24
+          :  _.sample([10, 12, 14]),
+        offsets: [
+          { x: _.random(-0.06, 0.06), y: _.random(-0.06, 0.06), fill: _.sample([colours.primary1, colours.secondary1]) },
+          { x: _.random(-0.06, 0.06), y: _.random(-0.06, 0.06), fill: _.sample([colours.primary1, colours.secondary1]) },
+        ]
+      })), 
+      links: allLinks
+    }
+    return data
+  }, [selectedAlbumId, selectedSongs])
+
 
   // Set dimensions of the main svg 
   const wrapperRef = useRef()
@@ -63,7 +71,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
     simulation.current = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id))
       .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(width * 0.5, height * 0.4).strength(1.5))
+      .force("center", d3.forceCenter(width * 0.5, height * 0.5).strength(1.2))
       .force("x", d3.forceX((d, i) => i * 50).strength(0.5))
       .force("collide", d3.forceCollide().radius(50).strength(0.2))
       .on("tick", () => {
@@ -95,9 +103,16 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
     <>
       <div className="wrapper-viz" ref={wrapperRef} style={{ background: colours.songsVizBg }}>
         {
+          !clickedNode &&
+            <div className='wrapper-viz-instructions'>
+              Click on <div className='example-circle' style={{ background: colours.songStar }}></div> song 
+            </div>
+        }
+
+        {/* {
           audioUrl &&
           <SongPlayer audioUrl={audioUrl} />
-        }
+        } */}
         
         <svg className='stars-viz-svg' onClick={(e) => {
           e.stopPropagation()
@@ -127,19 +142,39 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
             ))
           }
           {/* Nodes */}
-          <g className='nodes-g' style={{ filter: "url(#glow)" }}>
+          <g className='nodes-g' style={{ filter: "url(#glow)" }} >
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
                 <g className='circle-g' key={`${node.id}`} >
-                  <circle    
+                  <circle
+                    cx={node.x * (1 + node.offsets[0].x)}
+                    cy={node.y * (1 + node.offsets[0].y)}
+                    r={!clickedNode ? node.size*4 : 0}
+                    fill={node.offsets[0].fill}
+                    // filter='url(#blob-blur)'
+                    opacity={0.1}
+                    style={{ mixBlendMode: "screen", filter: "url(#blob-blur)", pointerEvents: 'none' }}
+                  />
+                  <circle
+                    cx={node.x * (1 + node.offsets[1].x)}
+                    cy={node.y * (1 + node.offsets[1].y)}
+                    r={!clickedNode ? node.size*4 : 0}
+                    fill={node.offsets[1].fill}
+                    // filter='url(#blob-blur)'
+                    opacity={0.1}
+                    style={{ mixBlendMode: "screen", filter: "url(#blob-blur)", pointerEvents: 'none'   }}
+                  />
+
+                  {/* Main circle */}
+                  <circle   
                     className='node'
-                    fill={node.id === selectedNode ? colours.songStar : colours.songStar}
+                    fill={ node.id === clickedNode || node.id === selectedNode ? 'url(#radial-gradient)' : colours.songStar}
                     opacity={node.id === clickedNode || clickedNode === null ? 1 : 0}
                     cx={node.x}
                     cy={node.y}
                     r={node.id !== clickedNode ? node.size : 30}
                     transform={ clickedNode === null ? 'none' : node.id === clickedNode
-                      ? `translate(${width/2 - node.x}, ${height*0.4 - node.y})` 
+                      ? `translate(${width/2 - node.x}, ${height*0.5 - node.y})` 
                       : `none`
                     }
                     onMouseEnter={(e) => {
