@@ -7,14 +7,11 @@ import selectedSongs from './selectedSongs.js'
 import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
 import SpotifyMetricsViz from '../SpotifyMetricsViz/SpotifyMetricsViz'
 import SongPlayer from '../SongPlayer/SongPlayer'
+import { colours } from '../assets/colours'
+import Filters from './Filters'
 
 
 const SongsViz = ({ selectedAlbumId }) => {
-
-  // useEffect(() => {
-  //   console.log('selected album data', albums.filter(d => d.id === selectedAlbumId))
-  // }, [selectedAlbumId])
-
   // Get the tracks in the selected album
   const tracksInAlbum = useMemo(() => {
     return albums.filter(d => d.id === selectedAlbumId)[0].tracks
@@ -41,12 +38,6 @@ const SongsViz = ({ selectedAlbumId }) => {
         :  _.sample([8, 10, 12])
     })), 
     links: allLinks
-    // links: _.uniqBy(_.range(12).map(i => {
-    //   const source = _.sample(tracksInAlbum).id
-    //   const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
-    //   return ({ source, target })
-    // }), d => `${d.source}-${d.target}`)
-    //   .map(link => ({...link, size: _.sample([0.3, 0.7, 1.6])}))
   }
 
   // Set dimensions of the main svg 
@@ -116,33 +107,7 @@ const SongsViz = ({ selectedAlbumId }) => {
 
           {/* Filers */}
           <defs>
-            <filter id='glow'>
-              <feGaussianBlur stdDeviation='10' result='coloredBlur'></feGaussianBlur>
-              <feMerge>
-                <feMergeNode in='coloredBlur'></feMergeNode>
-                <feMergeNode in='SourceGraphic'></feMergeNode>
-              </feMerge>
-            </filter>
-            <filter id='glow-subtle'>
-              <feGaussianBlur stdDeviation='3' result='coloredBlur'></feGaussianBlur>
-              <feMerge>
-                <feMergeNode in='coloredBlur'></feMergeNode>
-                <feMergeNode in='SourceGraphic'></feMergeNode>
-              </feMerge>
-            </filter>
-
-            <radialGradient id='radial-gradient' cx='50%' cy='50%' r='50%'>
-              <stop offset='0%' stopColor='#FFF76B'></stop>
-              <stop offset='50%' stopColor='#FFF845'></stop>
-              <stop offset='90%' stopColor='#FFDA4E'></stop>
-              <stop offset='100%' stopColor='#FB8933'></stop>
-            </radialGradient>
-
-            <radialGradient id='radial-gradient-planets' cx='50%' cy='50%' r='50%'>
-              <stop offset='0%' stopColor='#3a86ff'></stop>
-              <stop offset='100%' stopColor='#8338ec'></stop>
-              {/* <stop offset='100%' stopColor='#af2f91'></stop> */}
-            </radialGradient>
+            <Filters />
           </defs>
 
 
@@ -156,7 +121,7 @@ const SongsViz = ({ selectedAlbumId }) => {
                 y1={link.source.y}
                 x2={link.target.x}
                 y2={link.target.y}
-                stroke='#fcedbb'
+                stroke={colours.goldLight}
                 strokeWidth={link.size}
                 opacity={clickedNode === null ? 1 : 0}
               ></line>
@@ -169,7 +134,7 @@ const SongsViz = ({ selectedAlbumId }) => {
                 <g className='circle-g' key={`${node.id}`} >
                   <circle    
                     className='node'
-                    fill={node.id === selectedNode ? '#ea9918' : '#ea9918'}
+                    fill={node.id === selectedNode ? colours.songStar : colours.songStar}
                     opacity={node.id === clickedNode || clickedNode === null ? 1 : 0}
                     cx={node.x}
                     cy={node.y}
@@ -205,7 +170,7 @@ const SongsViz = ({ selectedAlbumId }) => {
           
 
           {/* Labels for songs */}
-          <g className='songs-labels-g' >
+          <g className='songs-labels-g' fill={colours.goldLight} >
             {
               (width > 0 && height > 0 && nodesSimulation) && nodesSimulation.map((node, i) => (
                 <text

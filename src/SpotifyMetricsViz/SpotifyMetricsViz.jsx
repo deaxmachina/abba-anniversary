@@ -2,6 +2,7 @@ import './SpotifyMetricsViz.scss'
 import { useMemo } from 'react'
 import _ from 'lodash'
 import * as d3 from 'd3'
+import { colours } from '../assets/colours'
 
 // TODO: These will come from data 
 const spotifyMetrics = [
@@ -16,14 +17,10 @@ const radtoDeg = (deg) => {
   return deg * (Math.PI / 180)
 }
 
-const arcGenerator = d3.arc()
-  .innerRadius(0)
-  .outerRadius(100)
-  .startAngle(0)
-  .endAngle(Math.PI / 2)
 
 const SpotifyMetricsViz = ({ width, height }) => {
 
+  // TODO: Need to use this in the end to compute the radii to make it responsive
   const maxRadius = useMemo(() => {
     return Math.floor(width / 2 - 70)
   }, [width])
@@ -44,14 +41,14 @@ const SpotifyMetricsViz = ({ width, height }) => {
                     cx={0}
                     cy={0}
                     r={r}
-                    stroke='#fcedbb'
+                    stroke={colours.goldLight}
                     strokeWidth='0.3'
                     fill='none'
                   ></circle>
                   {/* An arc from 0 to the circle? */}
                   <path 
                     fill='none'
-                    stroke='#fcedbb'
+                    stroke={colours.goldLight}
                     strokeWidth={3}
                     style={{ strokeLinejoin: 'round' }}
                     d={d3.arc()({
@@ -68,7 +65,7 @@ const SpotifyMetricsViz = ({ width, height }) => {
                       cx={Math.cos(radtoDeg(metric.angle-90)) * r}
                       cy={Math.sin(radtoDeg(metric.angle-90)) * r}
                       r={Math.max(10, metric.angle * 0.08)}
-                      fill='#af2f91'
+                      fill={colours.spotifyMetric}
                       //fill="url(#radial-gradient-planets)"
                     ></circle>
                   </g>
@@ -77,15 +74,6 @@ const SpotifyMetricsViz = ({ width, height }) => {
               }
             )
           }
-          {/* <circle
-            className='spotify-metrics'
-            cx={0}
-            cy={0}
-            r={100}
-            stroke='pink'
-            strokeWidth='10'
-            fill='none'
-          ></circle> */}
         </g>
       </g>
     </>

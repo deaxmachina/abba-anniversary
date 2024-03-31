@@ -15,9 +15,8 @@ import { BlendFunction } from 'postprocessing'
 import albums from './albums'
 import Lights from './Lights'
 import { AbbaText, AbbaTextAmbigram, VoyageText } from './AbbaText'
+import { colours } from '../assets/colours'
 
-// #00b4d8 #fca311 #fb8500
-// #8ac6af #eeb064 #ed9b88
 
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
@@ -31,7 +30,7 @@ const Scene = ({
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} transparent={1} >
       {/* <color attach="background" args={['#000']} /> */}
-      <fog attach="fog" args={['#191920', 0, 15]} />
+      {/* <fog attach="fog" args={['#191920', 0, 15]} /> */}
       <Lights />
       <AbbaTextAmbigram windowWidth={windowWidth}/>
       <VoyageText />
@@ -162,7 +161,6 @@ function Frames({
 function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selectedAlbumId }) {
   const image = useRef()
   const frame = useRef()
-  const [greyscale, setGreyscale] = useState(true)
   const [, params] = useRoute('/album/:id')
   const [hovered, hover] = useState(false)
   const [rnd] = useState(() => Math.random())
@@ -172,7 +170,7 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
   useFrame((state, dt) => {
     image.current.material.zoom = 1.5 + Math.sin(rnd * 10 + state.clock.elapsedTime / 3) / 2
     easing.damp3(image.current.scale, [0.85 * (!isActive && hovered ? 0.85 : 1), 0.9 * (!isActive && hovered ? 0.905 : 1), 1], 0.1, dt)
-    easing.dampC(frame.current.material.color, isActive ? '#000' : hovered ? '#fcedbb' : '#fff', 0.1, dt)
+    easing.dampC(frame.current.material.color, isActive ? '#000' : hovered ? colours.goldLight : '#fff', 0.1, dt)
   })
   return (
     <>
@@ -200,18 +198,18 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
           ref={image} 
           position={[0, 0, 0.7]} 
           url={imgUrl}
-          // color='red'
-          radius='0'
           grayscale={hovered || id === '0uUtGVj0y9FjfKful7cABY' || isActive ? false : true}
           // transparent={true}
-          // opacity={0.5}
+          // opacity={0.8}
+          // color='rebeccapurple'
+          // radius='0'
         />
       </mesh>
 
-      {/* <Text maxWidth={0.4} anchorX="left" anchorY="top" position={[0, 1.35, 0]} fontSize={0.025}>
-        name: {name} 1976
-        {selectedAlbumId}
-      </Text> */}
+      <Text maxWidth={0.35} anchorX="center" anchorY="top" position={[0, GOLDENRATIO*0.8, 0]} fontSize={0.04} color='#fff'>
+        {albums.find(d => d.id === id).name}
+        {/* 1976 */}
+      </Text>
     </group>
       </>
   )

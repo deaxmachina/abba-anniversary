@@ -1,4 +1,6 @@
 import { Environment, Sky } from "@react-three/drei";
+import { colours } from '../assets/colours'
+
 
 // https://polyhaven.com/a/cyclorama_hard_light
 // https://polyhaven.com/a/circus_arena
@@ -34,11 +36,11 @@ export default function Lights() {
 
 
       <pointLight 
-        args={['rebeccapurple', 20, 2]} 
+        args={[colours.pointLight1, 20, 2]} 
         position={[-0.2, 0, 3]}
       />
       <pointLight 
-        args={['#b38a42', 30, 5]} 
+        args={[colours.pointLight2, 30, 5]} 
         position={[2.4, 0, 1.7]}
       />
 

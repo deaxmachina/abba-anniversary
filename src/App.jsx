@@ -2,7 +2,6 @@ import { useState, useEffect, Suspense } from 'react'
 import _ from 'lodash'
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
-import useMountTransition from "./useMountTransition";
 import SongsViz from './SongsViz/SongsViz';
 import Loading from './Loading/Loading';
 
@@ -25,7 +24,6 @@ function App() {
     })
   }, [])
 
-  const hasTransitionedIn = useMountTransition(showHtml, 2000);
 
   return (
     <div className='overall-wrapper'>
@@ -49,15 +47,6 @@ function App() {
           <SongsViz selectedAlbumId={selectedAlbumId} />
         </div>
       }
-      {/* {
-        (hasTransitionedIn || showHtml) &&
-        <div className={`wrapper-2d ${hasTransitionedIn && "in"} ${showHtml && "visible"}`}>
-          {
-           showHtml && 
-           <SongsViz selectedAlbumId={selectedAlbumId} />
-          }
-        </div>
-      } */}
     </div>
   )
 }
