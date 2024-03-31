@@ -68,8 +68,8 @@ const SpotifyMetricsViz = ({ width, height }) => {
                       cx={Math.cos(radtoDeg(metric.angle-90)) * r}
                       cy={Math.sin(radtoDeg(metric.angle-90)) * r}
                       r={Math.max(10, metric.angle * 0.08)}
-                      // fill='#af2f91'
-                      fill="url(#radial-gradient-planets)"
+                      fill='#af2f91'
+                      //fill="url(#radial-gradient-planets)"
                     ></circle>
                   </g>
                 </g>

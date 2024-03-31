@@ -4,7 +4,9 @@ import * as d3 from 'd3'
 import _ from 'lodash'
 import './SongsViz.scss'
 import selectedSongs from './selectedSongs.js'
+import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
 import SpotifyMetricsViz from '../SpotifyMetricsViz/SpotifyMetricsViz'
+import SongPlayer from '../SongPlayer/SongPlayer'
 
 
 const SongsViz = ({ selectedAlbumId }) => {
@@ -84,11 +86,29 @@ const SongsViz = ({ selectedAlbumId }) => {
   // Keep track of the songs that have been selected 
   const [selectedNode, setSelectedNode] = useState(null)
   const [clickedNode, setClickedNode] = useState(null)
+  // TODO: This should probably be moved inside the player logic 
+  const [songUrl, setSongUrl] = useState(null)
+  const [audioUrl, setAudioUrl] = useState('')
+  const fetchAudio = async (songUrl) => {
+    try {
+      const response = await fetch(songUrl)
+      const blob = await response.blob()
+      const url = URL.createObjectURL(blob)
+      setAudioUrl(url)
+    } catch (error) {
+      console.error('Error fetching audio:', error);
+    }
+  };
 
 
   return (
     <>
       <div className="wrapper-viz" ref={wrapperRef} >
+        {
+          audioUrl &&
+          <SongPlayer audioUrl={audioUrl} />
+        }
+        
         <svg className='stars-viz-svg' onClick={(e) => {
           e.stopPropagation()
           setClickedNode(null)
@@ -124,7 +144,6 @@ const SongsViz = ({ selectedAlbumId }) => {
               {/* <stop offset='100%' stopColor='#af2f91'></stop> */}
             </radialGradient>
           </defs>
-
 
 
           {/* Links */}
@@ -168,6 +187,9 @@ const SongsViz = ({ selectedAlbumId }) => {
                     onClick={(e) => {
                       e.stopPropagation()
                       setClickedNode(node.id)
+                      const songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
+                      setSongUrl(songUrl)
+                      fetchAudio(songUrl)
                     }}
                     style={{ pointerEvents: clickedNode === null || node.id === clickedNode ? 'all' : 'none' }}
                   ></circle>
@@ -191,7 +213,7 @@ const SongsViz = ({ selectedAlbumId }) => {
                   key={`${node.id}`}
                   x={node.x}
                   y={node.y}
-                  dy={-20}
+                  dy={-node.size-5}
                   textAnchor='middle'
                   opacity={node.id === selectedNode ? 1 : 0}
                   style={{ pointerEvents: 'none' }}

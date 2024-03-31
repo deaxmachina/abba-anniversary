@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Licorice&display=swap');
+
 .wrapper-viz {
+  position: relative;
   width: 100%;
   height: 100%;
   backdrop-filter: blur(20px);
@@ -38,4 +41,7 @@ g.nodes-g {
 .songs-labels-g {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   fill: #fcedbb;
+  font-family: "Licorice", cursive;
+  font-weight: 400;
+  font-style: normal;
 }
