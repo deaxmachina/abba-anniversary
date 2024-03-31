@@ -7,11 +7,10 @@ import selectedSongs from './selectedSongs.js'
 import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
 import SpotifyMetricsViz from '../SpotifyMetricsViz/SpotifyMetricsViz'
 import SongPlayer from '../SongPlayer/SongPlayer'
-import { colours } from '../assets/colours'
 import Filters from './Filters'
 
 
-const SongsViz = ({ selectedAlbumId }) => {
+const SongsViz = ({ selectedAlbumId, colours }) => {
   // Get the tracks in the selected album
   const tracksInAlbum = useMemo(() => {
     return albums.filter(d => d.id === selectedAlbumId)[0].tracks
@@ -94,7 +93,7 @@ const SongsViz = ({ selectedAlbumId }) => {
 
   return (
     <>
-      <div className="wrapper-viz" ref={wrapperRef} >
+      <div className="wrapper-viz" ref={wrapperRef} style={{ background: colours.songsVizBg }}>
         {
           audioUrl &&
           <SongPlayer audioUrl={audioUrl} />
@@ -165,7 +164,7 @@ const SongsViz = ({ selectedAlbumId }) => {
           {/* Spotify metrics for selected song  */}
           {
             clickedNode !== null &&
-            <SpotifyMetricsViz width={width} height={height} />
+            <SpotifyMetricsViz width={width} height={height} colours={colours} />
           }
           
 

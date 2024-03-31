@@ -4,8 +4,10 @@ import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
 import SongsViz from './SongsViz/SongsViz';
 import Loading from './Loading/Loading';
+import { coloursDefault, coloursOption2 } from './assets/colours'
 
 function App() {
+  const [colours, setColours] = useState(coloursDefault)
   const [selectedAlbumId, setSelectedAlbumId] = useState(null)
   const [showHtml, setShowHtml] = useState(false)
 
@@ -27,8 +29,16 @@ function App() {
 
   return (
     <div className='overall-wrapper'>
-      <div className='wrapper-3d'>
 
+      <div className='wrapper-theme-selector'>
+        Select your theme
+        <div className='wrapper-theme-btns'>
+          <button onClick={() => { setColours(coloursDefault) }}>theme 1</button>
+          <button onClick={() => { setColours(coloursOption2) }}>theme 2</button>
+        </div>
+      </div>
+
+      <div className='wrapper-3d'>
       <Suspense fallback={<Loading />}>
         <Albums3DScene
             selectedAlbumId={selectedAlbumId}
@@ -37,14 +47,15 @@ function App() {
             setShowHtml={setShowHtml}
             windowWidth={windowWidth}
             windowHeight={windowHeight}
+            colours={colours}
           />
       </Suspense>
-
       </div>
+
       {
         showHtml && selectedAlbumId && 
         <div className='wrapper-2d'>
-          <SongsViz selectedAlbumId={selectedAlbumId} />
+          <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} />
         </div>
       }
     </div>

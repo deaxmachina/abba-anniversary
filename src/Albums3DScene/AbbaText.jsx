@@ -1,5 +1,4 @@
 import {  Text3D, Center, useMatcapTexture } from '@react-three/drei'
-import { colours } from '../assets/colours'
 
 
 const AbbaText = () => {
@@ -35,10 +34,11 @@ const AbbaText = () => {
 
 
 const AbbaTextAmbigram = ({ 
-  windowWidth,
+  windowWidth, colours,
   curveSegments=32, bevelEnabled=true, bevelSize=0.001, bevelThickness=0.01,  height=0.5, 
-  lineHeight=0.5, letterSpacing=-0.1, size=4, font="fonts/Sarabun Medium_Regular.json", color=colours.textAbba
+  lineHeight=0.5, letterSpacing=-0.1, size=4, font="fonts/Sarabun Medium_Regular.json", 
 }) => {
+  const colour = colours.textAbba
   const xOffset = -6
   // TODO: this needs to be replaced, host locally!!! 
   const [matcap, url] = useMatcapTexture(
@@ -61,7 +61,7 @@ const AbbaTextAmbigram = ({
         position={[xOffset + 0.2, -0.5, z]}
       >
         {`A`}
-        <meshMatcapMaterial matcap={matcap} color={color} />
+        <meshMatcapMaterial matcap={matcap} color={colour} />
       </Text3D>
       <Text3D
         curveSegments={curveSegments}
@@ -77,7 +77,7 @@ const AbbaTextAmbigram = ({
         scale={[-1, 1, 1]}
       >
         {`B`}
-        <meshMatcapMaterial matcap={matcap} color={color} />
+        <meshMatcapMaterial matcap={matcap} color={colour} />
       </Text3D>
       <Text3D
         curveSegments={curveSegments}
@@ -92,7 +92,7 @@ const AbbaTextAmbigram = ({
         position={[xOffset + 5.8, -0.5, z]}
       >
         {`B`}
-        <meshMatcapMaterial matcap={matcap} color={color} />
+        <meshMatcapMaterial matcap={matcap} color={colour} />
       </Text3D>
       <Text3D
         curveSegments={curveSegments}
@@ -107,14 +107,14 @@ const AbbaTextAmbigram = ({
         position={[xOffset + 8.5, -0.5, z]}
       >
         {`A`}
-        <meshMatcapMaterial matcap={matcap} color={color} />
+        <meshMatcapMaterial matcap={matcap} color={colour} />
       </Text3D>
     {/* </Center> */}
     </>
   )
 }
 
-const VoyageText = () => {
+const VoyageText = ({ colours }) => {
   return (
     <>
       {/* <Center top center > */}

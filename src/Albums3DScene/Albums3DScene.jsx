@@ -15,14 +15,13 @@ import { BlendFunction } from 'postprocessing'
 import albums from './albums'
 import Lights from './Lights'
 import { AbbaText, AbbaTextAmbigram, VoyageText } from './AbbaText'
-import { colours } from '../assets/colours'
 
 
 const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
 const Scene = ({ 
-  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight 
+  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours 
 }) => {
   const [location, setLocation] = useLocation()
 
@@ -31,9 +30,9 @@ const Scene = ({
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} transparent={1} >
       {/* <color attach="background" args={['#000']} /> */}
       {/* <fog attach="fog" args={['#191920', 0, 15]} /> */}
-      <Lights />
-      <AbbaTextAmbigram windowWidth={windowWidth}/>
-      <VoyageText />
+      <Lights colours={colours} />
+      <AbbaTextAmbigram windowWidth={windowWidth} colours={colours} />
+      <VoyageText colours={colours} />
 
       <group position={[0, -0.5, z]}>
         {/* The image frames */}
@@ -44,6 +43,7 @@ const Scene = ({
           setSelectedAlbumId={setSelectedAlbumId}
           setShowHtml={setShowHtml}
           showHtml={showHtml}
+          colours={colours}
         />
         {/* The floor */}
         <mesh 
@@ -85,7 +85,7 @@ const Scene = ({
 
 
 function Frames({ 
-  albums, setLocation, selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, 
+  albums, setLocation, selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, colours,
   q = new THREE.Quaternion(), p = new THREE.Vector3() 
 }) {
   const refFrames = useRef()
@@ -151,6 +151,7 @@ function Frames({
             imgUrl={d.imgUrl}
             id={d.id} // This will become the album id and needs to be renamed
             selectedAlbumId={selectedAlbumId} 
+            colours={colours}
           />
         ))
       }
@@ -158,7 +159,7 @@ function Frames({
   )
 }
 
-function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selectedAlbumId }) {
+function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selectedAlbumId, colours }) {
   const image = useRef()
   const frame = useRef()
   const [, params] = useRoute('/album/:id')

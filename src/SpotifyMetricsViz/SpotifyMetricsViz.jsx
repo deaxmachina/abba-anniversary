@@ -2,7 +2,6 @@ import './SpotifyMetricsViz.scss'
 import { useMemo } from 'react'
 import _ from 'lodash'
 import * as d3 from 'd3'
-import { colours } from '../assets/colours'
 
 // TODO: These will come from data 
 const spotifyMetrics = [
@@ -18,7 +17,7 @@ const radtoDeg = (deg) => {
 }
 
 
-const SpotifyMetricsViz = ({ width, height }) => {
+const SpotifyMetricsViz = ({ width, height, colours }) => {
 
   // TODO: Need to use this in the end to compute the radii to make it responsive
   const maxRadius = useMemo(() => {

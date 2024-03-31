@@ -21,21 +21,8 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: lightblue;
   z-index: 1; /* Ensure canvas is behind overlay */
 }
-
-.test-wrapper-div {
-  border: 1px solid red;
-  background-color: blue;
-  pointer-events: auto;
-}
-
-.test-wrapper-div div h1 {
-  color: orange;
-  pointer-events: auto;
-}
-
 
 .overall-wrapper {
   width: 100vw;
@@ -53,11 +40,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    // background: radial-gradient(#af2f91, #0c4bc6);
-    // background: radial-gradient(closest-side, #af2f91 30%, #8ac6af 60%, #000 90%);
     background: #000;
-    canvas {
-    }
   }
   .wrapper-2d {
     position: absolute;
@@ -69,11 +52,14 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: all;
     transition: all 1.5s ease;
-    // opacity: 0;  
-    // &.visible {
-    //   opacity: 1;
-    // }
   }
+}
+
+.wrapper-theme-selector {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
 }
 
 
