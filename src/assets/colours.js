@@ -68,18 +68,18 @@ const coloursOption2 = new function() {
   this.goldDark = '#b38a42'
   this.goldMid = '#eeb064'
   this.goldLight = '#fcedbb'
-  this.primary1 = '#00b4d8'
+  this.primary1 = '#fcedbb'
   this.primary1accent = ''
-  this.secondary1 = '#af2f91'
+  this.secondary1 = '#fcedbb' // '#0c4bc6'
   this.secondary1accent = ''
   this.songsVizBg = '#021021c3'
 
   this.envMap = '/hdrs/fave_SciFi_hdri-hdr_VR360_view_expansive_blue_529834485_10545969.hdr'
 
   this.textAbba = this.goldDark
-  this.textTitle = this.primary1
+  this.textTitle = '#00b4d8' //this.primary1
   
-  this.pointLight1 = this.primary1
+  this.pointLight1 = '#00b4d8' // this.primary1
   this.pointLight2 = this.goldDark
   
   this.songStar = this.goldSaturated

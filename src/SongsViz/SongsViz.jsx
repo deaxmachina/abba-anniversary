@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useLayoutEffect } from 'react'
-import albums from "./data/albums.json"
+import albums from "../data/albums.json"
 import * as d3 from 'd3'
 import _ from 'lodash'
 import './SongsViz.scss'
@@ -164,7 +164,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
           {/* Spotify metrics for selected song  */}
           {
             clickedNode !== null &&
-            <SpotifyMetricsViz width={width} height={height} colours={colours} />
+            <SpotifyMetricsViz width={width} height={height} colours={colours} songId={clickedNode} />
           }
           
 
