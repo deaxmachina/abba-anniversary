@@ -133,7 +133,7 @@ const VoyageText = ({ colours }) => {
         position={[-0.5, -0.5, 4.1]}
         rotation={[-Math.PI * 0.5, 0, 0]}
       >
-        {`Voyage`}
+        {`50 år`}
         <meshStandardMaterial color={colours.textTitle} />
       </Text3D>
     {/* </Center> */}

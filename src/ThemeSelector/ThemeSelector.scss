@@ -1,8 +1,28 @@
 .wrapper-theme-selector {
   position: absolute;
-  top: 0;
+  top: 20px;
   right: 0;
   z-index: 100;
+  background-color: #ffffff30;
+  box-shadow: 0 3px 7px #ffffff8a;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease-in-out;
+  border-radius: 30px;
+}
+
+.select-theme-label {
+  margin-right: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.select-theme-options {
+  padding-right: 50px;
 }
 
 button.theme-btn{
@@ -13,15 +33,23 @@ button.theme-btn{
   padding: 0;
   cursor: pointer;
   margin: 4px;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
   img.theme-thumbnail {
+    border-radius: 2px;
     width: 100%;
     height: 100%;
     transition: transform 0.3s ease-in-out; 
+    // border: 2px solid #ea9918;
     &:hover {
       transform: scale(1.2); /* Zoom the image by 10% */
     }
+  }
+}
+
+svg {
+  .st0 {
+    fill: #ea9918;
   }
 }
