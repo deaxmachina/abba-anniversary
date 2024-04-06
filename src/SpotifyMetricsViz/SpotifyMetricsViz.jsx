@@ -42,7 +42,7 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
     .domain(d3.extent(audioFeatures, d => d.loudness))
     .range([360, 0])
   // Radius scale 
-  const degToRadiusScale = d3.scaleLinear()
+  const degToRadiusScale = d3.scaleSqrt()
     .domain([0, 360])
     .range([4, 25])
 
@@ -83,8 +83,7 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
   return (
     <>
       <g transform={
-        `translate(${width * 0.5}, ${height * 0.5})
-        `
+        `translate(${width * 0.5}, ${height * 0.5})`
       //   `translate(${width * 0.5}, ${height * 0.5})
       //   scale(${scaleAll.x}, ${scaleAll.y})
       // `
@@ -93,7 +92,7 @@ const SpotifyMetricsViz = ({ width, height, colours, songId }) => {
         <g className='spotify-metrics-g' style={{ filter: "url(#glow-subtle)" }}>
           {
             spotifyMetrics.map((metric, i) => {
-              const r = 70 + i*30
+              const r = 100 + i*30
               return (
                 <g key={metric.metric}>
                   {/* The orbit */}

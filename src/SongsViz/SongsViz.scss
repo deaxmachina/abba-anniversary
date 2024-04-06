@@ -29,9 +29,11 @@ line.link, circle.node, text.song-label {
 
 .wrapper-viz-instructions {
   position: absolute;
-  top: 2%;
-  left: 3%;
+  bottom: 2%;
+  right: 1%;
   font-family: "Sarabun", sans-serif;
+  font-weight: 200;
+  font-size: 0.9rem;
   .example-circle {
     display: inline-block;
     width: 12px;

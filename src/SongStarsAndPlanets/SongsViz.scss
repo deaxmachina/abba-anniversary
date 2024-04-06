@@ -1,0 +1,59 @@
+
+.wrapper-viz {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 0rem;
+  background-color: #021021c3; // #17042bc3
+  border: 10px solid #000;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Adjust the color and size of the glow */
+
+  // border: 10px solid white;
+
+  // @media (max-width: 900px) {
+  //   width: 80%;
+  // }
+}
+
+svg.stars-viz-svg {
+  // background: #000;
+  width: 100%;
+  height: 100%;
+}
+
+line.link, circle.node, text.song-label {
+  transition: opacity 1s ease;
+}
+
+.wrapper-viz-instructions {
+  position: absolute;
+  top: 2%;
+  left: 3%;
+  font-family: "Sarabun", sans-serif;
+  .example-circle {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+
+  }
+}
+
+g.nodes-g {
+  g.circle-g {
+    //transition: transform 0.1s ease;
+  }
+  circle {
+    -webkit-transition: -webkit-transform 1s ease, opacity 1s ease; /* Safari */
+    transition: transform 1s ease, opacity 1s ease;
+    cursor: pointer;
+  }
+}
+
+.songs-labels-g {
+  font-family: "Licorice", cursive;
+  font-weight: 400;
+  font-style: normal;
+}

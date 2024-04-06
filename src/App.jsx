@@ -4,7 +4,8 @@ import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
 import SongsViz from './SongsViz/SongsViz';
 import Loading from './Loading/Loading';
-import { coloursDefault, coloursOption2 } from './assets/colours'
+import ThemeSelector from './ThemeSelector/ThemeSelector';
+import { coloursDefault, coloursOption2, coloursOption3, coloursOption4, coloursOption5 } from './assets/colours'
 
 function App() {
   const [colours, setColours] = useState(coloursDefault)
@@ -29,15 +30,7 @@ function App() {
 
   return (
     <div className='overall-wrapper'>
-
-      <div className='wrapper-theme-selector'>
-        Select your theme
-        <div className='wrapper-theme-btns'>
-          <button onClick={() => { setColours(coloursDefault) }}>theme 1</button>
-          <button onClick={() => { setColours(coloursOption2) }}>theme 2</button>
-        </div>
-      </div>
-
+      <ThemeSelector setColours={setColours} />
       <div className='wrapper-3d'>
       <Suspense fallback={<Loading />}>
         <Albums3DScene

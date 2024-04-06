@@ -172,9 +172,9 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
                     opacity={node.id === clickedNode || clickedNode === null ? 1 : 0}
                     cx={node.x}
                     cy={node.y}
-                    r={node.id !== clickedNode ? node.size : 30}
+                    r={node.id !== clickedNode ? node.size : 50}
                     transform={ clickedNode === null ? 'none' : node.id === clickedNode
-                      ? `translate(${width/2 - node.x}, ${height*0.5 - node.y})` 
+                      ? `translate(${width*0.5 - node.x}, ${height*0.5 - node.y})` 
                       : `none`
                     }
                     onMouseEnter={(e) => {
