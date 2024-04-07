@@ -4,14 +4,12 @@
 import * as THREE from 'three'
 import { useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useCursor, MeshReflectorMaterial, Image, Text, Environment, Html, Reflector, useTexture, Stars, Sky, Lightformer, SpotLight, Text3D, Center } from '@react-three/drei'
-import { useRoute, useLocation } from 'wouter'
+import { useCursor, MeshReflectorMaterial, Image, Text } from '@react-three/drei'
+import { useRoute } from 'wouter'
 import { easing } from 'maath'
 import getUuid from 'uuid-by-string'
 import { KernelSize } from 'postprocessing'
-import { EffectComposer, Bloom,  DepthOfField, Noise, Vignette, LensFlare, Glitch, GodRays, Sepia } from '@react-three/postprocessing'
-import { DotScreen } from '@react-three/postprocessing'
-import { BlendFunction } from 'postprocessing'
+import { EffectComposer, Bloom, Noise} from '@react-three/postprocessing'
 import albums from './albums'
 import Lights from './Lights'
 import { AbbaText, AbbaTextAmbigram, VoyageText } from './AbbaText'
@@ -21,9 +19,8 @@ const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
 const Scene = ({ 
-  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours 
+  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours, setLocation 
 }) => {
-  const [location, setLocation] = useLocation()
 
   const z = windowWidth >= 1200 ? 0 : windowWidth >= 800 ? -2 : -4
   return (
@@ -42,7 +39,6 @@ const Scene = ({
           selectedAlbumId={selectedAlbumId}
           setSelectedAlbumId={setSelectedAlbumId}
           setShowHtml={setShowHtml}
-          showHtml={showHtml}
           colours={colours}
         />
         {/* The floor */}
@@ -55,7 +51,7 @@ const Scene = ({
             e.stopPropagation()
             setShowHtml(false)
             setSelectedAlbumId(null)
-            setLocation('/')
+            //setLocation('/')
           }}
         >
           <planeGeometry args={[50, 50]} />
@@ -85,14 +81,14 @@ const Scene = ({
 
 
 function Frames({ 
-  albums, setLocation, selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, colours,
+  albums, setLocation, selectedAlbumId, setSelectedAlbumId, setShowHtml, colours,
   q = new THREE.Quaternion(), p = new THREE.Vector3() 
 }) {
   const refFrames = useRef()
   const clicked = useRef() // Store the object corresponding to the frame that has been clicked
-  const [, params] = useRoute('/album/:id')
+  // const [, params] = useRoute('/album/:id')
   useEffect(() => {
-    clicked.current = refFrames.current.getObjectByName(params?.id)
+    clicked.current = refFrames.current.getObjectByName(selectedAlbumId)
     if (clicked.current) {
       clicked.current.parent.updateWorldMatrix(true, true)
       clicked.current.parent.localToWorld(p.set(0, RATIO / 2, 1.25)) // TODO: Here is where you can set responsivness; original: 1.25
@@ -121,14 +117,14 @@ function Frames({
           //setSelectedAlbumId(null)
           setSelectedAlbumId(e.object.name)
           // setLocation('/')
-          setLocation('/album/' + e.object.name)
+          //setLocation('/album/' + e.object.name)
           setShowHtml(false)
           // setTimeout(() => {
           //   setShowHtml(false)
           // }, 1000)
         } else {
           setSelectedAlbumId(e.object.name)
-          setLocation('/album/' + e.object.name)
+          //setLocation('/album/' + e.object.name)
           setShowHtml(false)
           setTimeout(() => {
             setShowHtml(true)
@@ -144,13 +140,11 @@ function Frames({
         albums.map((d) =>(
           <Frame 
             key={d.id} 
+            selectedAlbumId={selectedAlbumId}
             position={d.position}
             rotation={d.rotation}
-            colorDark={d.colorDark}
-            colorLight={d.colorLight}
             imgUrl={d.imgUrl}
             id={d.id} // This will become the album id and needs to be renamed
-            selectedAlbumId={selectedAlbumId} 
             colours={colours}
           />
         ))
@@ -159,14 +153,14 @@ function Frames({
   )
 }
 
-function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selectedAlbumId, colours }) {
+function Frame({ selectedAlbumId,  position, rotation, imgUrl, id, colours }) {
   const image = useRef()
   const frame = useRef()
-  const [, params] = useRoute('/album/:id')
+  // const [, params] = useRoute('/album/:id')
   const [hovered, hover] = useState(false)
   const [rnd] = useState(() => Math.random())
   const name = id // needs to be unique
-  const isActive = params?.id === name
+  const isActive = selectedAlbumId === name
   useCursor(hovered)
   useFrame((state, dt) => {
     image.current.material.zoom = 1.5 + Math.sin(rnd * 10 + state.clock.elapsedTime / 3) / 2
@@ -200,10 +194,6 @@ function Frame({ position, rotation, colorDark, colorLight, imgUrl, id, selected
           position={[0, 0, 0.7]} 
           url={imgUrl}
           grayscale={hovered || id === '0uUtGVj0y9FjfKful7cABY' || isActive ? false : true}
-          // transparent={true}
-          // opacity={0.8}
-          // color='rebeccapurple'
-          // radius='0'
         />
       </mesh>
 
