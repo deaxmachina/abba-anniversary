@@ -6,6 +6,7 @@ import SongsViz from './SongsViz/SongsViz';
 import Loading from './Loading/Loading';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import { coloursDefault } from './assets/colours'
+import NotWorkingScreen from './NotWorkingScreen/NotWorkingScreen';
 
 function App() {
   const [colours, setColours] = useState(coloursDefault)
@@ -27,30 +28,42 @@ function App() {
     })
   }, [])
 
+  // The dimensions below which we don't show the app
+  const widthCondition = windowWidth <= 1000
+  const heightCondition = windowHeight <= 700
+
 
   return (
     <div className='overall-wrapper'>
-      <ThemeSelector setColours={setColours} />
-      <div className='wrapper-3d'>
-      <Suspense fallback={<Loading />}>
-        <Albums3DScene
-            selectedAlbumId={selectedAlbumId}
-            setSelectedAlbumId={setSelectedAlbumId}
-            showHtml={showHtml}
-            setShowHtml={setShowHtml}
-            windowWidth={windowWidth}
-            windowHeight={windowHeight}
-            colours={colours}
-          />
-      </Suspense>
-      </div>
 
       {
-        showHtml && selectedAlbumId && 
-        <div className='wrapper-2d'>
-          <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} />
-        </div>
+        widthCondition || heightCondition ? 
+        <NotWorkingScreen /> :
+        <>
+          <ThemeSelector setColours={setColours} />
+          <div className='wrapper-3d'>
+          <Suspense fallback={<Loading />}>
+            <Albums3DScene
+                selectedAlbumId={selectedAlbumId}
+                setSelectedAlbumId={setSelectedAlbumId}
+                showHtml={showHtml}
+                setShowHtml={setShowHtml}
+                windowWidth={windowWidth}
+                windowHeight={windowHeight}
+                colours={colours}
+              />
+          </Suspense>
+          </div>
+
+          {
+            showHtml && selectedAlbumId && 
+            <div className='wrapper-2d'>
+              <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} />
+            </div>
+          }
+        </>
       }
+
     </div>
   )
 }
