@@ -5,7 +5,6 @@ import * as THREE from 'three'
 import { useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useCursor, MeshReflectorMaterial, Image, Text } from '@react-three/drei'
-import { useRoute } from 'wouter'
 import { easing } from 'maath'
 import getUuid from 'uuid-by-string'
 import { KernelSize } from 'postprocessing'
@@ -19,14 +18,12 @@ const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
 const Scene = ({ 
-  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours, setLocation 
+  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours 
 }) => {
 
   const z = windowWidth >= 1200 ? 0 : windowWidth >= 800 ? -2 : -4
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} transparent={1} >
-      {/* <color attach="background" args={['#000']} /> */}
-      {/* <fog attach="fog" args={['#191920', 0, 15]} /> */}
       <Lights colours={colours} />
       <AbbaTextAmbigram windowWidth={windowWidth} colours={colours} />
       <VoyageText colours={colours} />
@@ -35,7 +32,6 @@ const Scene = ({
         {/* The image frames */}
         <Frames 
           albums={albums}
-          setLocation={setLocation}
           selectedAlbumId={selectedAlbumId}
           setSelectedAlbumId={setSelectedAlbumId}
           setShowHtml={setShowHtml}
@@ -51,7 +47,6 @@ const Scene = ({
             e.stopPropagation()
             setShowHtml(false)
             setSelectedAlbumId(null)
-            //setLocation('/')
           }}
         >
           <planeGeometry args={[50, 50]} />
@@ -81,12 +76,11 @@ const Scene = ({
 
 
 function Frames({ 
-  albums, setLocation, selectedAlbumId, setSelectedAlbumId, setShowHtml, colours,
+  albums, selectedAlbumId, setSelectedAlbumId, setShowHtml, colours,
   q = new THREE.Quaternion(), p = new THREE.Vector3() 
 }) {
   const refFrames = useRef()
   const clicked = useRef() // Store the object corresponding to the frame that has been clicked
-  // const [, params] = useRoute('/album/:id')
   useEffect(() => {
     clicked.current = refFrames.current.getObjectByName(selectedAlbumId)
     if (clicked.current) {
@@ -97,7 +91,6 @@ function Frames({
       p.set(0, 0, 5.5)
       q.identity()
     }
-    //console.log('clicked', clicked.current)
   })
   useFrame((state, dt) => {
     easing.damp3(state.camera.position, p, 0.4, dt)
@@ -108,23 +101,14 @@ function Frames({
       ref={refFrames}
       onClick={(e) => { 
         e.stopPropagation()
-        // setLocation(clicked.current === e.object ? '/' : '/album/' + e.object.name) // Original code
         // Logic to make sure that if the same Frame is clicked again there will be no selected album
         // Only set the selected Frame to currently clicked one, and don't reset the scene under any conditions
         // here (currently just resetting from clicking on the floor)
         if (clicked.current === e.object) {
-          console.log('current is clicked again')
-          //setSelectedAlbumId(null)
           setSelectedAlbumId(e.object.name)
-          // setLocation('/')
-          //setLocation('/album/' + e.object.name)
           setShowHtml(false)
-          // setTimeout(() => {
-          //   setShowHtml(false)
-          // }, 1000)
         } else {
           setSelectedAlbumId(e.object.name)
-          //setLocation('/album/' + e.object.name)
           setShowHtml(false)
           setTimeout(() => {
             setShowHtml(true)
@@ -133,7 +117,6 @@ function Frames({
       }}
       onPointerMissed={() => {
         setSelectedAlbumId(null)
-        // setLocation('/')
       }}
     >
       {
@@ -156,7 +139,6 @@ function Frames({
 function Frame({ selectedAlbumId,  position, rotation, imgUrl, id, colours }) {
   const image = useRef()
   const frame = useRef()
-  // const [, params] = useRoute('/album/:id')
   const [hovered, hover] = useState(false)
   const [rnd] = useState(() => Math.random())
   const name = id // needs to be unique

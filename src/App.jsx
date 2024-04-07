@@ -1,5 +1,4 @@
 import { useState, useEffect, Suspense } from 'react'
-import { useLocation } from 'wouter'
 import _ from 'lodash'
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
@@ -12,7 +11,6 @@ function App() {
   const [colours, setColours] = useState(coloursDefault)
   const [selectedAlbumId, setSelectedAlbumId] = useState(null)
   const [showHtml, setShowHtml] = useState(false)
-  const [location, setLocation] = useLocation()
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [windowHeight, setWindowHeight] = useState(window.innerHeight)
@@ -43,7 +41,6 @@ function App() {
             windowWidth={windowWidth}
             windowHeight={windowHeight}
             colours={colours}
-            setLocation={setLocation}
           />
       </Suspense>
       </div>
