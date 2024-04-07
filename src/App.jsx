@@ -29,15 +29,15 @@ function App() {
   }, [])
 
   // The dimensions below which we don't show the app
-  const widthCondition = windowWidth >= 1200
-  const heightCondition = windowHeight >= 900
+  const widthCondition = windowWidth <= 800
+  const heightCondition = windowHeight <= 500
 
 
   return (
     <div className='overall-wrapper'>
 
       {
-        !(widthCondition || heightCondition) ? 
+        widthCondition || heightCondition ? 
         <NotWorkingScreen /> :
         <>
           <ThemeSelector setColours={setColours} />
