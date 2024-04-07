@@ -29,8 +29,8 @@ function App() {
   }, [])
 
   // The dimensions below which we don't show the app
-  const widthCondition = windowWidth <= 800
-  const heightCondition = windowHeight <= 500
+  const widthCondition = windowWidth <= 1200
+  const heightCondition = windowHeight <= 700
 
 
   return (
