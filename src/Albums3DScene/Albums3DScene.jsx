@@ -131,10 +131,10 @@ function Frames({
           }, 1500)
         }
       }}
-      // onPointerMissed={() => {
-      //   setSelectedAlbumId(null)
-      //   setLocation('/')
-      // }}
+      onPointerMissed={() => {
+        setSelectedAlbumId(null)
+        // setLocation('/')
+      }}
     >
       {
         albums.map((d) =>(

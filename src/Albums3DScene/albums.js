@@ -46,4 +46,4 @@ const albumsTest = [
 //   { position: [2, 0, 2.75], rotation: [0, -Math.PI / 2.5, 0], imgUrl: pexel(1738986), id: '1738986' }
 // ]
 
-export default albumsTest;
+export default albums;
