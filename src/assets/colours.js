@@ -88,7 +88,7 @@ const coloursOption4 = new function() {
   this.envMap = '/hdrs/fave_SciFi_hdri-hdr_VR360_view_expansive_futuristic_124456106_10545770.hdr'
 
   this.textAbba = this.goldDark
-  this.textTitle = this.secondary1
+  this.textTitle = this.primary1
   
   this.pointLight1 = this.primary1
   this.pointLight2 = this.goldDark

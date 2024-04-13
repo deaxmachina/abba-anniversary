@@ -29,7 +29,7 @@ const Filters = () => {
 
       {/* Blur off the blobs behind the stars */}
       <filter id='blob-blur' width='200%' height='200%' x='-60%' y='-60%' colorInterpolationFilters='sRGB' >
-        <feGaussianBlur in='SourceGraphic' stdDeviation='10' />
+        <feGaussianBlur in='SourceGraphic' stdDeviation='7' />
       </filter>
 
 

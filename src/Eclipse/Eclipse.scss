@@ -1,0 +1,9 @@
+.wrapper-eclipse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background: #000;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}

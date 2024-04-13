@@ -112,7 +112,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
         {
           !clickedNode &&
             <div className='wrapper-viz-instructions'>
-              Click on <div className='example-circle' style={{ background: colours.songStar }}></div> song 
+              Click on <div className='example-circle'></div> song 
             </div>
         }
 
@@ -173,7 +173,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
                   />
 
                   {/* Main circle */}
-                  <circle   
+                  {/* <circle   
                     className='node'
                     fill={ node.id === clickedNode || node.id === selectedNode ? 'url(#radial-gradient)' : colours.songStar}
                     opacity={node.id === clickedNode || clickedNode === null ? 1 : 0}
@@ -198,10 +198,25 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
                       fetchAudio(songUrl)
                     }}
                     style={{ pointerEvents: clickedNode === null || node.id === clickedNode ? 'all' : 'none' }}
-                  ></circle>
+                  ></circle> */}
+
+                  <g 
+                  className='node'
+                  fill={ node.id === clickedNode || node.id === selectedNode ? 'url(#radial-gradient)' : colours.songStar}
+                  transform={`translate(${node.x - node.size*1.5}, ${node.y - node.size*1.5})scale(${node.size*0.1})`}>
+                    {/* <polygon 
+                      points="149,0 163,123 222,75 175,135 297,149 175,163 222,222 163,175 149,297 135,175 75,222 123,163 0,149 123,135 75,75 135,123"
+                    /> */}
+                    <path 
+                      d="M30.7,16.1c0.9-0.6-1.3-2.8-1.8-3c-2.7-0.9-5.4-1.8-8.1-2.8c-0.7-2.6-1.5-5.3-2.2-7.9c-0.1-0.4-1.8-3-2.4-2.2
+                      c-2,2.7-4,5.3-6,7.9C7,8,3.7,7.8,0.3,7.7c-0.9,0,0.3,1.9,0.4,2c1.6,2.3,3.3,4.7,4.9,7c-1.1,3-2.2,5.9-3.3,8.9
+                      c-0.3,0.8,1.3,3.1,2.2,2.9c3.1-1,6.2-1.9,9.3-2.9c2.4,1.9,4.8,3.8,7.3,5.8c0.4,0.3,1.2,0.7,1.2-0.1c0.1-3.2,0.1-6.5,0.2-9.7
+                      C25.2,19.7,28,17.9,30.7,16.1z"
+                    />
+                  </g>
 
                   {/* Circle for orbit around the main circle */}
-                  <g transform={`translate(${node.x}, ${node.y})scale(${node.xScale}, ${node.yScale})`}>
+                  {/* <g transform={`translate(${node.x}, ${node.y})scale(${node.xScale}, ${node.yScale})`}>
                     <circle 
                       className='spotify-metrics'
                       cx={0}
@@ -239,7 +254,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
                         fill={colours.goldLight}
                       ></circle>
                     </g>
-                  </g>
+                  </g> */}
 
                 </g>
               ))
