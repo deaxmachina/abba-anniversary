@@ -1,9 +1,10 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useMemo } from 'react'
 import _ from 'lodash'
 import { getGPUTier } from 'detect-gpu';
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
 import SongsViz from './SongsViz/SongsViz';
+import AlbumsAndSongSketch from './Eclipse/Sketch4'
 import Loading from './Loading/Loading';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import { coloursDefault } from './assets/colours'
@@ -28,6 +29,7 @@ function App() {
       // setWindowHeight(window.innerHeight)
     })
   }, [])
+
 
   // The dimensions below which we don't show the app
   const widthCondition = windowWidth <= 1150
@@ -72,9 +74,9 @@ function App() {
           safari={safari}
         /> :
         <>
+        <Suspense fallback={<Loading />}>
           <ThemeSelector setColours={setColours} />
           <div className='wrapper-3d'>
-          <Suspense fallback={<Loading />}>
             <Albums3DScene
                 selectedAlbumId={selectedAlbumId}
                 setSelectedAlbumId={setSelectedAlbumId}
@@ -84,15 +86,15 @@ function App() {
                 windowHeight={windowHeight}
                 colours={colours}
               />
-          </Suspense>
+          
           </div>
-
           {
             showHtml && selectedAlbumId && 
-            <div className='wrapper-2d'>
-              <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} />
-            </div>
+              <div className='wrapper-2d'>
+                <AlbumsAndSongSketch />
+              </div>
           }
+        </Suspense>
         </>
       }
 

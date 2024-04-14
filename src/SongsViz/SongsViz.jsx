@@ -14,6 +14,7 @@ import Filters from './Filters'
 const SongsViz = ({ selectedAlbumId, colours }) => {
   // Get the tracks in the selected album
   const tracksInAlbum = useMemo(() => {
+    console.log('selectedAlbumId', selectedAlbumId)
     return albums.filter(d => d.id === selectedAlbumId)[0].tracks
   }, [selectedAlbumId])
 

@@ -1,9 +1,38 @@
-.wrapper-eclipse {
+// .wrapper-eclipse {
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   z-index: 100;
+//   background: #bc0000;
+//   // opacity: 0;
+//   transition: opacity 0.5s ease;
+// }
+
+.wrapper-iframe {
+  position: relative;
+  background-color: #000;
+}
+
+.iframe-loading {
+  // animation: fade-in 2s;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 100;
-  background: #bc0000;
-  // opacity: 0;
-  transition: opacity 0.5s ease;
+  width: 660px;
+  height: 660px;
+  background: #000;
+}
+
+iframe {
+  border: none !important;
+}
+
+@keyframes fade-in-wrapper {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

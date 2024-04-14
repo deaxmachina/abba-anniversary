@@ -50,11 +50,25 @@ body {
     position: absolute;
     top: 44%;
     left: 50%;
-    width: 70vh;
-    height: 70vh;
+    width: 660px; // 70vh;
+    height: 660px; // 70vh;
     z-index: 100;
     transform: translate(-50%, -50%);
     pointer-events: all;
-    // transition: all 1.5s ease;
+    background: #000;
+    animation: fade-in 1s;
+  }
+}
+
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.1
+  }
+  100% {
+    opacity: 1;
   }
 }
