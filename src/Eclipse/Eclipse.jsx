@@ -7,6 +7,7 @@ import audioFeatures from '../data/audio_features_results.json'
 // import Sketch1 from './Sketch1'
 // import Sketch2 from './Sketch2'
 import Sketch3 from './Sketch3'
+import Sketch4 from './Sketch4'
 
 
 const Eclipse = ({ width, height, colours, songId, audioUrl, songUrl, setClickedNode }) => {
@@ -40,7 +41,8 @@ const Eclipse = ({ width, height, colours, songId, audioUrl, songUrl, setClicked
       {/* <Sketch0 width={width-20} height={height-20} audioUrl={audioUrl} /> */}
       {/* <Sketch1 canvasParentRef={wrapperRef} audioUrl={audioUrl} width={width-20} height={height-20} /> */}
       {/* <Sketch2 width={width-20} height={height-20} audioUrl={audioUrl} /> */}
-      <Sketch3 width={width-20} height={height-20} audioUrl={audioUrl} songUrl={songUrl} />
+      {/* <Sketch3 width={width-20} height={height-20} audioUrl={audioUrl} songUrl={songUrl} songId={songId} /> */}
+      <Sketch4 />
       
     </div>
   )
