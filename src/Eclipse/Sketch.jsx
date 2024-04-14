@@ -1,11 +1,11 @@
-// import p5 from "p5";
+import p5 from "p5";
 import { ReactP5Wrapper } from "@p5-wrapper/react";
 
-// window.p5 = p5;
+window.p5 = p5;
 
 import("p5/lib/addons/p5.sound.js");
 
-function sketch(p5) {
+function sketch(p5, width, height, audioUrl) {
   let song
   let button
 
@@ -14,10 +14,11 @@ function sketch(p5) {
     button = p5.createButton("Toggle audio")
     button.mousePressed(() => {
       if (!song) {
-        const songPath = ''
+        const songPath = './08GOw3NsrJ0LsCCeyqzt3b_1e59216e9b6f62bf73e198dbd1550cf36d635ca9.mp3'
         song = p5.loadSound(
           songPath,
           () => {
+            console.log('song playing')
             song.play();
           },
           () => {
@@ -51,7 +52,9 @@ function sketch(p5) {
   };
 }
 
-export function Sketch({ width, height, audioUrl }) {
+const Sketch = ({ width, height, audioUrl }) => {
   // return <ReactP5Wrapper sketch={(_) => sketch(_, width, height, audioUrl)}/>
-  return <ReactP5Wrapper sketch={sketch}/>
+  return <ReactP5Wrapper sketch={(_) => sketch(_,width, height, audioUrl)}/>
 }
+
+export default Sketch

@@ -11,7 +11,7 @@ export default ({ canvasParentRef, audioUrl, width, height }) => {
   let song
 
   useEffect(() => {
-    console.log('loaded....')
+    console.log('loaded....', canvasParentRef)
   }, [])
 
   const preload = (p5) => {
@@ -40,13 +40,12 @@ export default ({ canvasParentRef, audioUrl, width, height }) => {
         );
         return;
       }
-
       if (!song.isPlaying()) {
         song.play();
         return;
+      } else {
+        song.pause();
       }
-
-      song.pause();
     });
 
   };
@@ -60,5 +59,9 @@ export default ({ canvasParentRef, audioUrl, width, height }) => {
     y++
   };
 
-  return <Sketch preload={preload} setup={setup} draw={draw} />;
+  return <Sketch 
+    preload={preload} 
+    setup={setup} 
+    draw={draw} 
+  />;
 };

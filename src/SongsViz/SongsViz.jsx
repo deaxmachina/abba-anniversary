@@ -117,7 +117,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
         
         <svg className='stars-viz-svg' onClick={(e) => {
           e.stopPropagation()
-          d3.selectAll('.wrapper-eclipse canvas').remove()
+          //d3.selectAll('.wrapper-eclipse canvas').remove()
           setClickedNode(null)
         }} >
 
@@ -193,38 +193,6 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
                     }}
                     style={{ pointerEvents: clickedNode === null || node.id === clickedNode ? 'all' : 'none' }}
                   ></circle>
-
-                  {/* <g 
-                    className='node'
-                    fill={ node.id === clickedNode || node.id === selectedNode ? 'url(#radial-gradient)' : '#fff'}
-                    opacity={node.id === clickedNode || clickedNode === null ? 1 : 0}
-                    transform={
-                      node.id === clickedNode ? 
-                      `translate(${width*0.5 - node.size*1.5}, ${height*0.5 - node.size*1.5})scale(${4})` : 
-                      `translate(${node.x - node.size*1.5}, ${node.y - node.size*1.5})scale(${node.size*0.1})`
-                    }
-                    style={{ pointerEvents: clickedNode === null || node.id === clickedNode ? 'all' : 'none' }}
-                    onMouseEnter={(e) => {
-                      setSelectedNode(node.id)
-                    }}
-                    onMouseOut={(e) => {
-                      setSelectedNode(null)
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setClickedNode(node.id)
-                      const songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
-                      setSongUrl(songUrl)
-                      fetchAudio(songUrl)
-                    }}
-                  >
-                    <path 
-                      d="M30.7,16.1c0.9-0.6-1.3-2.8-1.8-3c-2.7-0.9-5.4-1.8-8.1-2.8c-0.7-2.6-1.5-5.3-2.2-7.9c-0.1-0.4-1.8-3-2.4-2.2
-                      c-2,2.7-4,5.3-6,7.9C7,8,3.7,7.8,0.3,7.7c-0.9,0,0.3,1.9,0.4,2c1.6,2.3,3.3,4.7,4.9,7c-1.1,3-2.2,5.9-3.3,8.9
-                      c-0.3,0.8,1.3,3.1,2.2,2.9c3.1-1,6.2-1.9,9.3-2.9c2.4,1.9,4.8,3.8,7.3,5.8c0.4,0.3,1.2,0.7,1.2-0.1c0.1-3.2,0.1-6.5,0.2-9.7
-                      C25.2,19.7,28,17.9,30.7,16.1z"
-                    />
-                  </g> */}
                   
                 </g>
               ))
@@ -254,15 +222,17 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
 
         {/* Spotify metrics for selected song  */}
         {
-          clickedNode !== null &&
+          clickedNode !== null ?
             <Eclipse 
               width={width} 
               height={height} 
               colours={colours} 
               songId={clickedNode} 
               audioUrl={audioUrl}
+              songUrl={songUrl}
               setClickedNode={setClickedNode} 
             />
+            : <></>
         }
       </div>
     </>
