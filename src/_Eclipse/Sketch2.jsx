@@ -1,6 +1,8 @@
 import p5 from 'p5'
 window.p5 = p5
 import("p5/lib/addons/p5.sound")
+import { P5Grain } from './p5.grain'
+
 
 
 import { useEffect, useRef } from 'react';
@@ -18,6 +20,8 @@ const Sketch = ( { width, height, audioUrl }) => {
     let fft
     const fftBins = 64
     const fftBinCutoff = 41
+    let p5grain
+    let texture
 
     const sketch = new p5((p) => {
       // console.log('loadSound', p5Sound)
@@ -25,6 +29,7 @@ const Sketch = ( { width, height, audioUrl }) => {
       p.preload = () => {
         song = p.loadSound(audioUrl)
         songRef.current = p.loadSound(audioUrl)
+        texture = p.loadImage('texture.jpg');
       }
 
       p.setup = () => {
@@ -34,6 +39,9 @@ const Sketch = ( { width, height, audioUrl }) => {
 
         // Instantial the fft
 	      fft = new p.constructor.FFT(0.8, fftBins)
+        // Setup the grain library
+        p5grain = new P5Grain()
+	      p5grain.setup()
 
         p.background(220);
         p.fill(255, 0, 0);
@@ -51,6 +59,7 @@ const Sketch = ( { width, height, audioUrl }) => {
       };
 
       p.draw = () => {
+        p.background(0)
         // Get the spectrum fro the fft analyze method and restrict the range 
         const spectrum = fft.analyze()
         const reducedSpectrum = spectrum.slice(0, fftBinCutoff)
@@ -65,6 +74,14 @@ const Sketch = ( { width, height, audioUrl }) => {
           p.fill(raysCol)
           p.circle(p.width/2, p.height/2, rMax)
         }
+
+        p5grain.textureOverlay(texture, {
+          width: 100,
+          height: 100,
+          //animate: true,
+        })
+
+
       }
     })
 
@@ -90,6 +107,7 @@ const Sketch = ( { width, height, audioUrl }) => {
         }
       }}
     >soo0000ong</button>
+    <div className='sketch-overlay'></div>
     </div>
   )
 }
