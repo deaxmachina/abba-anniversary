@@ -5,9 +5,9 @@ import _ from 'lodash'
 import './SongsViz.scss'
 import selectedSongs from './selectedSongs.js'
 import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
-import SpotifyMetricsViz from '../SpotifyMetricsViz/SpotifyMetricsViz'
+import SpotifyMetricsViz from '../_SpotifyMetricsViz/SpotifyMetricsViz'
 import Eclipse from '../Eclipse/Eclipse'
-import SongPlayer from '../SongPlayer/SongPlayer'
+import SongPlayer from '../_SongPlayer/SongPlayer'
 import Filters from './Filters'
 
 

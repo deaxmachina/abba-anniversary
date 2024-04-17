@@ -1,0 +1,28 @@
+.wrapper-iframe {
+  position: relative;
+  background-color: #000;
+}
+
+.iframe-loading {
+  // animation: fade-in 2s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 70vh;
+  height: 70vh;
+  background: #000;
+}
+
+iframe {
+  border: none !important;
+}
+
+@keyframes fade-in-wrapper {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
