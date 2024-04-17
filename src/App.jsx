@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { getGPUTier } from 'detect-gpu';
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
-// import SongsViz from './_SongsViz/SongsViz';
+import SongsViz from './_SongsViz/SongsViz';
 import ProcessingEmbed from './ProcessingEmbed/ProcessingEmbed'
 import Loading from './Loading/Loading';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
@@ -91,7 +91,8 @@ function App() {
           {
             showHtml && selectedAlbumId && 
               <div className='wrapper-2d'>
-                <ProcessingEmbed windowWidth={windowWidth} windowHeight={windowHeight} />
+                {/* <ProcessingEmbed windowWidth={windowWidth} windowHeight={windowHeight} /> */}
+                <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} />
               </div>
           }
         </Suspense>

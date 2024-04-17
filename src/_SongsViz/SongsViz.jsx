@@ -5,9 +5,7 @@ import _ from 'lodash'
 import './SongsViz.scss'
 import selectedSongs from './selectedSongs.js'
 import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
-import SpotifyMetricsViz from '../_SpotifyMetricsViz/SpotifyMetricsViz'
-import Eclipse from '../Eclipse/Eclipse'
-import SongPlayer from '../_SongPlayer/SongPlayer'
+import Eclipse from '../_Eclipse/Eclipse'
 import Filters from './Filters'
 
 
@@ -118,8 +116,7 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
         
         <svg className='stars-viz-svg' onClick={(e) => {
           e.stopPropagation()
-          //d3.selectAll('.wrapper-eclipse canvas').remove()
-          setClickedNode(null)
+          //setClickedNode(null)
         }} >
 
           {/* Filers */}
@@ -186,7 +183,6 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
                     }}
                     onClick={(e) => {
                       e.stopPropagation()
-                      d3.selectAll('.wrapper-eclipse canvas').remove()
                       setClickedNode(node.id)
                       const songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
                       setSongUrl(songUrl)
@@ -223,14 +219,12 @@ const SongsViz = ({ selectedAlbumId, colours }) => {
 
         {/* Spotify metrics for selected song  */}
         {
-          clickedNode !== null ?
+          clickedNode && audioUrl ?
             <Eclipse 
               width={width} 
               height={height} 
-              colours={colours} 
               songId={clickedNode} 
               audioUrl={audioUrl}
-              songUrl={songUrl}
               setClickedNode={setClickedNode} 
             />
             : <></>
