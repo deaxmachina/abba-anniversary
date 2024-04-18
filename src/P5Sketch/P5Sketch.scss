@@ -26,3 +26,37 @@
 @keyframes b{
   100% {background-position: 50% 0, 60% 50%}
 }
+
+.toggle-btn, .exit-songs-btn {
+	position: absolute;
+	border: none;
+	padding: 0.5rem 1rem;
+	text-transform: uppercase; 
+	background: #000;
+	color: #adb3c2;
+	font-size: 1.6rem;
+	font-weight: bold;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	transition: opacity 0.3s ease;
+}
+
+.exit-songs-btn {
+	top: 35px;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: none;
+}
+
+.toggle-btn {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+.exit-songs-btn.hide, .toggle-btn.hide {
+	opacity: 0;
+}
+.exit-songs-btn.show, .toggle-btn.show {
+	opacity: 1;
+}
