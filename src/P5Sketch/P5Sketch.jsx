@@ -139,6 +139,7 @@ const P5Sketch = () => {
         buttonPlayPause = p.select('.toggle-btn')
         buttonPlayPause.html('pa')
         buttonPlayPause.mousePressed(() => {
+          console.log('play pause button is clicked')
           if (songRef.current) {
             if (songRef.current.isPlaying()) {
               songRef.current.pause()
@@ -152,14 +153,14 @@ const P5Sketch = () => {
 
         // Button to set song to null 
         buttonExitSongs = p.select('.exit-songs-btn')
-        // buttonExitSongs.addClass('hide')
-        // buttonExitSongs.removeClass('show')
+        buttonExitSongs.addClass('hide')
+        buttonExitSongs.removeClass('show')
         buttonExitSongs.mousePressed(() => {
           if (songRef.current) songRef.current.pause()
           songRef.current = songUrl = songId = audioFeaturesSong = clickedNodeId = songName = null
           // Hide the play / pause button 
-          // buttonPlayPause.removeClass('show')
-          // buttonPlayPause.addClass('hide')
+          buttonPlayPause.removeClass('show')
+          buttonPlayPause.addClass('hide')
         })
 
         p.background(220)
@@ -265,8 +266,8 @@ const P5Sketch = () => {
         // This is what happens before a song is clicked
         if (!songRef.current && !animationIsActive && linksSimulation && nodesSimulation) {
           // Hide the exit songs btn if we're showing the graph
-          // buttonExitSongs.addClass('hide')
-          // buttonExitSongs.removeClass('show')
+          buttonExitSongs.addClass('hide')
+          buttonExitSongs.removeClass('show')
           
           // Draw the lines for the nodes
           linksSimulation.forEach(link => {
@@ -293,7 +294,120 @@ const P5Sketch = () => {
         }
 
 
+      	if (!audioFeaturesSong) return 
+        p.background(0)
+        p.translate(p.width/2, p.height/2)
+        // Show the play / pause button and exit songs button
+        buttonPlayPause.removeClass('hide')
+        buttonPlayPause.addClass('show')
+        buttonExitSongs.removeClass('hide')
+        buttonExitSongs.addClass('show')
+        
+        // Get the spectrum fro the fft analyze method and restrict the range 
+        const spectrum = fft.analyze()
+        const reducedSpectrum = spectrum.slice(0, fftBinCutoff)  
+
+        // Draw rays in a circle that correspond to amplitudes at different frequencies
+        p.push()
+        const raysCol = p.color(colRays)
+        p.strokeWeight(1)
+        for (let i=0; i < reducedSpectrum.length; i++) {
+          const amplitude = reducedSpectrum[i] // This is from 0 to 255 
+          const angle = p.map(i, 0, reducedSpectrum.length, 0, 360)
+          const rMin = 150
+          const rMax = p.map(amplitude, 0, 255, rMin, width/2)
+          raysCol.setAlpha(amplitude*1)
+          p.fill(raysCol)
+          p.quad(
+            rMin * p.cos(angle), rMin * p.sin(angle),
+            rMin * p.cos(angle-1), rMin * p.sin(angle-1),
+            rMax * p.cos(angle-4), rMax * p.sin(angle-4),
+            rMax * p.cos(angle), rMax * p.sin(angle)
+          )
+        }
+        p.pop()
+
+        // Draw the sun and moon in the middle for the song
+        p.push()
+        drawBlurryCircle(0, 0, maxRMiddleCircle*0.4, glowSongMoon)
+        p.fill('#000')
+        const freqForOption = fft.getEnergy('bass')
+        p.circle(0, 0, p.map(freqForOption, 0, 255, 20, maxRMiddleCircle))
+        p.pop()
+
+        // Draw the sun and moons for each of the metrics
+        p.push()
+        const outerRadius = 140
+        // Moons
+        const rMetricCircles = 72
+        metricsOptions.forEach((metric, i) => {		
+          const angle = (360 / metricsOptions.length) * i
+          const x = p.cos(angle) * outerRadius
+          const y = p.sin(angle) * outerRadius
+          drawBlurryCircle(x, y, rMetricCircles*0.5, glowMetricMoons)
+          p.fill(colMetricMoons)
+          p.noStroke()
+          p.circle(x, y, rMetricCircles)
+        })
+        // Suns
+        metricsOptions.forEach((metric, i) => {
+          const rawValue = audioFeaturesSong[metric]
+          let offset
+          if (['energy', 'danceability', 'valence'].includes(metric)) {
+            offset = p.map(rawValue, 0, 1, 0, 30) // 0 -> metric is 0; 30 -> metric is 1
+          } else if (metric === 'loudness') {
+            offset = p.map(rawValue, d3.min(audioFeatures, d => d.loudness), d3.max(audioFeatures, d => d.loudness), 0, 30) 
+          } else if (metric === 'tempo') {
+            offset = p.map(rawValue, 0, 200, 0, 30)
+          }
+          const angle = (360 / metricsOptions.length) * i + offset 
+          const x = p.cos(angle) * outerRadius
+          const y = p.sin(angle) * outerRadius
+          
+          // eclipsing circle
+          p.fill('#000')
+          p.noStroke()
+          p.circle(x, y, rMetricCircles)
+          
+          // text with metric value
+          p.push()
+          p.fill(colMetricMoons)
+          p.textAlign(p.CENTER)
+          p.textStyle(p.BOLD)
+          if (['energy', 'danceability', 'valence'].includes(metric)) {
+            p.text(rawValue.toFixed(2), x, y+12)
+          } else if (metric === 'loudness') {
+            p.text(`${rawValue.toFixed(1)}dB`, x, y+12)
+          } else if (metric === 'tempo') {
+            p.text(`${rawValue.toFixed(0)}bpm`, x, y+12)
+          }
+          p.pop()
+          
+          // text with metric name
+          p.push()
+          p.fill(colMetricMoons)
+          p.textAlign(p.CENTER)
+          p.textStyle(p.NORMAL)
+          p.textFont(fontFamily)
+          p.textSize(16)
+          p.translate(0, -5)
+          p.text(metric, x, y)
+          p.pop()
+        })
+        p.pop()
+
+        // Name of the song 
+        if (songName) {
+          p.push()
+          p.fill(colRays)
+          p.textSize(30)
+          p.text(songName, 0, -height * 0.35)
+          p.pop()
+        }
+
       }
+
+
     })
 
     return () => {
@@ -325,8 +439,8 @@ const P5Sketch = () => {
           }}
         >soo0000ong</button> */}
 
-        <button class='toggle-btn'>pl</button>
-        <button class='exit-songs-btn'>bk</button>
+        <button class='toggle-btn hide'>pl</button>
+        <button class='exit-songs-btn hide'>bk</button>
 
         <div className='sketch-overlay'></div>
       </div>
