@@ -5,6 +5,7 @@ import albums from '../data/albums.json'
 import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
 import { useMemo, useEffect, useState, useRef } from 'react'
 import _ from 'lodash'
+import gsap from 'gsap'
 import * as d3 from 'd3'
 import p5 from 'p5'
 window.p5 = p5
@@ -32,7 +33,10 @@ const P5Sketch = () => {
 
   useEffect(() => {
     let fft
+    let songUrl = null
     let songId
+    let songName
+    let clickedNodeId = null
     let audioFeaturesSong
     const fftBins = 64
     const fftBinCutoff = 41
@@ -46,11 +50,29 @@ const P5Sketch = () => {
     let simulation = null
     let nodesSimulation = null
     let linksSimulation = null
+    let animationIsActive = false
+    const fontFamily = 'Dawning of a New Day' // 'Dawning of a New Day'
+    const metricsOptions = ['loudness', 'tempo', 'energy', 'danceability', 'valence']
+
+    // Dimensions
+    const w = 650
+    const h = 650
+    const maxRMiddleCircle = 150 // Radius for the middle circle = selected song
 
     const sketch = new p5((p) => {
 
+      const drawBlurryCircle = (x, y, r, col) => {
+        p.noStroke()
+        const theFill = p.color(col)
+        theFill.setAlpha(6)
+        p.fill(theFill);
+        for(let i = 0; i < r; i++){
+          p.circle(x, y, i*3);
+        }
+      }
+
       p.preload = () => {
-        songRef.current = p.loadSound(audioUrl)
+        //songRef.current = p.loadSound(audioUrl)
       }
 
       p.setup = () => {
@@ -144,29 +166,142 @@ const P5Sketch = () => {
 
       };
 
+
+
+      //////////////////////////////////////////////
+      // Show the song name on mouse over of node //
+      //////////////////////////////////////////////
+      p.mouseMoved = () => {
+        if (songRef.current) return // Only want to allow clicks in the graph mode
+        if (!songId) songName = null
+        if (nodesSimulation) {
+          nodesSimulation.forEach(node => {
+            if (p.dist(p.mouseX, p.mouseY, node.x, node.y) <= node.size/2) {
+              songName = node.name
+            } 
+          })
+        }
+      }
+
+
+
+      ////////////////////////////////////////////
+      /// Set the song on mousePressed of node ///
+      ////////////////////////////////////////////
+      p.mousePressed = () => {
+        if (songRef.current) return // Only want to allow clicks in the graph mode
+        if (!nodesSimulation) return // Need to have the nodesSimulation
+        nodesSimulation.forEach(node => {
+          if (p.dist(p.mouseX, p.mouseY, node.x, node.y) <= node.size/2) {
+            songId = node.id
+            clickedNodeId = node.id
+            songName = node.name
+            songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
+            if (songRef.current) songRef.current.pause() // pause the previous song first
+            
+            // Check if node has been selected and draw circle to the middle 
+            // for it if so, deleting everything else 
+            nodesSimulation.forEach(node => {
+              if (clickedNodeId === node.id) {
+                const clonedNode = Object.assign({}, node) // Clone the node so that the OG node stays in place
+                gsap.timeline()
+                  .fromTo(clonedNode, 
+                  { 
+                    x: clonedNode.x, 
+                    y: clonedNode.y,
+                    size: clonedNode.size, 
+                    col: clonedNode.col,
+                  }, 
+                  { 
+                    x: p.width/2, 
+                    y: p.height/2, 
+                    size: maxRMiddleCircle*0.8,
+                    col: 'black',
+                    //duration: 0.8,
+                    onUpdate: () => { 
+                      animationIsActive = true
+                      // Create the whole scene with a black rect
+                      p.fill(0)
+                      p.rect(0, 0, p.width, p.height)
+                      // Draw the blurry circle moving behind the main circle
+                      drawBlurryCircle(clonedNode.x, clonedNode.y, clonedNode.size * 0.5, glowSongMoon)
+                      // Draw the main circle with updating fill and position
+                      p.fill(clonedNode.col)
+                      p.circle(clonedNode.x, clonedNode.y, clonedNode.size) 
+                    },
+                    onComplete: () => { animationIsActive = false },
+                    duration: 1
+                  },
+
+                )	
+              }
+            })
+            // Wait a bit before playing song for the node graph to shift its form 
+            // so that the selected song is in the middle
+            setTimeout(() => {
+              // load the new song and play when it's ready 
+              songRef.current = p.loadSound(songUrl, () => {
+                songRef.current.setVolume(0.1)
+                songRef.current.play()
+                  audioFeaturesSong = audioFeatures.find(d => d.id === songId)
+              })
+            }, 1000)
+            
+          }
+        })
+      }
+
+
+
+
+
+
       p.draw = () => {
         p.background(0)
-        // Get the spectrum fro the fft analyze method and restrict the range 
-        const spectrum = fft.analyze()
-        const reducedSpectrum = spectrum.slice(0, fftBinCutoff)
-        // Draw rays in a circle that correspond to amplitudes at different frequencies
-        const raysCol = 'orange'
-        p.strokeWeight(1)
-        for (let i=0; i < reducedSpectrum.length; i++) {
-          const amplitude = reducedSpectrum[i] // This is from 0 to 255 
-          const angle = p.map(i, 0, reducedSpectrum.length, 0, 360)
-          const rMin = 150
-          const rMax = p.map(amplitude, 0, 255, rMin, p.width/2)
-          p.fill(raysCol)
-          p.circle(p.width/2, p.height/2, rMax)
+	
+        ///////////////////////////////////////////////////
+        // Draw nodes simulation before song is selected //
+        ///////////////////////////////////////////////////
+        // This is what happens before a song is clicked
+        if (!songRef.current && !animationIsActive && linksSimulation && nodesSimulation) {
+          // Hide the exit songs btn if we're showing the graph
+          // buttonExitSongs.addClass('hide')
+          // buttonExitSongs.removeClass('show')
+          
+          // Draw the lines for the nodes
+          linksSimulation.forEach(link => {
+            p.stroke(glowMetricMoons)
+            p.strokeWeight(link.size)
+            p.line(link.source.x, link.source.y, link.target.x, link.target.y)
+          })
+          // Draw circles for the nodes 
+          nodesSimulation.forEach(node => {
+            // Add blurry circles behind the node circles
+            drawBlurryCircle(node.x, node.y, node.size * 0.7, glowSongMoon)
+            // Circle for each node on top of the blurry circles
+            p.fill(colRays)
+            p.circle(node.x, node.y, node.size)
+            // Draw song name for hovered song
+            if (node.name === songName) {
+              p.textAlign(p.CENTER)
+              p.textFont(fontFamily)
+              p.textStyle(p.BOLD)
+              p.textSize(20)
+              p.text(songName, node.x, node.y - node.size * 0.5 - 10)
+            }
+          })       
         }
+
+
       }
     })
 
     return () => {
       // Clean up p5.js sketch
-      songRef.current.pause()
-      songRef.current = null
+      if (songRef.current) {
+        songRef.current.pause()
+        songRef.current = null
+      }
       sketch.remove()
     };
   }, [audioUrl])
