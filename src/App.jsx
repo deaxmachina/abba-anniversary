@@ -3,12 +3,13 @@ import _ from 'lodash'
 import { getGPUTier } from 'detect-gpu';
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
-import SongsViz from './_SongsViz/SongsViz';
-import ProcessingEmbed from './ProcessingEmbed/ProcessingEmbed'
+// import SongsViz from './_SongsViz/SongsViz';
+// import ProcessingEmbed from './ProcessingEmbed/ProcessingEmbed'
 import Loading from './Loading/Loading';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import { coloursDefault } from './assets/colours'
 import NotWorkingScreen from './NotWorkingScreen/NotWorkingScreen';
+import P5Sketch from './P5Sketch/P5Sketch';
 
 function App() {
   const [colours, setColours] = useState(coloursDefault)
@@ -92,7 +93,8 @@ function App() {
             showHtml && selectedAlbumId && 
               <div className='wrapper-2d'>
                 {/* <ProcessingEmbed windowWidth={windowWidth} windowHeight={windowHeight} /> */}
-                <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} />
+                {/* <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} /> */}
+                <P5Sketch />
               </div>
           }
         </Suspense>
