@@ -20,7 +20,6 @@ const colRays = '#ea9918'
 
 const width = 660
 const height = 660
-const audioUrl = './08GOw3NsrJ0LsCCeyqzt3b_1e59216e9b6f62bf73e198dbd1550cf36d635ca9.mp3'
 
 const P5Sketch = () => {
   window.p5 = p5
@@ -55,9 +54,11 @@ const P5Sketch = () => {
     const metricsOptions = ['loudness', 'tempo', 'energy', 'danceability', 'valence']
 
     // Dimensions
-    const w = 650
-    const h = 650
-    const maxRMiddleCircle = 150 // Radius for the middle circle = selected song
+    const rMaxMiddleCircle = 150 // Radius for the middle circle = selected song
+    const rMinRays = 140 // Min radius of the radial rays coming from the middle for the song viz
+    const rMetricCirclesPosition = rMinRays + 10 // where to radially position the circles for the metrics (suns and moons)
+    const rMetricCircles = 72 // radius of the suns and moons circles for the metrics
+
 
     const sketch = new p5((p) => {
 
@@ -71,19 +72,13 @@ const P5Sketch = () => {
         }
       }
 
-      p.preload = () => {
-        //songRef.current = p.loadSound(audioUrl)
-      }
-
       p.setup = () => {
         // Get reference to the existing canvas element
         const canvas = p.createCanvas(canvasRef.current.offsetWidth, canvasRef.current.offsetHeight)
         canvas.parent(canvasRef.current)
         p.angleMode(p.DEGREES)
 
-        // Instantial the fft
 	      fft = new p.constructor.FFT(0.8, fftBins)
-
 
       	////////////////////////////////////////////
         ///////// Nodes and Links creation /////////
@@ -168,7 +163,6 @@ const P5Sketch = () => {
       };
 
 
-
       //////////////////////////////////////////////
       // Show the song name on mouse over of node //
       //////////////////////////////////////////////
@@ -183,7 +177,6 @@ const P5Sketch = () => {
           })
         }
       }
-
 
 
       ////////////////////////////////////////////
@@ -216,8 +209,8 @@ const P5Sketch = () => {
                   { 
                     x: p.width/2, 
                     y: p.height/2, 
-                    size: maxRMiddleCircle*0.8,
-                    col: 'black',
+                    size: rMaxMiddleCircle*0.8,
+                    col: '#000000',
                     //duration: 0.8,
                     onUpdate: () => { 
                       animationIsActive = true
@@ -251,9 +244,6 @@ const P5Sketch = () => {
           }
         })
       }
-
-
-
 
 
 
@@ -293,7 +283,9 @@ const P5Sketch = () => {
           })       
         }
 
-
+        ///////////////////////////////////////////////////
+        // Draw song eclipse graph when song is selected //
+        ///////////////////////////////////////////////////
       	if (!audioFeaturesSong) return 
         p.background(0)
         p.translate(p.width/2, p.height/2)
@@ -314,56 +306,54 @@ const P5Sketch = () => {
         for (let i=0; i < reducedSpectrum.length; i++) {
           const amplitude = reducedSpectrum[i] // This is from 0 to 255 
           const angle = p.map(i, 0, reducedSpectrum.length, 0, 360)
-          const rMin = 150
-          const rMax = p.map(amplitude, 0, 255, rMin, width/2)
+          const rMaxRays = p.map(amplitude, 0, 255, rMinRays, p.width/2)
           raysCol.setAlpha(amplitude*1)
           p.fill(raysCol)
           p.quad(
-            rMin * p.cos(angle), rMin * p.sin(angle),
-            rMin * p.cos(angle-1), rMin * p.sin(angle-1),
-            rMax * p.cos(angle-4), rMax * p.sin(angle-4),
-            rMax * p.cos(angle), rMax * p.sin(angle)
+            rMinRays * p.cos(angle), rMinRays * p.sin(angle),
+            rMinRays * p.cos(angle-1), rMinRays * p.sin(angle-1),
+            rMaxRays * p.cos(angle-4), rMaxRays * p.sin(angle-4),
+            rMaxRays * p.cos(angle), rMaxRays * p.sin(angle)
           )
         }
         p.pop()
 
-        // Draw the sun and moon in the middle for the song
+        // Draw the sun and moon in the middle for the song (bass)
         p.push()
-        drawBlurryCircle(0, 0, maxRMiddleCircle*0.4, glowSongMoon)
+        drawBlurryCircle(0, 0, rMaxMiddleCircle*0.4, glowSongMoon)
         p.fill('#000')
         const freqForOption = fft.getEnergy('bass')
-        p.circle(0, 0, p.map(freqForOption, 0, 255, 20, maxRMiddleCircle))
+        p.circle(0, 0, p.map(freqForOption, 0, 255, 20, rMaxMiddleCircle))
         p.pop()
 
         // Draw the sun and moons for each of the metrics
         p.push()
-        const outerRadius = 140
-        // Moons
-        const rMetricCircles = 72
+        // Suns (bright)
         metricsOptions.forEach((metric, i) => {		
           const angle = (360 / metricsOptions.length) * i
-          const x = p.cos(angle) * outerRadius
-          const y = p.sin(angle) * outerRadius
+          const x = p.cos(angle) * rMetricCirclesPosition
+          const y = p.sin(angle) * rMetricCirclesPosition
           drawBlurryCircle(x, y, rMetricCircles*0.5, glowMetricMoons)
           p.fill(colMetricMoons)
           p.noStroke()
           p.circle(x, y, rMetricCircles)
         })
-        // Suns
+        // Moons (black)
         metricsOptions.forEach((metric, i) => {
           const rawValue = audioFeaturesSong[metric]
           let offset
+          // moved by an angle equivalent to the diameter of the circle
+          const maxAngleToShiftBy = p.atan(rMetricCirclesPosition / (rMetricCircles + 10))
           if (['energy', 'danceability', 'valence'].includes(metric)) {
-            offset = p.map(rawValue, 0, 1, 0, 30) // 0 -> metric is 0; 30 -> metric is 1
+            offset = p.map(rawValue, 0, 1, 0, maxAngleToShiftBy/2) // metric 0 -> offset 0; metric 1 -> offset = radius
           } else if (metric === 'loudness') {
-            offset = p.map(rawValue, d3.min(audioFeatures, d => d.loudness), d3.max(audioFeatures, d => d.loudness), 0, 30) 
+            offset = p.map(rawValue, d3.min(audioFeatures, d => d.loudness), d3.max(audioFeatures, d => d.loudness), 0, maxAngleToShiftBy/2) 
           } else if (metric === 'tempo') {
-            offset = p.map(rawValue, 0, 200, 0, 30)
+            offset = p.map(rawValue, 0, 200, 0, maxAngleToShiftBy/2)
           }
           const angle = (360 / metricsOptions.length) * i + offset 
-          const x = p.cos(angle) * outerRadius
-          const y = p.sin(angle) * outerRadius
-          
+          const x = p.cos(angle) * rMetricCirclesPosition
+          const y = p.sin(angle) * rMetricCirclesPosition   
           // eclipsing circle
           p.fill('#000')
           p.noStroke()
@@ -418,7 +408,7 @@ const P5Sketch = () => {
       }
       sketch.remove()
     };
-  }, [audioUrl])
+  }, [])
 
   return (
     <div 
