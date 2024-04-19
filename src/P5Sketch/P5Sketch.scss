@@ -29,19 +29,21 @@
   100% {background-position: 50% 0, 60% 50%}
 }
 
-.toggle-btn, .exit-songs-btn {
+.toggle-btn {
 	position: absolute;
 	border: none;
-	padding: 0.5rem 1rem;
 	text-transform: uppercase; 
 	background: #000;
 	color: #adb3c2;
 	font-size: 1.6rem;
 	font-weight: bold;
-	width: 50px;
-	height: 50px;
+	width: 65px;
+	height: 65px;
 	border-radius: 50%;
 	transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .exit-songs-btn {
@@ -61,4 +63,51 @@
 }
 .exit-songs-btn.show, .toggle-btn.show {
 	opacity: 1;
+}
+
+.play-button {
+  width: 0;
+  height: 0;
+  border-top: 16px solid transparent;
+  border-bottom: 16px solid transparent;
+  border-left: 30px solid #adb3c2;
+  cursor: pointer;
+}
+
+.pause-button {
+  position: relative;
+  width: 40px; /* Adjust the width as needed */
+  height: 40px; /* Adjust the height as needed */
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.pause-button::before,
+.pause-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px; /* Adjust the width of the lines as needed */
+  height: 60%; /* Adjust the height of the lines as needed */
+  background-color: #adb3c2;
+  transform: translate(-50%, -50%);
+}
+
+.pause-button::before {
+  margin-left: -8px; /* Adjust the spacing between the lines */
+}
+
+.pause-button::after {
+  margin-left: 8px; /* Adjust the spacing between the lines */
+}
+
+
+
+.exit-songs-btn {
+  position: absolute;
+  border: none;
+  background: none;
+  top: 40px;
 }

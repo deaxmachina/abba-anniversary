@@ -132,16 +132,17 @@ const P5Sketch = () => {
         ///////////////////////////////////////////
         // Play / pause button
         buttonPlayPause = p.select('.toggle-btn')
-        buttonPlayPause.html('pa')
+        //buttonPlayPause.html('pa')
+        buttonPlayPause.html('<div class="pause-button"></div>')
         buttonPlayPause.mousePressed(() => {
-          console.log('play pause button is clicked')
           if (songRef.current) {
             if (songRef.current.isPlaying()) {
               songRef.current.pause()
-              buttonPlayPause.html('pl')
+              buttonPlayPause.html('<div class="play-button"></div>')
             } else {
               songRef.current.play()
-              buttonPlayPause.html('pa')
+              // buttonPlayPause.html('pa')
+              buttonPlayPause.html('<div class="pause-button"></div>')
             }
           }
         })
@@ -429,8 +430,15 @@ const P5Sketch = () => {
           }}
         >soo0000ong</button> */}
 
-        <button class='toggle-btn hide'>pl</button>
-        <button class='exit-songs-btn hide'>bk</button>
+        <button class='toggle-btn hide'></button>
+        <button class='exit-songs-btn hide'>
+          <svg width='30' height='33'>
+            <g fill={colMetricMoons}>
+              <path d="M16.6,4.9h-4l2.7-2.6l-1.4-1.4l-5,5l5,5l1.4-1.4l-2.6-2.6h4c6.2,0,11.2,5,11.2,11.2c0,6.2-5,11.2-11.2,11.2H3.2v2h13.5
+                c7.3,0,13.2-5.9,13.2-13.2C29.9,10.9,23.9,5,16.6,4.9L16.6,4.9z"/>
+            </g>
+          </svg>
+        </button>
 
         <div className='sketch-overlay'></div>
       </div>
