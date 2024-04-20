@@ -75,7 +75,10 @@ function App() {
           safari={safari}
         /> :
         <>
-        <Suspense fallback={<Loading />}>
+        {/* <Loading windowWidth={windowWidth} windowHeight={windowHeight} /> */}
+        <Suspense fallback={
+          <Loading windowWidth={windowWidth} windowHeight={windowHeight} />
+        }>
           <ThemeSelector setColours={setColours} />
           <div className='wrapper-3d'>
             <Albums3DScene
@@ -92,8 +95,6 @@ function App() {
           {
             showHtml && selectedAlbumId && 
               <div className='wrapper-2d'>
-                {/* <ProcessingEmbed windowWidth={windowWidth} windowHeight={windowHeight} /> */}
-                {/* <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} /> */}
                 <P5Sketch windowWidth={windowWidth} windowHeight={windowHeight} selectedAlbumId={selectedAlbumId} />
               </div>
           }

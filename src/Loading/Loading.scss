@@ -1,8 +1,173 @@
 .wrapper-loading {
+  position: relative;
   width: 100vw;
   height: 100vh;
-  background-color: purple;
+  background-color: #000;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  // z-index: -1;
+}
+
+#myVideo {
+  opacity: 0.4;
+  width: 120%; /* Set the video width to 120% of its original size */
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.2); /* Scale the video from the center */
+}
+
+.ryoo-bg5 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  --circle_w: 2px;
+  --m_bet_circle: 3px;
+  --circle_color: #737b8771;//  #adb3c271;
+  --bg_color: transparent;
+  --A: calc(var(--circle_w) + var(--m_bet_circle));
+  --B: calc(var(--circle_w) / 2);
+  background: 0 0/var(--A) var(--A) radial-gradient(circle at center, var(--circle_color) var(--B), var(--bg_color) var(--B)), center/cover no-repeat;
+}
+
+.loading-text {
+  font-family: 'Dawning of a New Day';
+  font-size: 6rem;
+  font-weight: bold;
+  color: #fff;
+  z-index: 100;
+}
+
+
+.dot-flashing {
+ position: relative;
+ display: inline-block;
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ background-color: #fff;
+ color: #fff;
+ animation: dot-flashing 1s infinite linear alternate;
+ animation-delay: 0.5s;
+ margin-left: 35px;
+}
+.dot-flashing::before, .dot-flashing::after {
+ content: "";
+ display: inline-block;
+ position: absolute;
+ top: 0;
+}
+.dot-flashing::before {
+ left: -25px;
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ background-color: #fff;
+ color: #fff;
+ animation: dot-flashing 1s infinite alternate;
+ animation-delay: 0s;
+}
+.dot-flashing::after {
+ left: 25px;
+ width: 16px;
+ height: 16px;
+ border-radius: 50%;
+ background-color: #fff;
+ color: #fff;
+ animation: dot-flashing 1s infinite alternate;
+ animation-delay: 1s;
+}
+
+@keyframes dot-flashing {
+ 0% {
+   background-color: #fff;
+ }
+ 50%, 100% {
+   background-color: #868b9871;
+ }
+}
+
+
+.dot-pulse {
+  position: relative;
+  display: inline-block;
+  left: -9999px;
+  margin-left: 30px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #fff;
+  box-shadow: 9999px 0 0 -5px;
+  animation: dot-pulse 1.5s infinite linear;
+  animation-delay: 0.25s;
+}
+.dot-pulse::before, .dot-pulse::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #fff;
+  color: #fff;
+}
+.dot-pulse::before {
+  box-shadow: 9984px 0 0 -5px;
+  animation: dot-pulse-before 1.5s infinite linear;
+  animation-delay: 0s;
+}
+.dot-pulse::after {
+  box-shadow: 10014px 0 0 -5px;
+  animation: dot-pulse-after 1.5s infinite linear;
+  animation-delay: 0.5s;
+}
+
+@keyframes dot-pulse-before {
+  0% {
+    box-shadow: 9984px 0 0 -5px;
+  }
+  30% {
+    box-shadow: 9984px 0 0 2px;
+  }
+  60%, 100% {
+    box-shadow: 9984px 0 0 -5px;
+  }
+}
+@keyframes dot-pulse {
+  0% {
+    box-shadow: 9999px 0 0 -5px;
+  }
+  30% {
+    box-shadow: 9999px 0 0 2px;
+  }
+  60%, 100% {
+    box-shadow: 9999px 0 0 -5px;
+  }
+}
+@keyframes dot-pulse-after {
+  0% {
+    box-shadow: 10014px 0 0 -5px;
+  }
+  30% {
+    box-shadow: 10014px 0 0 2px;
+  }
+  60%, 100% {
+    box-shadow: 10014px 0 0 -5px;
+  }
 }
