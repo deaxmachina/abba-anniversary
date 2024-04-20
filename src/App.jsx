@@ -75,9 +75,9 @@ function App() {
           safari={safari}
         /> :
         <>
-        {/* <LoadingScreen /> */}
+        {/* <LoadingScreen windowWidth={windowWidth} windowHeight={windowHeight} /> */}
         <Suspense fallback={
-          <LoadingScreen />
+          <LoadingScreen windowWidth={windowWidth} windowHeight={windowHeight} />
         }>
           <ThemeSelector setColours={setColours} />
           <div className='wrapper-3d'>

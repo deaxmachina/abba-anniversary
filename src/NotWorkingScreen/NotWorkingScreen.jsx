@@ -9,6 +9,9 @@ const NotWorkingScreen = ({ windowWidth, windowHeight, widthCondition, heightCon
       {
         safari && !(widthCondition || heightCondition) &&
         <BackgroundScreen 
+          windowWidth={windowWidth}
+          windowHeight={windowHeight}
+          showBlobs={false}
           childrenComponent={
             <div className='wrapper-safari-condition condition'>
               <h2>Sorry :(</h2>
@@ -22,6 +25,9 @@ const NotWorkingScreen = ({ windowWidth, windowHeight, widthCondition, heightCon
       {
         !safari && (widthCondition || heightCondition) &&
         <BackgroundScreen 
+          windowWidth={windowWidth}
+          windowHeight={windowHeight}
+          showBlobs={false}
           childrenComponent={
             <div className='wrapper-size-condition condition'>
               <h2>Sorry :(</h2>
@@ -35,6 +41,9 @@ const NotWorkingScreen = ({ windowWidth, windowHeight, widthCondition, heightCon
       {
         safari && (widthCondition || heightCondition) &&
         <BackgroundScreen 
+          windowWidth={windowWidth}
+          windowHeight={windowHeight}
+          showBlobs={false}
           childrenComponent={
             <div className='wrapper-all-condition condition'>
               <h2>Sorry :(</h2>

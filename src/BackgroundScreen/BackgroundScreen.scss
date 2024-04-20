@@ -18,8 +18,18 @@
   // z-index: -1;
 }
 
+.decorative {
+  position: absolute;
+  top: 0;
+  left: 0;
+  svg {
+    width: 100vw;
+    height: 100vh;
+  }
+}
+
 #myVideo {
-  opacity: 0.4;
+  opacity: 0.2;
   width: 120%; /* Set the video width to 120% of its original size */
   height: auto;
   position: absolute;

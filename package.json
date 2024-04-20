@@ -26,7 +26,6 @@
     "postprocessing": "^6.35.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-p5": "^1.4.1",
     "sass": "^1.72.0",
     "scss": "^0.2.4",
     "suspend-react": "^0.1.3",
