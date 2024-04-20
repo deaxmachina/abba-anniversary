@@ -5,7 +5,7 @@ import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
 // import SongsViz from './_SongsViz/SongsViz';
 // import ProcessingEmbed from './ProcessingEmbed/ProcessingEmbed'
-import Loading from './Loading/Loading';
+import LoadingScreen from './LoadingScreen/LoadingScreen';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import { coloursDefault } from './assets/colours'
 import NotWorkingScreen from './NotWorkingScreen/NotWorkingScreen';
@@ -33,8 +33,8 @@ function App() {
 
 
   // The dimensions below which we don't show the app
-  const widthCondition = windowWidth <= 1150
-  const heightCondition = windowHeight <= 650
+  const widthCondition = windowWidth <= 1200
+  const heightCondition = windowHeight <= 700
 
   // GPU conditions 
   const [gpuTier, setGpuTier] = useState(null)
@@ -75,9 +75,9 @@ function App() {
           safari={safari}
         /> :
         <>
-        {/* <Loading windowWidth={windowWidth} windowHeight={windowHeight} /> */}
+        {/* <LoadingScreen /> */}
         <Suspense fallback={
-          <Loading windowWidth={windowWidth} windowHeight={windowHeight} />
+          <LoadingScreen />
         }>
           <ThemeSelector setColours={setColours} />
           <div className='wrapper-3d'>

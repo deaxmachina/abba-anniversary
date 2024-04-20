@@ -1,11 +1,9 @@
-import './Loading.scss'
+import './BackgroundScreen.scss'
 
-const Loading = ({ windowWidth, windowHeight }) => {
+const BackgroundScreen = ({ childrenComponent }) => {
 
   return (
-    <div className='wrapper-loading'>
-      {/* <LoadingSketch windowWidth={windowWidth} windowHeight={windowHeight} /> */}
-
+    <div className='wrapper-bacgkround-screen'>
       <div className="video-background">
         <video autoPlay muted loop id="myVideo">
           <source src="./mammamia2.mp4" type="video/mp4" ></source>
@@ -14,12 +12,14 @@ const Loading = ({ windowWidth, windowHeight }) => {
       </div>
 
       <div className="ryoo-bg5"></div>
-      <div className='loading-text'>
+      {childrenComponent}
+
+      {/* <div className='loading-text'>
         Loading
         <div class="dot-pulse"></div>
-      </div>
+      </div> */}
     </div>
   )
 }
 
-export default Loading
+export default BackgroundScreen

@@ -1,4 +1,4 @@
-.wrapper-loading {
+.wrapper-bacgkround-screen{
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -26,6 +26,14 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(1.2); /* Scale the video from the center */
+  @media (max-width: 1200px) {
+    width: 150%;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  @media (max-width: 900px) {
+    width: 180%;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
 }
 
 .ryoo-bg5 {
@@ -50,55 +58,6 @@
   font-weight: bold;
   color: #fff;
   z-index: 100;
-}
-
-
-.dot-flashing {
- position: relative;
- display: inline-block;
- width: 16px;
- height: 16px;
- border-radius: 50%;
- background-color: #fff;
- color: #fff;
- animation: dot-flashing 1s infinite linear alternate;
- animation-delay: 0.5s;
- margin-left: 35px;
-}
-.dot-flashing::before, .dot-flashing::after {
- content: "";
- display: inline-block;
- position: absolute;
- top: 0;
-}
-.dot-flashing::before {
- left: -25px;
- width: 16px;
- height: 16px;
- border-radius: 50%;
- background-color: #fff;
- color: #fff;
- animation: dot-flashing 1s infinite alternate;
- animation-delay: 0s;
-}
-.dot-flashing::after {
- left: 25px;
- width: 16px;
- height: 16px;
- border-radius: 50%;
- background-color: #fff;
- color: #fff;
- animation: dot-flashing 1s infinite alternate;
- animation-delay: 1s;
-}
-
-@keyframes dot-flashing {
- 0% {
-   background-color: #fff;
- }
- 50%, 100% {
-   background-color: #868b9871;
- }
 }
 
 
