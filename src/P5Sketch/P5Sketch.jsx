@@ -11,18 +11,26 @@ import p5 from 'p5'
 window.p5 = p5
 import("p5/lib/addons/p5.sound")
 
-const selectedAlbumId = '1kM6xcSYO5ASJaWgygznL7' // '0uUtGVj0y9FjfKful7cABY'
+//const selectedAlbumId = '1kM6xcSYO5ASJaWgygznL7' // '0uUtGVj0y9FjfKful7cABY'
+// const width = 660
+// const height = 660
 
 const glowMetricMoons = '#fcedbb' // '#fff'
 const glowSongMoon = '#fcedbb' // '#fff'
 const colMetricMoons = '#adb3c2' // '#fcedbb' // '#adb3c2'
 const colRays = '#ea9918'
 
-const width = 660
-const height = 660
 
-const P5Sketch = () => {
+const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
   window.p5 = p5
+
+  const width = windowHeight * 0.7
+  const height = windowHeight * 0.7
+  // Dimensions
+  const rMaxMiddleCircle = 150 // Radius for the middle circle = selected song
+  const rMinRays = 140 // Min radius of the radial rays coming from the middle for the song viz
+  const rMetricCirclesPosition = rMinRays + 10 // where to radially position the circles for the metrics (suns and moons)
+  const rMetricCircles = 72 // radius of the suns and moons circles for the metrics
 
   const canvasRef = useRef()
   const songRef = useRef()
@@ -31,12 +39,13 @@ const P5Sketch = () => {
   const tracksInAlbum = albums.find(d => d.id === selectedAlbumId).tracks
 
   useEffect(() => {
-    let fft
+    let fft = null 
     let songUrl = null
-    let songId
-    let songName
+    let songId = null 
+    let songName = null
+    let songNameOnHover = null
     let clickedNodeId = null
-    let audioFeaturesSong
+    let audioFeaturesSong = null
     const fftBins = 64
     const fftBinCutoff = 41
 
@@ -52,12 +61,6 @@ const P5Sketch = () => {
     let animationIsActive = false
     const fontFamily = 'Dawning of a New Day' // 'Dawning of a New Day'
     const metricsOptions = ['loudness', 'tempo', 'energy', 'danceability', 'valence']
-
-    // Dimensions
-    const rMaxMiddleCircle = 150 // Radius for the middle circle = selected song
-    const rMinRays = 140 // Min radius of the radial rays coming from the middle for the song viz
-    const rMetricCirclesPosition = rMinRays + 10 // where to radially position the circles for the metrics (suns and moons)
-    const rMetricCircles = 72 // radius of the suns and moons circles for the metrics
 
 
     const sketch = new p5((p) => {
@@ -153,7 +156,7 @@ const P5Sketch = () => {
         buttonExitSongs.removeClass('show')
         buttonExitSongs.mousePressed(() => {
           if (songRef.current) songRef.current.pause()
-          songRef.current = songUrl = songId = audioFeaturesSong = clickedNodeId = songName = null
+          songRef.current = songUrl = songId = audioFeaturesSong = clickedNodeId = songName = songNameOnHover = null
           // Hide the play / pause button 
           buttonPlayPause.removeClass('show')
           buttonPlayPause.addClass('hide')
@@ -169,12 +172,15 @@ const P5Sketch = () => {
       //////////////////////////////////////////////
       p.mouseMoved = () => {
         if (songRef.current) return // Only want to allow clicks in the graph mode
-        if (!songId) songName = null
+        if (!songId) songNameOnHover = null
+        const distCondition = (node) => p.dist(p.mouseX, p.mouseY, node.x, node.y) <= node.size/2
         if (nodesSimulation) {
           nodesSimulation.forEach(node => {
-            if (p.dist(p.mouseX, p.mouseY, node.x, node.y) <= node.size/2) {
-              songName = node.name
-            } 
+            if (distCondition(node)) {
+              songNameOnHover = node.name
+              p.cursor(p.CROSS)
+            } else {
+            }
           })
         }
       }
@@ -274,12 +280,12 @@ const P5Sketch = () => {
             p.fill(colRays)
             p.circle(node.x, node.y, node.size)
             // Draw song name for hovered song
-            if (node.name === songName) {
+            if (node.name === songNameOnHover) {
               p.textAlign(p.CENTER)
               p.textFont(fontFamily)
               p.textStyle(p.BOLD)
               p.textSize(20)
-              p.text(songName, node.x, node.y - node.size * 0.5 - 10)
+              p.text(songNameOnHover, node.x, node.y - node.size * 0.5 - 10)
             }
           })       
         }
@@ -344,7 +350,7 @@ const P5Sketch = () => {
           const rawValue = audioFeaturesSong[metric]
           let offset
           // moved by an angle equivalent to the diameter of the circle
-          const maxAngleToShiftBy = p.atan(rMetricCirclesPosition / (rMetricCircles + 10))
+          const maxAngleToShiftBy = p.atan(rMetricCirclesPosition / (rMetricCircles*2))
           if (['energy', 'danceability', 'valence'].includes(metric)) {
             offset = p.map(rawValue, 0, 1, 0, maxAngleToShiftBy/2) // metric 0 -> offset 0; metric 1 -> offset = radius
           } else if (metric === 'loudness') {
@@ -392,7 +398,7 @@ const P5Sketch = () => {
           p.push()
           p.fill(colRays)
           p.textSize(30)
-          p.text(songName, 0, -height * 0.35)
+          p.text(songName, 0, -height * 0.4)
           p.pop()
         }
 
@@ -406,10 +412,14 @@ const P5Sketch = () => {
       if (songRef.current) {
         songRef.current.pause()
         songRef.current = null
+        buttonExitSongs.addClass('hide')
+        buttonExitSongs.removeClass('show')
+        buttonPlayPause.addClass('hide')
+        buttonPlayPause.removeClass('show')
       }
       sketch.remove()
     };
-  }, [])
+  }, [selectedAlbumId, windowWidth, windowHeight])
 
   return (
     <div 
@@ -417,19 +427,6 @@ const P5Sketch = () => {
       style={{ width: `${width}px`, height: `${height}px` }}
     >
       <div ref={canvasRef} className='wrapper-sketch' style={{ width: `${width}px`, height: `${height}px`, position: 'relative' }}>
-        {/* <button
-          style={{ position: 'absolute', top: '0px', left: '0px' }}
-          onClick={() => {
-            if (songRef.current) {
-              if (songRef.current.isPlaying()) {
-                songRef.current.pause()
-              } else {
-                songRef.current.play()
-              }
-            }
-          }}
-        >soo0000ong</button> */}
-
         <button class='toggle-btn hide'></button>
         <button class='exit-songs-btn hide'>
           <svg width='30' height='33'>

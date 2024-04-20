@@ -34,7 +34,7 @@ function App() {
 
   // The dimensions below which we don't show the app
   const widthCondition = windowWidth <= 1150
-  const heightCondition = windowHeight <= 700
+  const heightCondition = windowHeight <= 650
 
   // GPU conditions 
   const [gpuTier, setGpuTier] = useState(null)
@@ -94,7 +94,7 @@ function App() {
               <div className='wrapper-2d'>
                 {/* <ProcessingEmbed windowWidth={windowWidth} windowHeight={windowHeight} /> */}
                 {/* <SongsViz selectedAlbumId={selectedAlbumId} colours={colours} /> */}
-                <P5Sketch />
+                <P5Sketch windowWidth={windowWidth} windowHeight={windowHeight} selectedAlbumId={selectedAlbumId} />
               </div>
           }
         </Suspense>

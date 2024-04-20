@@ -28,7 +28,7 @@ export default function Lights({ colours }) {
       />
 
       <ambientLight
-        intensity={1.5}
+        intensity={1}
       />
       <directionalLight
         position={[0, 5, 0]}
