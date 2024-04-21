@@ -4,6 +4,7 @@ import audioFeatures from '../data/audio_features_results.json'
 import albums from '../data/albums.json'
 import audioPreviews from '../data/songs_coverArt_and_audioPreviews.json'
 import { useMemo, useEffect, useState, useRef } from 'react'
+import SpotifyExplanation from './SpotifyExplanation.jsx'
 import _ from 'lodash'
 import gsap from 'gsap'
 import * as d3 from 'd3'
@@ -25,6 +26,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
   window.p5 = p5
 
   const [songModeActive, setSongModeActive] = useState(false)
+  const [showExplanation, setShowExplanation] = useState(false)
 
   const width = windowHeight * 0.7
   const height = windowHeight * 0.7
@@ -32,7 +34,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
   const rMaxMiddleCircle = 150 // Radius for the middle circle = selected song
   const rMinRays = 140 // Min radius of the radial rays coming from the middle for the song viz
   const rMetricCirclesPosition = rMinRays + 10 // where to radially position the circles for the metrics (suns and moons)
-  const rMetricCircles = 72 // radius of the suns and moons circles for the metrics
+  const rMetricCircles = 74 // radius of the suns and moons circles for the metrics
 
   const canvasRef = useRef()
   const songRef = useRef()
@@ -236,8 +238,9 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
             songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
             if (songRef.current) songRef.current.pause() // pause the previous song first
             setSongModeActive(true)
-                const clonedNode = Object.assign({}, node) // Clone the node so that the OG node stays in place
-                gsap.timeline()
+            const clonedNode = Object.assign({}, node) // Clone the node so that the OG node stays in place
+            
+            gsap.timeline()
                   .fromTo(clonedNode, 
                   { 
                     x: clonedNode.x, 
@@ -264,9 +267,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
                     },
                     onComplete: () => { animationIsActive = false },
                     duration: 1
-                  },
-
-                )	
+            })	
 
 
             // Wait a bit before playing song for the node graph to shift its form 
@@ -459,15 +460,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
       style={{ width: `${width}px`, height: `${height}px` }}
     >
       <div ref={canvasRef} className='wrapper-sketch' style={{ width: `${width}px`, height: `${height}px`, position: 'relative' }}>
-        <button class='toggle-btn hide'></button>
-        <button class='exit-songs-btn hide'>
-          <svg width='30' height='33'>
-            <g fill={colMetricMoons}>
-              <path d="M16.6,4.9h-4l2.7-2.6l-1.4-1.4l-5,5l5,5l1.4-1.4l-2.6-2.6h4c6.2,0,11.2,5,11.2,11.2c0,6.2-5,11.2-11.2,11.2H3.2v2h13.5
-                c7.3,0,13.2-5.9,13.2-13.2C29.9,10.9,23.9,5,16.6,4.9L16.6,4.9z"/>
-            </g>
-          </svg>
-        </button>
+        <button className='toggle-btn hide'></button>
+        <button className='exit-songs-btn hide'>&larr; back</button>
         <svg 
           className='svg-gooey-blobs' 
           filter='url(#gooeyCodeFilter)'
@@ -495,6 +489,31 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
             })
           }
         </svg>
+
+        {/* Explanation for the circles */}
+        {
+          !songModeActive &&
+          <div className='circles-explanation'>click on a song
+          <div className='song-circle'></div>
+          </div>
+        }
+
+        {/* Explanation of the graph */}
+        {
+          songModeActive &&
+          <button 
+            className='explain-graph-btn'
+            onClick={() => setShowExplanation(prev => !prev)}
+          >
+            { showExplanation ? 'x' : '?' }
+          </button>
+        }
+        {
+          showExplanation && songModeActive &&
+          <SpotifyExplanation />
+        }
+
+        {/* Noisy overlay */}
         <div className='sketch-overlay'></div>
       </div>
     </div>
