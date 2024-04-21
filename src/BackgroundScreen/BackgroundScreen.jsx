@@ -16,24 +16,24 @@ const BackgroundScreen = ({ childrenComponent, windowWidth, windowHeight, showBl
         .fromTo('.decorative-circle', {
           attr: {
             'fill-opacity': 0,
-            'cx': (i) => dummyData[i].x,
-            'cy': (i) => dummyData[i].y,
+            'cx': (i) => dummyDataLeft[i].x,
+            'cy': (i) => dummyDataLeft[i].y,
           },
         }, {
           attr: {
-            'fill-opacity': (i) => dummyData[i].fillOpacity,
+            'fill-opacity': (i) => dummyDataLeft[i].fillOpacity,
             'cx': (i) => {
               if (Math.random() < 0.5) {
-                return dummyData[i].x + _.random(20, 100)
+                return dummyDataLeft[i].x + _.random(20, 100)
               } else {
-                return dummyData[i].x 
+                return dummyDataLeft[i].x 
               }
             },
             'cy': (i) => {
               if (Math.random() < 0.5) {
-                return dummyData[i].y + _.random(20, 100)
+                return dummyDataLeft[i].y + _.random(20, 100)
               } else {
-                return dummyData[i].y 
+                return dummyDataLeft[i].y 
               }
             },
           },
@@ -48,7 +48,7 @@ const BackgroundScreen = ({ childrenComponent, windowWidth, windowHeight, showBl
           },
         }, {
           attr: {
-            'r': (i) => dummyData[i].r
+            'r': (i) => dummyDataLeft[i].r
           },
           repeat: -1,
           duration: 0.5,
@@ -105,7 +105,7 @@ const BackgroundScreen = ({ childrenComponent, windowWidth, windowHeight, showBl
   }, [])
 
 
-  const dummyData = useMemo(() => {
+  const dummyDataLeft = useMemo(() => {
     return  _.range(40).map(i => {
       const x = _.random(0, 0.5)*windowWidth // _.random(-0.05, 0.15)*windowWidth
       const y = Math.random()*windowHeight
@@ -157,7 +157,7 @@ const BackgroundScreen = ({ childrenComponent, windowWidth, windowHeight, showBl
             </filter>
             </defs>
           {
-            dummyData.map((d, i) => {
+            dummyDataLeft.map((d, i) => {
               return (
                 <circle 
                   key={d.x}

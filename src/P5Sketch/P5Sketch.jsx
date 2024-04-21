@@ -21,8 +21,10 @@ const colMetricMoons = '#adb3c2' // '#fcedbb' // '#adb3c2'
 const colRays = '#ea9918'
 
 
-const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
+const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
   window.p5 = p5
+
+  const [songModeActive, setSongModeActive] = useState(false)
 
   const width = windowHeight * 0.7
   const height = windowHeight * 0.7
@@ -37,6 +39,38 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
 
   // Get tracks in current album 
   const tracksInAlbum = albums.find(d => d.id === selectedAlbumId).tracks
+
+  // For the dummy gooey circles 
+  const randomCircles = useMemo(() => {
+      return  _.range(40).map(i => {
+        // Top edge 
+        const xTop = Math.random() * width 
+        const yTop = _.random(0, 0.15) * height
+        // Bottom edge 
+        const xBottom = Math.random() * width 
+        const yBottom = _.random(0.85, 1.1) * height
+        // Left edge 
+        const xLeft = _.random(0.85, 1) * width
+        const yLeft = Math.random() * height
+        // Right edge 
+        const xRight = _.random(0, 0.15) * width
+        const yRight = Math.random() * height
+        // All the options 
+        const options = [
+          // { x: xTop, y: yTop },
+          { x: xBottom, y: yBottom },
+          // { x: xLeft, y: yLeft },
+          // { x: xRight, y: yRight }
+        ]
+        const option = _.sample(options)
+        const x = option.x
+        const y = option.y
+        const r = Math.round(_.random(20, 80))
+        const fill = _.sample([colours.primary1, colours.secondary1, '#adb3c2'])
+        const fillOpacity = _.random(0.2, 0.6)
+        return { x, y, r, fill, fillOpacity }
+      })
+  }, [width, height, colours])
 
   useEffect(() => {
     let fft = null 
@@ -91,13 +125,13 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
         const compulsoryLinks = tracksInAlbum.map(track => {
           const source = track.id
           const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
-          return ({ source, target, size: _.sample([0, 0.7, 1.6]) })
+          return ({ source, target, size: _.sample([0, 0.5, 1, 2.5]) })
         })
         // Thow in some more random links for funsies
         const otherLinks = _.range(6).map(i => {
           const source = _.sample(tracksInAlbum).id
           const target = _.sample(tracksInAlbum.filter(d => d.id !== source)).id
-          return ({ source, target, size: _.sample([0, 0.6, 0.5, 0.7, 1.8, 4])  })
+          return ({ source, target, size: _.sample([0, 0.5, 1, 2.5])  })
         })
         const allLinks = _.uniqBy([...compulsoryLinks, ...otherLinks], d => `${d.source}-${d.target}`)
         const data = { 
@@ -121,7 +155,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
         simulation = d3.forceSimulation(nodes)
           .force("link", d3.forceLink(links).id(d => d.id))
           .force("charge", d3.forceManyBody())
-          .force("center", d3.forceCenter(width * 0.5, height * 0.5).strength(1.2))
+          .force("center", d3.forceCenter(width * 0.5, height * 0.4).strength(1.2))
           .force("x", d3.forceX((d, i) => i * 50).strength(0.5))
           .force("collide", d3.forceCollide().radius(50).strength(0.2))
           .on("tick", () => {
@@ -157,9 +191,11 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
         buttonExitSongs.mousePressed(() => {
           if (songRef.current) songRef.current.pause()
           songRef.current = songUrl = songId = audioFeaturesSong = clickedNodeId = songName = songNameOnHover = null
+          setSongModeActive(false)
           // Hide the play / pause button 
           buttonPlayPause.removeClass('show')
           buttonPlayPause.addClass('hide')
+          buttonPlayPause.html('<div class="pause-button"></div>')
         })
 
         p.background(220)
@@ -199,11 +235,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
             songName = node.name
             songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
             if (songRef.current) songRef.current.pause() // pause the previous song first
-            
-            // Check if node has been selected and draw circle to the middle 
-            // for it if so, deleting everything else 
-            nodesSimulation.forEach(node => {
-              if (clickedNodeId === node.id) {
+            setSongModeActive(true)
                 const clonedNode = Object.assign({}, node) // Clone the node so that the OG node stays in place
                 gsap.timeline()
                   .fromTo(clonedNode, 
@@ -235,8 +267,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
                   },
 
                 )	
-              }
-            })
+
+
             // Wait a bit before playing song for the node graph to shift its form 
             // so that the selected song is in the middle
             setTimeout(() => {
@@ -436,7 +468,33 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId }) => {
             </g>
           </svg>
         </button>
-
+        <svg 
+          className='svg-gooey-blobs' 
+          filter='url(#gooeyCodeFilter)'
+        >
+          <defs>
+            <filter id='gooeyCodeFilter'>
+              <feGaussianBlur in='SourceGraphic' stdDeviation='10' colorInterpolationFilters='sRGB' result='blur'/>
+              <feColorMatrix className="blurValues" in='blur' mode='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9' result='gooey' />
+              <feComposite in='SourceGraphic' in2='gooey' operator='atop' />
+            </filter>
+          </defs>
+          {
+            !songModeActive && randomCircles.map((d, i) => {
+              return (
+                <circle 
+                  key={d.x}
+                  className='decorative-blob'
+                  cx={d.x} 
+                  cy={d.y} 
+                  r={d.r} 
+                  fill={d.fill}
+                  fillOpacity={d.fillOpacity}
+                />
+              )
+            })
+          }
+        </svg>
         <div className='sketch-overlay'></div>
       </div>
     </div>

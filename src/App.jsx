@@ -95,7 +95,7 @@ function App() {
           {
             showHtml && selectedAlbumId && 
               <div className='wrapper-2d'>
-                <P5Sketch windowWidth={windowWidth} windowHeight={windowHeight} selectedAlbumId={selectedAlbumId} />
+                <P5Sketch windowWidth={windowWidth} windowHeight={windowHeight} selectedAlbumId={selectedAlbumId} colours={colours} />
               </div>
           }
         </Suspense>
