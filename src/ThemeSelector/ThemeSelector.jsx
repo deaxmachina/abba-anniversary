@@ -20,10 +20,10 @@ const themeOptions = [
     theme: 'theme4',
     colours: coloursOption4
   },
-  {
-    theme: 'theme5',
-    colours: coloursOption5
-  },
+  // {
+  //   theme: 'theme5',
+  //   colours: coloursOption5
+  // },
 ]
 
 const ThemeSelector = ({ setColours }) => {
@@ -34,15 +34,14 @@ const ThemeSelector = ({ setColours }) => {
   return (
     <div 
       className='wrapper-theme-selector' 
-      style={{ transform: transform }}
-      onMouseOver={() => { setTransform('translate(50px, 0)') }}
-      onMouseOut={() => { setTransform('translate(300px, 0)') }}
+      // style={{ transform: transform }}
+      // onMouseOver={() => { setTransform('translate(50px, 0)') }}
+      // onMouseOut={() => { setTransform('translate(300px, 0)') }}
     >
 
-      <div className='select-theme-label'>
+      {/* <div className='select-theme-label'>
         <Icon />
-        {/* theme */}
-      </div>
+      </div> */}
 
       <div className='select-theme-options'>
         <div className='wrapper-theme-btns'>
