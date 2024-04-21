@@ -10,6 +10,7 @@ import ThemeSelector from './ThemeSelector/ThemeSelector';
 import { coloursDefault } from './assets/colours'
 import NotWorkingScreen from './NotWorkingScreen/NotWorkingScreen';
 import P5Sketch from './P5Sketch/P5Sketch';
+import Credits from './Credits/Credits';
 
 function App() {
   const [colours, setColours] = useState(coloursDefault)
@@ -34,7 +35,7 @@ function App() {
 
   // The dimensions below which we don't show the app
   const widthCondition = windowWidth <= 1200
-  const heightCondition = windowHeight <= 700
+  const heightCondition = windowHeight <= 650
 
   // GPU conditions 
   const [gpuTier, setGpuTier] = useState(null)
@@ -79,7 +80,14 @@ function App() {
         <Suspense fallback={
           <LoadingScreen windowWidth={windowWidth} windowHeight={windowHeight} />
         }>
-          <ThemeSelector setColours={setColours} />
+          {
+            selectedAlbumId === null &&
+            <ThemeSelector setColours={setColours} />
+          }
+          {
+            selectedAlbumId === null &&
+            <Credits />
+          }
           <div className='wrapper-3d'>
             <Albums3DScene
                 selectedAlbumId={selectedAlbumId}

@@ -1,0 +1,25 @@
+.wrapper-credits {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  z-index: 2;
+  transform: translate(330px, 0);
+  transition: transform 0.5s ease;
+  display: flex;
+  align-items: center;
+
+  .pullout {
+    display: flex;
+    align-items: center;
+    color: #b38a42;
+  }
+  .star {
+    font-size: 1.4rem;
+    color: #b38a42;
+  }
+
+  .content {
+    width: 330px;
+    background-color: red;
+  }
+}

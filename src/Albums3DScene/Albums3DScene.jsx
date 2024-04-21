@@ -179,7 +179,7 @@ function Frame({ selectedAlbumId,  position, rotation, imgUrl, id, colours }) {
         />
       </mesh>
 
-      <Text maxWidth={0.55} anchorX="center" anchorY="top" position={[0, GOLDENRATIO*0.8, 0]} fontSize={0.05} color='#fff'>
+      <Text maxWidth={0.55} anchorX="center" anchorY="top" position={[0, GOLDENRATIO*0.8, 0]} fontSize={0.05} color='#ffffff'>
         {albums.find(d => d.id === id).name} ★
         {albums.find(d => d.id === id).year}
       </Text>

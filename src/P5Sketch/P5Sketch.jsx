@@ -31,8 +31,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
   const width = windowHeight * 0.7
   const height = windowHeight * 0.7
   // Dimensions
-  const rMaxMiddleCircle = 150 // Radius for the middle circle = selected song
-  const rMinRays = 140 // Min radius of the radial rays coming from the middle for the song viz
+  const rMaxMiddleCircle =  width >= 550 ? 150 : 120 // Radius for the middle circle = selected song
+  const rMinRays = width >= 550 ? 140 : 120 // Min radius of the radial rays coming from the middle for the song viz
   const rMetricCirclesPosition = rMinRays + 10 // where to radially position the circles for the metrics (suns and moons)
   const rMetricCircles = 74 // radius of the suns and moons circles for the metrics
 
@@ -158,8 +158,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
           .force("link", d3.forceLink(links).id(d => d.id))
           .force("charge", d3.forceManyBody())
           .force("center", d3.forceCenter(width * 0.5, height * 0.4).strength(1.2))
-          .force("x", d3.forceX((d, i) => i * 50).strength(0.5))
-          .force("collide", d3.forceCollide().radius(50).strength(0.2))
+          //.force("x", d3.forceX((d, i) => i * 50).strength(0.5))
+          .force("collide", d3.forceCollide().radius(width >= 550 ? 50 : 40).strength(0.2))
           .on("tick", () => {
             nodesSimulation = [...nodes]
             linksSimulation = [...links]
@@ -352,8 +352,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
           p.quad(
             rMinRays * p.cos(angle), rMinRays * p.sin(angle),
             rMinRays * p.cos(angle-1), rMinRays * p.sin(angle-1),
-            rMaxRays * p.cos(angle-4), rMaxRays * p.sin(angle-4),
-            rMaxRays * p.cos(angle), rMaxRays * p.sin(angle)
+            rMaxRays * p.cos(angle-2), rMaxRays * p.sin(angle-2),
+            rMaxRays * p.cos(angle+2), rMaxRays * p.sin(angle+2)
           )
         }
         p.pop()
@@ -430,7 +430,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
         if (songName) {
           p.push()
           p.fill(colRays)
-          p.textSize(30)
+          p.textSize(26)
           p.text(songName, 0, -height * 0.4)
           p.pop()
         }
@@ -493,7 +493,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
         {/* Explanation for the circles */}
         {
           !songModeActive &&
-          <div className='circles-explanation'>click on a song
+          <div className='circles-explanation'>click song
           <div className='song-circle'></div>
           </div>
         }
