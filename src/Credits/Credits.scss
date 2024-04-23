@@ -6,20 +6,48 @@
   transform: translate(330px, 0);
   transition: transform 0.5s ease;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
   .pullout {
     display: flex;
     align-items: center;
-    color: #b38a42;
+    color: #000000da;
+    cursor: pointer;
   }
   .star {
     font-size: 1.4rem;
-    color: #b38a42;
+    color: #000000da;
   }
 
   .content {
-    width: 330px;
-    background-color: red;
+    //border-radius: 20px 0 0 20px;
+    width: 450px;
+    height: 100vh;
+    background-color: #37280f98;
+    backdrop-filter: blur(10px);
+    color: #f1f8ff;
+    padding: 0 1.8rem 1.5rem;
+    .section {
+      margin-bottom: 2rem;
+    }
+    .copyright {
+      font-family: monospace;
+      font-size: 0.6rem;
+    }
+    h3 {
+      line-height: 0.5;
+      margin-bottom: 0;
+      color: #b38a42;
+      font-size: 1.6rem;
+      font-weight: bold;
+      font-family: 'Dawning of a New Day';
+    }
+    p {
+      font-size: 0.8rem;
+      font-weight: 300;
+    }
+    a {
+      color: #fcedbb;
+    }
   }
 }
