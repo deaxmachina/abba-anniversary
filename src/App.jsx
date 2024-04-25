@@ -15,7 +15,7 @@ const optionsForSite = {
   privatePreview: { mum: false, mirrorB: true, fullSongPreview: true },
   forMum: { mum: true, mirrorB: true, fullSongPreview: true },
 }
-const selectedOptionForSide = 'publicPreview'
+const selectedOptionForSide = 'forMum'
 
 function App() {
   // Options that change the version of the page
@@ -43,7 +43,7 @@ function App() {
 
   // The dimensions below which we don't show the app
   const widthCondition = windowWidth <= 1200
-  const heightCondition = windowHeight <= 650
+  const heightCondition = windowHeight <= 670
 
   // GPU conditions 
   const [gpuTier, setGpuTier] = useState(null)
