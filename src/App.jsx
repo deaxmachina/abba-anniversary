@@ -10,12 +10,18 @@ import NotWorkingScreen from './NotWorkingScreen/NotWorkingScreen';
 import P5Sketch from './P5Sketch/P5Sketch';
 import Credits from './Credits/Credits';
 
+const optionsForSite = {
+  publicPreview: { mum: false, mirrorB: false, fullSongPreview: false },
+  privatePreview: { mum: false, mirrorB: true, fullSongPreview: true },
+  forMum: { mum: true, mirrorB: true, fullSongPreview: true },
+}
+const selectedOptionForSide = 'forMum'
+
 function App() {
   // Options that change the version of the page
-  const [mum, setMum] = useState(false)
-  const [mirrorB, setMirrorB] = useState(true)
-  const [fullSongPreview, setFullSongPreview] = useState(false)
-
+  const mum = optionsForSite[selectedOptionForSide].mum
+  const [mirrorB, setMirrorB] = useState(optionsForSite[selectedOptionForSide].mirrorB) 
+  const fullSongPreview = optionsForSite[selectedOptionForSide].fullSongPreview
 
   const [colours, setColours] = useState(coloursDefault)
   const [selectedAlbumId, setSelectedAlbumId] = useState(null)
