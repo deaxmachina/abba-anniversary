@@ -174,11 +174,11 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
           console.log('clicked on the play pause btn')
           if (songRef.current) {
             if (songRef.current.isPlaying()) {
-              console.log('song is playing')
+              console.log('song was playing')
               songRef.current.pause()
               buttonPlayPause.html('<div class="play-button"></div>')
             } else {
-              console.log('song is NOT playing')
+              console.log('song was NOT playing')
               songRef.current.play()
               buttonPlayPause.html('<div class="pause-button"></div>')
             }
@@ -337,8 +337,9 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
         // Stop and reset the song after 15 seconds
         //console.log(songRef.current.currentTime())
         if (songRef.current.currentTime() > 5) {
-          songRef.current.jump(0)
           songRef.current.pause()
+          songRef.current.jump(0)
+          //songRef.current.pause()
         }
 
 
