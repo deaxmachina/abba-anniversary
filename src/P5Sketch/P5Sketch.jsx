@@ -169,16 +169,17 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
         ///////////////////////////////////////////
         // Play / pause button
         buttonPlayPause = p.select('.toggle-btn')
-        //buttonPlayPause.html('pa')
         buttonPlayPause.html('<div class="pause-button"></div>')
         buttonPlayPause.mousePressed(() => {
+          console.log('clicked on the play pause btn')
           if (songRef.current) {
             if (songRef.current.isPlaying()) {
+              console.log('song is playing')
               songRef.current.pause()
               buttonPlayPause.html('<div class="play-button"></div>')
             } else {
+              console.log('song is NOT playing')
               songRef.current.play()
-              // buttonPlayPause.html('pa')
               buttonPlayPause.html('<div class="pause-button"></div>')
             }
           }
@@ -339,8 +340,6 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
           songRef.current.jump(0)
           songRef.current.pause()
         }
-
-        
 
 
         p.background(0)
