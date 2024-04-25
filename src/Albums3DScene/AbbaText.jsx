@@ -36,7 +36,8 @@ const AbbaText = () => {
 const AbbaTextAmbigram = ({ 
   windowWidth, colours,
   curveSegments=32, bevelEnabled=true, bevelSize=0.001, bevelThickness=0.01,  height=0.5, 
-  lineHeight=0.5, letterSpacing=-0.1, size=4, font="fonts/Sarabun Medium_Regular.json", 
+  lineHeight=0.5, letterSpacing=-0.1, size=4, mirrorB,
+  font="fonts/Sarabun Medium_Regular.json", 
 }) => {
   const colour = colours.textAbba
   const xOffset = -6
@@ -73,8 +74,8 @@ const AbbaTextAmbigram = ({
         letterSpacing={letterSpacing}
         size={size}
         font={font}
-        position={[xOffset+6.2, -0.5, z]}
-        scale={[-1, 1, 1]}
+        position={ mirrorB ? [xOffset+6.2, -0.5, z] : [xOffset + 3.0, -0.5, z]}
+        scale={ mirrorB ? [-1, 1, 1] : [1, 1, 1]}
       >
         {`B`}
         <meshMatcapMaterial matcap={matcap} color={colour} />

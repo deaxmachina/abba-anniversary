@@ -19,7 +19,7 @@ const colMetricMoons = '#adb3c2' // '#fcedbb' // '#adb3c2'
 const colRays = '#ea9918'
 
 
-const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum }) => {
+const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fullSongPreview }) => {
   window.p5 = p5
 
   const [songModeActive, setSongModeActive] = useState(false)
@@ -331,6 +331,16 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum }) 
         // Draw song eclipse graph when song is selected //
         ///////////////////////////////////////////////////
       	if (!audioFeaturesSong) return 
+
+        // Only in the mode where we want to limit the song duration !!!
+        // Stop and reset the song after 15 seconds
+        if (songRef.current.currentTime() > 5) {
+          console.log(songRef.current.currentTime())
+          songRef.current.jump()
+          songRef.current.pause()
+        }
+
+
         p.background(0)
         p.translate(p.width/2, p.height/2)
         // Show the play / pause button and exit songs button

@@ -100,6 +100,7 @@ function App() {
                 windowWidth={windowWidth}
                 windowHeight={windowHeight}
                 colours={colours}
+                mirrorB={mirrorB}
               />
           
           </div>
@@ -112,6 +113,7 @@ function App() {
                   selectedAlbumId={selectedAlbumId} 
                   colours={colours} 
                   mum={mum}
+                  fullSongPreview={fullSongPreview}
                 />
               </div>
           }

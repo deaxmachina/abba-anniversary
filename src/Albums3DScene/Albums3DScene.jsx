@@ -18,14 +18,14 @@ const GOLDENRATIO = 1.61803398875
 const RATIO = 1
 
 const Scene = ({ 
-  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours 
+  selectedAlbumId, setSelectedAlbumId, showHtml, setShowHtml, windowWidth, windowHeight, colours, mirrorB 
 }) => {
 
   const z = windowWidth >= 1200 ? 0 : windowWidth >= 800 ? -2 : -4
   return (
     <Canvas dpr={[1, 1.5]} camera={{ fov: 70, position: [0, 2, 15] }} transparent={1} >
       <Lights colours={colours} />
-      <AbbaTextAmbigram windowWidth={windowWidth} colours={colours} />
+      <AbbaTextAmbigram windowWidth={windowWidth} colours={colours} mirrorB={mirrorB} />
       <VoyageText colours={colours} />
 
       <group position={[0, -0.5, z]}>
