@@ -449,7 +449,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
           p.textAlign(p.CENTER)
           p.textStyle(p.NORMAL)
           p.textFont(fontFamily)
-          p.textSize(16)
+          p.textSize(18)
           p.translate(0, -5)
           p.text(metric, x, y)
           p.pop()
