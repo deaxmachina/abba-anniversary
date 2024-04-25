@@ -80,8 +80,7 @@ function App() {
         <>
         {/* <LoadingScreen windowWidth={windowWidth} windowHeight={windowHeight} /> */}
         <Suspense fallback={
-          // <LoadingScreen windowWidth={windowWidth} windowHeight={windowHeight} />
-          <h1>Helo</h1>
+          <LoadingScreen windowWidth={windowWidth} windowHeight={windowHeight} />
         }>
           {
             selectedAlbumId === null &&
