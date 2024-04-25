@@ -177,11 +177,14 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
               console.log('song was playing')
               songRef.current.pause()
               buttonPlayPause.html('<div class="play-button"></div>')
-            } else {
+              return
+            } 
+            if (songRef.current.isPaused()) {
               console.log('song was NOT playing')
               songRef.current.play()
               buttonPlayPause.html('<div class="pause-button"></div>')
-            }
+              return
+            } 
           }
         })
 
@@ -337,9 +340,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
         // Stop and reset the song after 15 seconds
         //console.log(songRef.current.currentTime())
         if (songRef.current.currentTime() > 5) {
-          songRef.current.pause()
+          songRef.current.stop()
           songRef.current.jump(0)
-          //songRef.current.pause()
         }
 
 
