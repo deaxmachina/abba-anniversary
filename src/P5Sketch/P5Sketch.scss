@@ -129,6 +129,9 @@ svg.svg-gooey-blobs {
   background: none;
   border: none;
   z-index: 100;
+  &.x {
+    font-size: 2rem;
+  }
   cursor: pointer;
   &:hover {
     color: #ea9918;
@@ -265,4 +268,9 @@ svg.svg-gooey-blobs {
   &.show {
     opacity: 1;
   }
+}
+
+.a-audio-feature {
+  top: 100px;
+  position: absolute;
 }

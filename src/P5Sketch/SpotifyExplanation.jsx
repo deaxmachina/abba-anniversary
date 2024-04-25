@@ -48,13 +48,15 @@ const SpotifyExplanation = ({ mum }) => {
           mum ? 
           <>
             Размерът на видимата част на всяко 
-            <div className='sun bg'>слънце</div> отговаря на една от следните <a 
+            <div className='sun bg'>слънце</div> отговаря на 
+            <br></br>
+            <a 
               href='https://developer.spotify.com/documentation/web-api/reference/get-audio-features'
               target='_blank'
-            >
-              Spotify audio features
-            </a>
-          </> : 
+              class='a-audio-feature'
+            >Spotify audio feature</a>
+          </> 
+          : 
           <>
             The size of the visible part of each
             <div className='sun'>sun</div> corresponds to one of the following <a 

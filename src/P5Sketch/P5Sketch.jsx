@@ -538,7 +538,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
         {
           songModeActive &&
           <button 
-            className='explain-graph-btn'
+            className={`explain-graph-btn ${showExplanation && 'x'}`}
             onClick={() => setShowExplanation(prev => !prev)}
           >
             { showExplanation ? 'x' : ( mum ? 'какво означава?' : 'about ?' ) }
