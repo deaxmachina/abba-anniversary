@@ -15,7 +15,7 @@ const optionsForSite = {
   privatePreview: { mum: false, mirrorB: true, fullSongPreview: true },
   forMum: { mum: true, mirrorB: true, fullSongPreview: true },
 }
-const selectedOptionForSide = 'publicPreview'
+const selectedOptionForSide = 'privatePreview'
 
 function App() {
   // Options that change the version of the page
