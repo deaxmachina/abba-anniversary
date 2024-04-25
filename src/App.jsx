@@ -3,8 +3,6 @@ import _ from 'lodash'
 import { getGPUTier } from 'detect-gpu';
 import './App.scss'
 import Albums3DScene from './Albums3DScene/Albums3DScene'
-// import SongsViz from './_SongsViz/SongsViz';
-// import ProcessingEmbed from './ProcessingEmbed/ProcessingEmbed'
 import LoadingScreen from './LoadingScreen/LoadingScreen';
 import ThemeSelector from './ThemeSelector/ThemeSelector';
 import { coloursDefault } from './assets/colours'
@@ -13,6 +11,12 @@ import P5Sketch from './P5Sketch/P5Sketch';
 import Credits from './Credits/Credits';
 
 function App() {
+  // Options that change the version of the page
+  const [mum, setMum] = useState(false)
+  const [mirrorB, setMirrorB] = useState(true)
+  const [fullSongPreview, setFullSongPreview] = useState(true)
+
+
   const [colours, setColours] = useState(coloursDefault)
   const [selectedAlbumId, setSelectedAlbumId] = useState(null)
   const [showHtml, setShowHtml] = useState(false)
@@ -27,8 +31,6 @@ function App() {
     }, 300);
     window.addEventListener('resize', () => { 
       throttledResize() 
-      // setWindowWidth(window.innerWidth)
-      // setWindowHeight(window.innerHeight)
     })
   }, [])
 
@@ -84,7 +86,8 @@ function App() {
             selectedAlbumId === null &&
             <ThemeSelector setColours={setColours} />
           }
-          {
+          { 
+            !mum &&
             selectedAlbumId === null &&
             <Credits />
           }
@@ -103,7 +106,13 @@ function App() {
           {
             showHtml && selectedAlbumId && 
               <div className='wrapper-2d'>
-                <P5Sketch windowWidth={windowWidth} windowHeight={windowHeight} selectedAlbumId={selectedAlbumId} colours={colours} />
+                <P5Sketch 
+                  windowWidth={windowWidth} 
+                  windowHeight={windowHeight} 
+                  selectedAlbumId={selectedAlbumId} 
+                  colours={colours} 
+                  mum={mum}
+                />
               </div>
           }
         </Suspense>

@@ -12,9 +12,6 @@ import p5 from 'p5'
 window.p5 = p5
 import("p5/lib/addons/p5.sound")
 
-//const selectedAlbumId = '1kM6xcSYO5ASJaWgygznL7' // '0uUtGVj0y9FjfKful7cABY'
-// const width = 660
-// const height = 660
 
 const glowMetricMoons = '#fcedbb' // '#fff'
 const glowSongMoon = '#fcedbb' // '#fff'
@@ -22,7 +19,7 @@ const colMetricMoons = '#adb3c2' // '#fcedbb' // '#adb3c2'
 const colRays = '#ea9918'
 
 
-const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
+const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum }) => {
   window.p5 = p5
 
   const [songModeActive, setSongModeActive] = useState(false)
@@ -79,14 +76,15 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
     let songUrl = null
     let songId = null 
     let songName = null
+    let songSpotifyLink = null
     let songNameOnHover = null
-    let clickedNodeId = null
     let audioFeaturesSong = null
     const fftBins = 64
     const fftBinCutoff = 41
 
     let buttonPlayPause
     let buttonExitSongs
+    let songSpotifyLinkEl 
     
     let graphData = null
     let links = null
@@ -192,13 +190,19 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
         buttonExitSongs.removeClass('show')
         buttonExitSongs.mousePressed(() => {
           if (songRef.current) songRef.current.pause()
-          songRef.current = songUrl = songId = audioFeaturesSong = clickedNodeId = songName = songNameOnHover = null
+          songRef.current = songUrl = songId = audioFeaturesSong = songName = songNameOnHover = songSpotifyLink = null
           setSongModeActive(false)
           // Hide the play / pause button 
           buttonPlayPause.removeClass('show')
           buttonPlayPause.addClass('hide')
           buttonPlayPause.html('<div class="pause-button"></div>')
+          songSpotifyLinkEl.addClass('hide')
+          songSpotifyLinkEl.removeClass('show')
         })
+
+        // Container for the spotify song link
+        songSpotifyLinkEl = p.select('.spotify-link-el')
+        songSpotifyLinkEl.attribute('href', 'https://www.example.com')
 
         p.background(220)
 
@@ -233,8 +237,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
         nodesSimulation.forEach(node => {
           if (p.dist(p.mouseX, p.mouseY, node.x, node.y) <= node.size/2) {
             songId = node.id
-            clickedNodeId = node.id
             songName = node.name
+            songSpotifyLink = node.spotify_track_link
             songUrl = audioPreviews.find(d => d.song_id === node.id).song_audioPreview.url
             if (songRef.current) songRef.current.pause() // pause the previous song first
             setSongModeActive(true)
@@ -334,6 +338,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
         buttonPlayPause.addClass('show')
         buttonExitSongs.removeClass('hide')
         buttonExitSongs.addClass('show')
+        songSpotifyLinkEl.addClass('show')
+        songSpotifyLinkEl.removeClass('hide')
         
         // Get the spectrum fro the fft analyze method and restrict the range 
         const spectrum = fft.analyze()
@@ -435,6 +441,9 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
           p.pop()
         }
 
+        // Set the spotify link 
+        songSpotifyLinkEl.attribute('href', songSpotifyLink)
+
       }
 
 
@@ -461,7 +470,9 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
     >
       <div ref={canvasRef} className='wrapper-sketch' style={{ width: `${width}px`, height: `${height}px`, position: 'relative' }}>
         <button className='toggle-btn hide'></button>
-        <button className='exit-songs-btn hide'>&larr; back</button>
+        <button className='exit-songs-btn hide'>&larr; {
+          mum ? 'назад' : 'back'
+        }</button>
         <svg 
           className='svg-gooey-blobs' 
           filter='url(#gooeyCodeFilter)'
@@ -493,7 +504,8 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
         {/* Explanation for the circles */}
         {
           !songModeActive &&
-          <div className='circles-explanation'>click song
+          <div className='circles-explanation'>
+            { mum ? 'кликни на песен' : 'click song' }
           <div className='song-circle'></div>
           </div>
         }
@@ -505,13 +517,22 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours }) => {
             className='explain-graph-btn'
             onClick={() => setShowExplanation(prev => !prev)}
           >
-            { showExplanation ? 'x' : '?' }
+            { showExplanation ? 'x' : ( mum ? 'какво означава?' : 'about ?' ) }
           </button>
         }
         {
           showExplanation && songModeActive &&
-          <SpotifyExplanation />
+          <SpotifyExplanation mum={mum} />
         }
+
+        {/* Link to Spotify for song */}
+        <a 
+          className='spotify-link-el hide' 
+          target='_blank'
+        >
+          <img src='115772_vynil_disk_icon.png' width='18px' height='18px'></img>
+          <span>Spotify link</span>
+        </a>
 
         {/* Noisy overlay */}
         <div className='sketch-overlay'></div>

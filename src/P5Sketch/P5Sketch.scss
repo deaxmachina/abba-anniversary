@@ -105,7 +105,7 @@
   left: 5px;
   color: #adb3c2;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   &:hover {
     color: #ea9918;
   }
@@ -124,7 +124,7 @@ svg.svg-gooey-blobs {
   position: absolute;
   bottom: 10px; 
   right: 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #adb3c2;
   background: none;
   border: none;
@@ -152,9 +152,8 @@ svg.svg-gooey-blobs {
 
 
   .intro {
-    // line-height: 0.5;
     margin: 0;
-    // font-size: 1.2rem;
+    line-height: -2;
   }
 
   .sun {
@@ -179,6 +178,16 @@ svg.svg-gooey-blobs {
       border-radius: 50%;
       background-color: #000;
     }
+    &.bg {
+      width: 80px;
+      height: 80px;
+      &::after {
+        width: 70px;
+        height: 70px;
+        top: 30px;
+        left: 15px;
+      }
+    }
   }
   .metric-name {
     font-family: 'Dawning of a New Day';
@@ -186,6 +195,10 @@ svg.svg-gooey-blobs {
     font-weight: bold;
     color: #ea9918;
     line-height: 0.3;
+    .metric-name-bg {
+      font-size: 0.9rem;
+      margin-left: 0.4rem;
+    }
   }
   .metric-range {
     display: inline-block;
@@ -226,5 +239,30 @@ svg.svg-gooey-blobs {
     margin-left: 5px;
     border-radius: 50%;
     background-color: #ea9918;
+  }
+}
+
+.spotify-link-el {
+  position: absolute;
+  z-index: 100;
+  bottom: 0px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ea9918;
+  font-weight: 100;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  img {
+    margin-right: 5px;
+  }
+  &.hide {
+    opacity: 0;
+  }
+  &.show {
+    opacity: 1;
   }
 }
