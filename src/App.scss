@@ -27,10 +27,10 @@ body::-webkit-scrollbar-track {
   background:green;
   border-radius: 20px;
   }
-  body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb {
   background-color: red;
   border-radius: 20px;
-  }
+}
 
 .canvas {
   position: absolute;
