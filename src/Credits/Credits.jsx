@@ -1,7 +1,7 @@
 import './Credits.scss'
 import { useState } from 'react'
 
-const Credits = () => {
+const Credits = ({ fullSongPreview }) => {
 
   const [transform, setTransform] = useState('translate(450px, 0)')
 
@@ -52,15 +52,17 @@ const Credits = () => {
         <div className='credits section'>
           <h3>Credits</h3>
           <p>
-            Music previews and music audio features data was obtained via 
-            <a href='https://developer.spotify.com/documentation/web-api' target='_blank'>
-            the Spotify Web API 
-            </a>
+            Music previews and music audio features data was obtained via <a href='https://developer.spotify.com/documentation/web-api' target='_blank'>
+            the Spotify Web API</a>. {
+              !fullSongPreview &&
+              <>
+                The API provides 30s music clip previews, but these were clipped to 15s to avoid copyright issues. 
+                If you have a Spotify account, head to the link provided for the full song.
+              </>}
             <br></br>
             Environment maps were AI-generated via <a href='https://skybox.blockadelabs.com/' target='_blank'>Skybox AI by Blockade Labs</a>
             <br></br> 
-            The Three.js code for the photo gallery is based on <a href='https://codesandbox.io/p/sandbox/image-gallery-lx2h8?file=%2Fsrc%2FApp.js'>this example</a> by 
-            <a href='https://docs.pmnd.rs/react-three-fiber/getting-started/examples'>Pmndrs</a>
+            The Three.js code for the photo gallery is based on <a href='https://codesandbox.io/p/sandbox/image-gallery-lx2h8?file=%2Fsrc%2FApp.js'>this example</a> by  <a href='https://docs.pmnd.rs/react-three-fiber/getting-started/examples'>Pmndrs</a>
           </p>
         </div>
 
@@ -68,7 +70,7 @@ const Credits = () => {
           <h3>Tech</h3>
           <p>
             Made with 
-            React, React Three Fiber + Drei, p5.js + p5 sound 
+            React, Three.js + React Three Fiber + Drei, p5.js + p5 sound 
           </p>
         </div>
 

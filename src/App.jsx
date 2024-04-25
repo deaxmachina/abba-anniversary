@@ -14,7 +14,7 @@ function App() {
   // Options that change the version of the page
   const [mum, setMum] = useState(false)
   const [mirrorB, setMirrorB] = useState(true)
-  const [fullSongPreview, setFullSongPreview] = useState(true)
+  const [fullSongPreview, setFullSongPreview] = useState(false)
 
 
   const [colours, setColours] = useState(coloursDefault)
@@ -89,7 +89,7 @@ function App() {
           { 
             !mum &&
             selectedAlbumId === null &&
-            <Credits />
+            <Credits fullSongPreview={fullSongPreview} />
           }
           <div className='wrapper-3d'>
             <Albums3DScene
