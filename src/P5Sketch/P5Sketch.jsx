@@ -334,6 +334,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
 
         // Only in the mode where we want to limit the song duration !!!
         // Stop and reset the song after 15 seconds
+        console.log(songRef.current.currentTime())
         if (songRef.current.currentTime() > 5) {
           console.log(songRef.current.currentTime())
           songRef.current.jump()
