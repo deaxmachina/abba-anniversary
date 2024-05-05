@@ -341,7 +341,7 @@ const P5Sketch = ({ windowWidth, windowHeight, selectedAlbumId, colours, mum, fu
         // Only in the mode where we want to limit the song duration !!!
         // Stop and reset the song after 15 seconds
         if (!fullSongPreview) {
-          if (songRef.current.currentTime() > 15) {
+          if (songRef.current.currentTime() > 5) {
             songRef.current.jump(0)
             songRef.current.stop()
             buttonPlayPause.html('<div class="play-button"></div>')
